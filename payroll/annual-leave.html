@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <title>연차 계산기 2025 — 입사일 기준 발생·잔여 연차 자동 계산</title>
+  <meta name="description" content="2025년 기준 연차를 자동 계산합니다. 입사일과 기준일을 입력하면 발생 연차일수, 가산휴가, 잔여 연차를 즉시 확인할 수 있습니다.">
+  <meta name="keywords" content="연차 계산기, 연차 일수, 연차 발생, 유급휴가, 연차 계산, 2025 근로기준법">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="연차 계산기 2025 — 입사일 기준 발생·잔여 연차 자동 계산">
+  <meta property="og:description" content="입사일을 입력하면 오늘까지 발생한 연차일수와 잔여 연차를 자동으로 계산합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/payroll/annual-leave.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .law-badge {
+      display: inline-block;
+      font-size: var(--type-caption);
+      color: var(--primary);
+      background: var(--primary-50);
+      border: 1px solid var(--primary-100);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .ineligible-box {
+      background: var(--warning-50);
+      border: 1px solid var(--warning-500);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+      margin-top: 16px;
+      display: none;
+    }
+    .ineligible-box.show { display: block; }
+    .copy-btn {
+      padding: 4px 10px;
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      background: var(--white);
+      color: var(--primary);
+      font-size: var(--type-caption);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: var(--primary); color: var(--white); }
+    .section-divider {
+      font-size: var(--type-body-sm);
+      font-weight: 600;
+      color: var(--text-light);
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .leave-timeline {
+      margin-top: 16px;
+      font-size: var(--type-body-sm);
+      color: var(--text-light);
+    }
+    .leave-year-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .leave-year-row:last-child { border-bottom: none; }
+    .leave-year-label { color: var(--text); font-weight: 500; }
+    .leave-days-badge {
+      background: var(--primary-50);
+      color: var(--primary);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-weight: 600;
+      font-size: var(--type-body-sm);
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <div class="calc-card">
+        <h2><i data-lucide="calendar-check" class="icon"></i> 연차 계산기
+          <span class="law-badge">근로기준법 제60조</span>
+        </h2>
+        <p><span data-rates-year>2025년 기준</span> · 5인 이상 사업장 적용 기준입니다.</p>
+
+        <form id="leaveForm">
+          <div class="form-group">
+            <label>입사일</label>
+            <div class="date-selects">
+              <select id="hireYear" class="date-select"><option value="">연도</option></select>
+              <select id="hireMonth" class="date-select"><option value="">월</option></select>
+              <select id="hireDay" class="date-select"><option value="">일</option></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>기준일 <span style="font-weight:400;color:var(--text-light);">(오늘 또는 조회 기준일)</span></label>
+            <div class="date-selects">
+              <select id="refYear" class="date-select"><option value="">연도</option></select>
+              <select id="refMonth" class="date-select"><option value="">월</option></select>
+              <select id="refDay" class="date-select"><option value="">일</option></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="usedLeave">이미 사용한 연차 일수 <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
+            <input type="number" id="usedLeave" placeholder="예: 5" min="0" max="25" inputmode="numeric">
+          </div>
+          <div class="form-group">
+            <label for="bizSize">사업장 규모</label>
+            <select id="bizSize">
+              <option value="5plus">5인 이상 (연차 적용)</option>
+              <option value="under5">5인 미만 (연차 미적용)</option>
+            </select>
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn-primary">계산하기</button>
+            <button type="button" class="btn-reset" id="resetBtn">다시 입력</button>
+          </div>
+        </form>
+
+        <div id="ineligibleBox" class="ineligible-box">
+          <strong>⚠ 연차 미적용</strong>
+          <p style="margin-top:8px;font-size:var(--type-body-sm);color:var(--gray-700);" id="ineligibleReason">—</p>
+        </div>
+
+        <div id="resultBox" class="result-box">
+          <h3>연차 계산 결과</h3>
+          <div class="result-item">
+            <span class="result-label">현재 연도 발생 연차</span>
+            <span class="result-value highlight" id="currentYearLeave">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">잔여 연차 (미사용)</span>
+            <span class="result-value" id="remainingLeave">—</span>
+            <button class="copy-btn" onclick="copyVal('remainingLeave')">복사</button>
+          </div>
+          <div class="result-item">
+            <span class="result-label">총 재직 기간</span>
+            <span class="result-value" id="servicePeriod">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">근속 연수 기준 최대 연차</span>
+            <span class="result-value" id="maxLeave">—</span>
+          </div>
+          <div id="firstYearNote" style="display:none;margin-top:12px;font-size:var(--type-body-sm);background:var(--primary-50);padding:10px 14px;border-radius:var(--radius-sm);color:var(--gray-700);">
+            <strong>입사 첫 해 안내:</strong> 1개월 개근마다 1일씩 발생 (최대 11일). 1년이 지나면 연차로 전환됩니다.
+          </div>
+
+          <!-- 연도별 연차 발생 타임라인 -->
+          <div class="leave-timeline">
+            <p style="font-weight:600;margin-bottom:8px;">연도별 발생 연차</p>
+            <div id="leaveTimeline"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-space">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <div class="calc-card">
+        <h2>연차 발생 기준</h2>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:16px;">
+          연차유급휴가는 근로기준법 제60조에 따라 발생합니다. 입사일 기준으로 계산하며 사업장 규모(5인 이상)와 근속 연수에 따라 일수가 달라집니다.
+        </p>
+        <h3 style="margin:20px 0 10px;font-size:var(--type-title-md);">발생 기준표</h3>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:var(--type-body-sm);">
+            <thead>
+              <tr style="background:var(--primary);color:white;">
+                <th style="padding:10px;text-align:left;">근속 연수</th>
+                <th style="padding:10px;text-align:center;">연차 일수</th>
+                <th style="padding:10px;text-align:left;">비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px;">1년 미만</td>
+                <td style="padding:10px;text-align:center;">월 1일 (최대 11일)</td>
+                <td style="padding:10px;color:var(--text-light);">개근 조건</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
+                <td style="padding:10px;">1년 이상</td>
+                <td style="padding:10px;text-align:center;font-weight:600;">15일</td>
+                <td style="padding:10px;color:var(--text-light);">80% 출근 시</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px;">3년 이상</td>
+                <td style="padding:10px;text-align:center;font-weight:600;">16일</td>
+                <td style="padding:10px;color:var(--text-light);">2년마다 +1일</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
+                <td style="padding:10px;">5년 이상</td>
+                <td style="padding:10px;text-align:center;font-weight:600;">17일</td>
+                <td style="padding:10px;color:var(--text-light);"></td>
+              </tr>
+              <tr>
+                <td style="padding:10px;">21년 이상</td>
+                <td style="padding:10px;text-align:center;font-weight:600;">25일 (최대)</td>
+                <td style="padding:10px;color:var(--text-light);">상한 25일</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:16px;font-size:var(--type-body-sm);color:var(--text-light);">
+          ※ 5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 규정이 적용되지 않습니다.<br>
+          ※ 회계연도 기준으로 운영하는 사업장은 입사일 기준과 결과가 다를 수 있습니다.
+        </p>
+      </div>
+
+      <div class="calc-card">
+        <h2>이런 계산도 해보세요</h2>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <a href="../payroll/weekly-holiday.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="sun" class="icon"></i> 주휴수당 계산기
+          </a>
+          <a href="../payroll/severance.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="hand-coins" class="icon"></i> 퇴직금 계산기
+          </a>
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="banknote" class="icon"></i> 연봉 실수령액 계산기
+          </a>
+        </div>
+      </div>
+
+      <div class="ad-space">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/common.js"></script>
+  <script>
+    function initDateSelects() {
+      const today    = new Date();
+      const thisYear = today.getFullYear();
+
+      ['hireYear', 'refYear'].forEach(id => {
+        const sel = document.getElementById(id);
+        for (let y = thisYear + 1; y >= 1980; y--) sel.add(new Option(y + '년', y));
+      });
+      ['hireMonth', 'refMonth'].forEach(id => {
+        const sel = document.getElementById(id);
+        for (let m = 1; m <= 12; m++) sel.add(new Option(m + '월', m));
+      });
+
+      // 기준일 오늘로 기본값 설정
+      document.getElementById('refYear').value  = thisYear;
+      document.getElementById('refMonth').value = today.getMonth() + 1;
+      updateDays('ref');
+      document.getElementById('refDay').value   = today.getDate();
+
+      ['hireYear', 'refYear'].forEach(id =>
+        document.getElementById(id).addEventListener('change', () => updateDays(id.replace('Year', ''))));
+      ['hireMonth', 'refMonth'].forEach(id =>
+        document.getElementById(id).addEventListener('change', () => updateDays(id.replace('Month', ''))));
+    }
+
+    function updateDays(prefix) {
+      const year  = parseInt(document.getElementById(prefix + 'Year').value);
+      const month = parseInt(document.getElementById(prefix + 'Month').value);
+      const sel   = document.getElementById(prefix + 'Day');
+      const prev  = sel.value;
+      sel.innerHTML = '<option value="">일</option>';
+      if (year && month) {
+        const days = new Date(year, month, 0).getDate();
+        for (let d = 1; d <= days; d++) sel.add(new Option(d + '일', d));
+        if (prev && parseInt(prev) <= days) sel.value = prev;
+      }
+    }
+
+    // ── 연차 발생 일수 계산 ───────────────────────────────────────
+    // completeYears: 만 근속연수
+    function annualLeaveDays(completeYears) {
+      if (completeYears < 1) return 0;
+      const base = 15;
+      const extra = Math.floor((completeYears - 1) / 2);
+      return Math.min(base + extra, 25);
+    }
+
+    function calc() {
+      document.getElementById('ineligibleBox').classList.remove('show');
+      hideResult('resultBox');
+
+      const hY = document.getElementById('hireYear').value;
+      const hM = document.getElementById('hireMonth').value;
+      const hD = document.getElementById('hireDay').value;
+      const rY = document.getElementById('refYear').value;
+      const rM = document.getElementById('refMonth').value;
+      const rD = document.getElementById('refDay').value;
+      if (!hY || !hM || !hD || !rY || !rM || !rD) return;
+
+      const hireDate = new Date(hY, hM - 1, hD);
+      const refDate  = new Date(rY, rM - 1, rD);
+
+      if (refDate <= hireDate) {
+        document.getElementById('ineligibleBox').classList.add('show');
+        document.getElementById('ineligibleReason').textContent = '기준일이 입사일보다 이전입니다.';
+        return;
+      }
+
+      if (document.getElementById('bizSize').value === 'under5') {
+        document.getElementById('ineligibleBox').classList.add('show');
+        document.getElementById('ineligibleReason').textContent =
+          '5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 적용 제외입니다.';
+        return;
+      }
+
+      const totalDays = Math.floor((refDate - hireDate) / 86400000);
+      const years  = Math.floor(totalDays / 365);
+      const months = Math.floor((totalDays % 365) / 30);
+
+      // 현재 연도에 발생하는 연차 (기준일 기준 가장 최근 입사 기념일 이후 연차)
+      let currentLeave;
+      let firstYear = false;
+
+      if (years < 1) {
+        // 입사 1년 미만: 경과 완전 월수만큼 발생 (최대 11)
+        const fullMonths = Math.floor(totalDays / 30);
+        currentLeave = Math.min(fullMonths, 11);
+        firstYear = true;
+      } else {
+        currentLeave = annualLeaveDays(years);
+      }
+
+      const usedLeave = parseInt(document.getElementById('usedLeave').value) || 0;
+      const remaining = Math.max(0, currentLeave - usedLeave);
+
+      const yearStr  = years > 0 ? years + '년 ' : '';
+      const monthStr = months > 0 ? months + '개월' : '';
+
+      document.getElementById('currentYearLeave').textContent = currentLeave + '일';
+      document.getElementById('remainingLeave').textContent   = remaining + '일';
+      document.getElementById('servicePeriod').textContent    = (yearStr + monthStr) || totalDays + '일';
+      document.getElementById('maxLeave').textContent         = (years >= 1 ? annualLeaveDays(years) : '미발생 (1년 미만)') + (years >= 1 ? '일' : '');
+      document.getElementById('firstYearNote').style.display  = firstYear ? 'block' : 'none';
+
+      // 연도별 타임라인 (입사년도부터 지금까지)
+      const timeline = document.getElementById('leaveTimeline');
+      timeline.innerHTML = '';
+      const hireYear = parseInt(hY);
+      const refYear  = parseInt(rY);
+      for (let y = hireYear; y <= Math.min(refYear, hireYear + 30); y++) {
+        const annivDate = new Date(y, hireDate.getMonth(), hireDate.getDate());
+        if (annivDate > refDate) break;
+        const yearNum = y - hireYear; // 완전 근속 연수
+        const days = yearNum === 0 ? '입사년 (월 1일)' : annualLeaveDays(yearNum) + '일';
+        const row = document.createElement('div');
+        row.className = 'leave-year-row';
+        row.innerHTML = `<span class="leave-year-label">${y}년 (입사 ${yearNum}년차)</span><span class="leave-days-badge">${days}</span>`;
+        timeline.appendChild(row);
+      }
+
+      showResult('resultBox');
+    }
+
+    function copyVal(id) {
+      const el = document.getElementById(id);
+      const text = el.textContent.replace(/[^0-9]/g, '');
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = el.nextElementSibling;
+        if (btn) { btn.textContent = '복사됨 ✓'; setTimeout(() => btn.textContent = '복사', 1200); }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      lucide.createIcons();
+      initDateSelects();
+      const rates = await loadRates();
+      applyRatesYear(rates);
+    });
+
+    document.getElementById('leaveForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      calc();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('leaveForm').reset();
+      document.getElementById('ineligibleBox').classList.remove('show');
+      document.getElementById('leaveTimeline').innerHTML = '';
+      hideResult('resultBox');
+      initDateSelects();
+    });
+  </script>
+</body>
+</html>

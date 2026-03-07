@@ -22,6 +22,24 @@
 
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
+    .currency-btn {
+      padding: 8px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: var(--type-body-sm);
+      font-weight: 500;
+      font-family: inherit;
+      background: var(--white);
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .currency-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+      font-weight: 600;
+    }
     .info-box {
       background-color: var(--primary-50);
       border-left: 4px solid var(--primary);
@@ -212,13 +230,23 @@
       <div class="calc-card">
         <form id="returnForm">
           <!-- 기본 정보 -->
+          <!-- 통화 선택 -->
           <div class="form-group">
-            <label for="buyPrice">매수가 (원)</label>
+            <label>통화 선택</label>
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="currency-btn active" id="currKRW" onclick="setCurrency('KRW')">🇰🇷 원 (KRW)</button>
+              <button type="button" class="currency-btn" id="currUSD" onclick="setCurrency('USD')">🇺🇸 달러 (USD)</button>
+            </div>
+            <span id="fxRateInfo" style="display:none;font-size:var(--type-caption);color:var(--primary);margin-top:6px;display:none;">적용 환율: 로드 중...</span>
+          </div>
+
+          <div class="form-group">
+            <label for="buyPrice"><span id="buyLabel">매수가 (원)</span></label>
             <input type="text" id="buyPrice" class="auto-comma" placeholder="예: 50,000" data-amount-hint="원" inputmode="numeric" required>
           </div>
 
           <div class="form-group">
-            <label for="sellPrice">매도가 (원)</label>
+            <label for="sellPrice"><span id="sellLabel">매도가 (원)</span></label>
             <input type="text" id="sellPrice" class="auto-comma" placeholder="예: 55,000" data-amount-hint="원" inputmode="numeric" required>
           </div>
 
@@ -457,8 +485,11 @@
 
     // 수익률 계산 함수
     function calcReturn() {
-      const buyPrice = parseNumber(document.getElementById('buyPrice').value);
-      const sellPrice = parseNumber(document.getElementById('sellPrice').value);
+      const rawBuy  = parseNumber(document.getElementById('buyPrice').value);
+      const rawSell = parseNumber(document.getElementById('sellPrice').value);
+      // USD 입력 시 원화로 변환
+      const buyPrice  = currentCurrency === 'USD' ? Math.round(rawBuy  * usdToKrw) : rawBuy;
+      const sellPrice = currentCurrency === 'USD' ? Math.round(rawSell * usdToKrw) : rawSell;
       const quantity = parseNumber(document.getElementById('quantity').value);
 
       if (!buyPrice || !sellPrice || !quantity || buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
@@ -521,9 +552,51 @@
       showResult('resultBox');
     }
 
+    // ── 통화 토글 ─────────────────────────────────────────────────
+    let currentCurrency = 'KRW';
+    let usdToKrw = 1370; // 기본값, loadExchangeRates()로 갱신
+
+    async function initCurrencyToggle() {
+      const fx = await loadExchangeRates();
+      usdToKrw = Math.round(fx.USD?.krw ?? 1370);
+      const infoEl = document.getElementById('fxRateInfo');
+      infoEl.textContent = `적용 환율: 1 USD = ${usdToKrw.toLocaleString()}원`;
+    }
+
+    function setCurrency(code) {
+      currentCurrency = code;
+      document.getElementById('currKRW').classList.toggle('active', code === 'KRW');
+      document.getElementById('currUSD').classList.toggle('active', code === 'USD');
+      const infoEl = document.getElementById('fxRateInfo');
+
+      if (code === 'USD') {
+        document.getElementById('buyLabel').textContent  = '매수가 (USD $)';
+        document.getElementById('sellLabel').textContent = '매도가 (USD $)';
+        document.getElementById('buyPrice').placeholder  = '예: 150.00';
+        document.getElementById('sellPrice').placeholder = '예: 165.00';
+        document.getElementById('buyPrice').removeAttribute('data-amount-hint');
+        document.getElementById('sellPrice').removeAttribute('data-amount-hint');
+        infoEl.style.display = 'block';
+        infoEl.textContent = `적용 환율: 1 USD = ${usdToKrw.toLocaleString()}원`;
+      } else {
+        document.getElementById('buyLabel').textContent  = '매수가 (원)';
+        document.getElementById('sellLabel').textContent = '매도가 (원)';
+        document.getElementById('buyPrice').placeholder  = '예: 50,000';
+        document.getElementById('sellPrice').placeholder = '예: 55,000';
+        document.getElementById('buyPrice').setAttribute('data-amount-hint', '원');
+        document.getElementById('sellPrice').setAttribute('data-amount-hint', '원');
+        infoEl.style.display = 'none';
+      }
+      // 입력값 초기화
+      document.getElementById('buyPrice').value  = '';
+      document.getElementById('sellPrice').value = '';
+      hideResult('resultBox');
+    }
+
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
+      initCurrencyToggle();
 
       // 수수료 체크박스 토글
       const includeFeeCheckbox = document.getElementById('includeFee');

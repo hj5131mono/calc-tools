@@ -208,12 +208,14 @@ function createNavigation() {
   const path = window.location.pathname;
   let activeCategory = '';
   if (path.includes('/finance/') || path.includes('/stock/')) activeCategory = '금융';
+  else if (path.includes('/payroll/')) activeCategory = '노무';
   else if (path.includes('/lotto/')) activeCategory = '로또';
   else if (path.includes('/daily/')) activeCategory = '유틸리티';
 
   const navItems = [
     { href: '/index.html', label: '홈', key: 'home' },
     { href: '/index.html#금융', label: '금융/투자', key: '금융' },
+    { href: '/index.html#노무', label: '노무/급여', key: '노무' },
     { href: '/index.html#로또', label: '로또/운세', key: '로또' },
     { href: '/index.html#유틸리티', label: '일상 유틸리티', key: '유틸리티' },
   ];
