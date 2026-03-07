@@ -881,29 +881,34 @@
     }
 
     function renderSalaryChart(currentMan, dependents, children, nonTaxable) {
-      const labels   = SALARY_RANGE.map(s => s >= 10000 ? (s / 10000) + '억' : (s / 10000).toFixed(1).replace('.0', '') + '억');
-      // 실제 레이블 개선
-      const fmtLabel = s => {
-        if (s >= 10000) return (s / 10000) + '억';
-        return s >= 1000 ? (s / 1000).toFixed(1).replace('.0','') + '억' : s + '만';
-      };
-      const xLabels  = SALARY_RANGE.map(fmtLabel);
-      const netData  = SALARY_RANGE.map(s => calcMonthlyDetail(s * 10000, dependents, children, nonTaxable).net);
-      const colors   = SALARY_RANGE.map(s => Math.abs(s - currentMan) < 1 ? '#3182F6' : '#BFDBFE');
+      // X축 레이블: 만원 단위 그대로 표시 (1만원 = 1만원, 10000만원 = 1억)
+      const fmtLabel = s => s >= 10000
+        ? (s / 10000).toFixed(1).replace('.0', '') + '억'
+        : s.toLocaleString() + '만';
+      const xLabels = SALARY_RANGE.map(fmtLabel);
+      const netData = SALARY_RANGE.map(s => calcMonthlyDetail(s * 10000, dependents, children, nonTaxable).net);
+      const isCurrent = SALARY_RANGE.map(s => Math.abs(s - currentMan) < 1);
 
       const ctx = document.getElementById('salaryChart').getContext('2d');
       if (salaryChartInstance) salaryChartInstance.destroy();
 
       salaryChartInstance = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: xLabels,
           datasets: [{
             label: '월 실수령액',
             data: netData,
-            backgroundColor: colors,
-            borderRadius: 5,
-            borderSkipped: false,
+            fill: true,
+            backgroundColor: 'rgba(49, 130, 246, 0.10)',
+            borderColor: '#3182F6',
+            borderWidth: 2.5,
+            tension: 0.35,
+            pointBackgroundColor: isCurrent.map(c => c ? '#FF8A00' : '#3182F6'),
+            pointBorderColor:     isCurrent.map(c => c ? '#fff'    : '#fff'),
+            pointRadius:          isCurrent.map(c => c ? 9          : 4),
+            pointHoverRadius:     7,
+            pointBorderWidth:     2,
           }]
         },
         options: {
@@ -913,17 +918,15 @@
             legend: { display: false },
             tooltip: {
               callbacks: {
-                title: (items) => `연봉 ${SALARY_RANGE[items[0].dataIndex].toLocaleString()}만원`,
-                label: (item) => `월 실수령: ${item.raw.toLocaleString('ko-KR')}원`
+                title: items => `연봉 ${SALARY_RANGE[items[0].dataIndex].toLocaleString()}만원`,
+                label: item  => `월 실수령: ${item.raw.toLocaleString('ko-KR')}원`
               }
             }
           },
           scales: {
             x: { grid: { display: false } },
             y: {
-              ticks: {
-                callback: v => (v / 10000).toFixed(0) + '만원'
-              },
+              ticks: { callback: v => (v / 10000).toFixed(0) + '만원' },
               grid: { color: '#F3F4F6' }
             }
           }
