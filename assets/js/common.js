@@ -132,6 +132,7 @@ async function initExchangeWidget() {
       </div>`;
   }).join('');
 
+  widget.classList.remove('exchange-skeleton'); // 스켈레톤 해제 → 숫자 visible
   widget.innerHTML = `
     <div class="exchange-header">
       <span class="exchange-title">실시간 환율</span>
