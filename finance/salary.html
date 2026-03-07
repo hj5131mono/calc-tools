@@ -459,9 +459,10 @@
             <div class="job-band-mean" id="jbMean" title="평균값"></div>
             <div class="job-band-user" id="jbUser" title="내 연봉"></div>
           </div>
-          <!-- 레이블: Q10(좌), 중위(floating), 평균(floating), Q90(우) -->
+          <!-- 레이블: Q10(좌), 내연봉(floating), 중위(floating), 평균(floating), Q90(우) -->
           <div class="job-band-labels">
             <span class="jb-label-fixed-l" id="jbQ10Label"></span>
+            <span class="jb-label-float" id="jbUserLabel" style="color:var(--warning-500);font-weight:700;"></span>
             <span class="jb-label-float" id="jbMedianLabel" style="color:var(--primary-700);"></span>
             <span class="jb-label-float" id="jbMeanLabel" style="color:var(--warning-600);"></span>
             <span class="jb-label-fixed-r" id="jbQ90Label"></span>
@@ -1228,14 +1229,38 @@
 
       const fmtM = v => v >= 10000 ? (v/10000).toFixed(1).replace('.0','')+'억' : v.toLocaleString()+'만';
 
-      // floating 레이블: 마커 위치 그대로 따라가도록 left % 직접 설정
+      // floating 레이블: 마커 위치 추종 + 겹침 방지
+      const OVERLAP = 12; // % 임계값
+      const userPos = toPos(salaryMan);
+
+      // 행 배치: 내연봉(0), 중위(0 또는 18), 평균(0 또는 18 또는 36)
+      const userMedClose  = Math.abs(userPos  - medPos)  < OVERLAP;
+      const userMeanClose = Math.abs(userPos  - meanPos) < OVERLAP;
+      const medMeanClose  = Math.abs(medPos   - meanPos) < OVERLAP;
+
+      const userRow = 0;
+      const medRow  = userMedClose ? 18 : 0;
+      const meanRow = (userMeanClose && medMeanClose) ? 36
+                    : (userMeanClose || medMeanClose) ? 18 : 0;
+
+      const labelWrap = document.querySelector('.job-band-labels');
+      const maxRow = Math.max(userRow, medRow, meanRow);
+      labelWrap.style.height = (maxRow + 22) + 'px';
+
+      const userLabel = document.getElementById('jbUserLabel');
+      userLabel.textContent = `내 연봉 ${fmtM(salaryMan)}`;
+      userLabel.style.left  = userPos + '%';
+      userLabel.style.top   = userRow + 'px';
+
       const medLabel = document.getElementById('jbMedianLabel');
-      medLabel.textContent  = `중위 ${fmtM(medBand[2])}`;
-      medLabel.style.left   = medPos + '%';
+      medLabel.textContent = `중위 ${fmtM(medBand[2])}`;
+      medLabel.style.left  = medPos + '%';
+      medLabel.style.top   = medRow + 'px';
 
       const meanLabel = document.getElementById('jbMeanLabel');
       meanLabel.textContent = `평균 ${fmtM(meanBand[2])}`;
       meanLabel.style.left  = meanPos + '%';
+      meanLabel.style.top   = meanRow + 'px';
 
       document.getElementById('jbQ10Label').textContent = fmtM(q10);
       document.getElementById('jbQ90Label').textContent = fmtM(q90);
