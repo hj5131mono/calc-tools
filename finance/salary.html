@@ -227,9 +227,23 @@
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
       transition: left 0.4s;
     }
+    /* 평균값 마커 (주황) */
+    .job-band-mean {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 3px; height: 16px;
+      background: var(--warning-500); border-radius: 2px; transition: left 0.4s;
+      opacity: 0.9;
+    }
+    /* Q10/Q90 고정 레이블 + 중위/평균 floating 레이블 */
     .job-band-labels {
-      display: flex; justify-content: space-between;
-      font-size: var(--type-caption); color: var(--text-light); margin-top: 6px;
+      position: relative; height: 22px; margin-top: 4px;
+      font-size: var(--type-caption);
+    }
+    .jb-label-fixed-l { position: absolute; left: 0; color: var(--text-light); }
+    .jb-label-fixed-r { position: absolute; right: 0; color: var(--text-light); }
+    .jb-label-float {
+      position: absolute; transform: translateX(-50%);
+      font-weight: 600; white-space: nowrap; transition: left 0.4s;
     }
     .job-band-result {
       text-align: center; margin-top: 12px; padding: 10px;
@@ -275,7 +289,8 @@
       <nav>
         <ul class="nav-links">
           <li><a href="../index.html">홈</a></li>
-          <li><a href="../index.html#금융" class="active">금융/투자</a></li>
+          <li><a href="../index.html#금융">금융/투자</a></li>
+          <li><a href="../index.html#노무" class="active">노무/급여</a></li>
           <li><a href="../index.html#로또">로또/운세</a></li>
           <li><a href="../index.html#유틸리티">일상 유틸리티</a></li>
         </ul>
@@ -426,29 +441,30 @@
             <option value="6-9">6-9년 (시니어)</option>
             <option value="10+">10년+ (리드·수석)</option>
           </select>
-          <div class="view-toggle" style="flex-shrink:0;">
-            <button class="view-toggle-btn active" id="bandMeanBtn" onclick="setBandMode('mean')">평균값</button>
-            <button class="view-toggle-btn" id="bandMedianBtn" onclick="setBandMode('median')">중위값</button>
-          </div>
         </div>
         <div id="jobBandViz" style="display:none;">
           <!-- 범례 -->
-          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:var(--type-caption);color:var(--text-light);">
-            <span><span style="display:inline-block;width:28px;height:6px;background:var(--primary-400);border-radius:3px;vertical-align:middle;margin-right:4px;"></span>중위 25~75%</span>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:var(--type-caption);color:var(--text-light);">
+            <span><span style="display:inline-block;width:28px;height:6px;background:var(--primary-400);border-radius:3px;vertical-align:middle;margin-right:4px;"></span>IQR 25~75%</span>
             <span><span style="display:inline-block;width:28px;height:2px;background:var(--gray-300);vertical-align:middle;margin-right:4px;"></span>하위10~상위10%</span>
-            <span><span style="display:inline-block;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid var(--warning-500);vertical-align:middle;margin-right:4px;"></span>내 연봉</span>
+            <span><span style="display:inline-block;width:3px;height:14px;background:var(--primary-700);vertical-align:middle;margin-right:4px;border-radius:2px;"></span>중위값</span>
+            <span><span style="display:inline-block;width:3px;height:14px;background:var(--warning-500);vertical-align:middle;margin-right:4px;border-radius:2px;"></span>평균값</span>
+            <span><span style="display:inline-block;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid var(--warning-500);vertical-align:middle;margin-right:4px;opacity:0.5;"></span>내 연봉</span>
           </div>
           <div class="job-band-wrap">
             <div class="job-band-rail"></div>
             <div class="job-band-range" id="jbRange"></div>
             <div class="job-band-iqr" id="jbIqr"></div>
-            <div class="job-band-median" id="jbMedian"></div>
+            <div class="job-band-median" id="jbMedian" title="중위값"></div>
+            <div class="job-band-mean" id="jbMean" title="평균값"></div>
             <div class="job-band-user" id="jbUser" title="내 연봉"></div>
           </div>
+          <!-- 레이블: Q10(좌), 중위(floating), 평균(floating), Q90(우) -->
           <div class="job-band-labels">
-            <span id="jbQ10Label"></span>
-            <span id="jbMedianLabel" style="font-weight:600;color:var(--primary);">중위</span>
-            <span id="jbQ90Label"></span>
+            <span class="jb-label-fixed-l" id="jbQ10Label"></span>
+            <span class="jb-label-float" id="jbMedianLabel" style="color:var(--primary-700);"></span>
+            <span class="jb-label-float" id="jbMeanLabel" style="color:var(--warning-600);"></span>
+            <span class="jb-label-fixed-r" id="jbQ90Label"></span>
           </div>
           <!-- 최솟값/최댓값 -->
           <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:var(--type-caption);color:var(--text-light);">
@@ -1143,22 +1159,13 @@
       renderBand();
     }
 
-    // 평균 / 중위값 모드
-    let bandMode = 'mean';
-    function setBandMode(mode) {
-      bandMode = mode;
-      document.getElementById('bandMeanBtn').classList.toggle('active', mode === 'mean');
-      document.getElementById('bandMedianBtn').classList.toggle('active', mode === 'median');
-      renderBand();
-    }
-
-    // 직군 내 모든 직업의 분위수 집계
-    function aggregateBand(catId, expId) {
+    // 직군 내 모든 직업의 분위수 집계 (mean 또는 median)
+    function aggregateBand(catId, expId, mode) {
       const jobs  = JOB_BANDS[catId].jobs;
       const bands = jobs.map(j => expId && j.exp?.[expId] ? j.exp[expId] : j.all);
       return [0,1,2,3,4].map(i => {
         const vals = bands.map(b => b[i]);
-        if (bandMode === 'mean') {
+        if (mode === 'mean') {
           return Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
         } else {
           const sorted = [...vals].sort((a, b) => a - b);
@@ -1177,8 +1184,11 @@
       const salaryMan = parseNumber(document.getElementById('annualSalary').value);
       if (!salaryMan) return;
 
-      // 직군 전체 집계 밴드
-      const band = aggregateBand(catId, expId);
+      // 평균밴드 + 중위밴드 동시 계산
+      const meanBand   = aggregateBand(catId, expId, 'mean');
+      const medBand    = aggregateBand(catId, expId, 'median');
+      // IQR/range 표시는 중위밴드 기준
+      const band = medBand;
       const [q10, q25, q50, q75, q90] = band;
 
       // 최솟값(Q5 추정 ≈ Q10×0.82) / 최댓값(Q95 추정 ≈ Q90×1.28)
@@ -1200,32 +1210,46 @@
       }
       const topPct = Math.round(100 - pct);
 
-      // 바 좌표 계산
+      // 바 좌표 계산 (중위밴드 기준 좌표계)
       const toPos = v => Math.max(0, Math.min(100, (v - q10) / (q90 - q10) * 100));
       document.getElementById('jbRange').style.left  = '0%';
       document.getElementById('jbRange').style.width = '100%';
       document.getElementById('jbIqr').style.left    = toPos(q25) + '%';
       document.getElementById('jbIqr').style.width   = (toPos(q75) - toPos(q25)) + '%';
-      document.getElementById('jbMedian').style.left = toPos(q50) + '%';
       document.getElementById('jbUser').style.left   = toPos(salaryMan) + '%';
+
+      // 중위값 마커 (파랑)
+      const medPos = toPos(medBand[2]);
+      document.getElementById('jbMedian').style.left = medPos + '%';
+
+      // 평균값 마커 (주황)
+      const meanPos = toPos(meanBand[2]);
+      document.getElementById('jbMean').style.left = meanPos + '%';
 
       const fmtM = v => v >= 10000 ? (v/10000).toFixed(1).replace('.0','')+'억' : v.toLocaleString()+'만';
 
-      document.getElementById('jbQ10Label').textContent    = fmtM(q10);
-      document.getElementById('jbMedianLabel').textContent = `중위 ${fmtM(q50)}`;
-      document.getElementById('jbQ90Label').textContent    = fmtM(q90);
-      document.getElementById('jbMinLabel').textContent    = fmtM(qMin) + '원';
-      document.getElementById('jbMaxLabel').textContent    = fmtM(qMax) + '원';
+      // floating 레이블: 마커 위치 그대로 따라가도록 left % 직접 설정
+      const medLabel = document.getElementById('jbMedianLabel');
+      medLabel.textContent  = `중위 ${fmtM(medBand[2])}`;
+      medLabel.style.left   = medPos + '%';
+
+      const meanLabel = document.getElementById('jbMeanLabel');
+      meanLabel.textContent = `평균 ${fmtM(meanBand[2])}`;
+      meanLabel.style.left  = meanPos + '%';
+
+      document.getElementById('jbQ10Label').textContent = fmtM(q10);
+      document.getElementById('jbQ90Label').textContent = fmtM(q90);
+      document.getElementById('jbMinLabel').textContent = fmtM(qMin) + '원';
+      document.getElementById('jbMaxLabel').textContent = fmtM(qMax) + '원';
 
       const catName  = JOB_BANDS[catId].name;
       const expLabel = expId ? { '0-2':'신입·주니어(0-2년)', '3-5':'미드레벨(3-5년)', '6-9':'시니어(6-9년)', '10+':'리드·수석(10년+)' }[expId] : '연차 전체';
-      const modeLabel = bandMode === 'mean' ? '평균값' : '중위값';
       const topStr   = topPct <= 5 ? '상위 5% 이내' : `상위 ${topPct}%`;
       document.getElementById('jobBandSummary').innerHTML =
-        `<strong>${catName}</strong> · ${expLabel} · ${modeLabel} 기준<br>` +
+        `<strong>${catName}</strong> · ${expLabel}<br>` +
         `<strong style="color:var(--primary);font-size:1.1em;">${topStr}</strong> 수준입니다.<br>` +
         `<span style="font-size:var(--type-caption);color:var(--text-light);">` +
-        `집계 ${modeLabel} ${fmtM(q50)} · 하위25% ${fmtM(q25)} · 상위25% ${fmtM(q75)}</span>`;
+        `중위 ${fmtM(medBand[2])} · 평균 ${fmtM(meanBand[2])} · IQR ${fmtM(q25)}~${fmtM(q75)}</span>`;
 
       document.getElementById('jobBandViz').style.display = 'block';
     }
