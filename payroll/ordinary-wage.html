@@ -389,11 +389,11 @@
         <h3 style="margin:20px 0 10px;font-size:var(--type-title-md);">시급 환산 공식</h3>
         <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:16px;font-size:var(--type-body-sm);line-height:1.9;">
           <strong>월 통상임금</strong> = 기본급 + 정기·고정수당 합계<br>
-          <strong>월 소정근로시간</strong> = (주 소정근로시간 + 주휴시간) × 52 ÷ 12<br>
+          <strong>월 소정근로시간</strong> = (주 소정근로시간 + 주휴시간) × 365 ÷ 7 ÷ 12<br>
           <strong>주휴시간</strong> = 주 소정근로시간 ÷ 40 × 8시간 (주 15시간 이상 근무 시)<br>
           <strong>통상임금 시급</strong> = 월 통상임금 ÷ 월 소정근로시간<br>
           <br>
-          <em style="color:var(--text-light);">예) 월급 300만원, 주 40시간 → 시급 = 3,000,000 ÷ 209h = 14,354원</em>
+          <em style="color:var(--text-light);">예) 월급 300만원, 주 40시간 → 월 소정근로시간 = 48h × 365/7/12 = 208.57h ≈ 209h → 시급 = 3,000,000 ÷ 208.57 = 14,384원</em>
         </div>
 
         <div style="margin-top:16px;background:var(--warning-50);border:1px solid var(--warning-500);border-radius:var(--radius-sm);padding:12px 16px;font-size:var(--type-body-sm);">
@@ -482,9 +482,10 @@
       // 월 통상임금
       const monthlyOrdinary = basePay + totalAllowance;
 
-      // 월 소정근로시간 = (주 소정근로시간 + 주휴시간) × 52 / 12
+      // 월 소정근로시간 = (주 소정근로시간 + 주휴시간) × 365 / 7 / 12
+      // 52주 기준(×52/12)이 아닌 연간 일수 기준 사용 → 주 40h 기준 209시간
       const weeklyHoliday  = weeklyHours >= 15 ? (weeklyHours / 40) * 8 : 0;
-      const monthlyHours   = (weeklyHours + weeklyHoliday) * 52 / 12;
+      const monthlyHours   = (weeklyHours + weeklyHoliday) * 365 / 7 / 12;
 
       // 통상임금 시급
       const hourlyOrdinary = monthlyOrdinary / monthlyHours;
