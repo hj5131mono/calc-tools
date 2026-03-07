@@ -32,9 +32,15 @@ git push
   - `formatNumber()`, `parseNumber()` — 천단위 콤마 포맷
   - `initAutoComma()` — `.auto-comma` 클래스 input에 자동 콤마
   - `showResult(id)` / `hideResult(id)` — 결과 박스 표시/숨김
+  - `resetForm(formId)` — 폼 초기화 (입력값 클리어 + 결과 숨김)
   - `initKeyboardShortcuts()` — Enter=계산, Esc=초기화, ↑↓=값 ±1
   - `initKeyboardHint()` — 폼이 있는 페이지에 단축키 안내 텍스트 자동 삽입
   - `initLayout()` — 헤더/푸터 동적 삽입 (이미 존재하면 스킵)
+  - `toKoreanAmount(value, unit)` — 숫자를 한국어 단위(만/억)로 변환
+  - `initAmountHint()` — `data-amount-hint` 속성 필드에 입력 중 한국어 단위 실시간 표시
+  - `loadRates()` — `assets/data/rates.json`에서 최신 세율/요율 비동기 로드 (캐시 포함)
+  - `applyRatesYear(rates)` — 로드된 rates 기준 연도를 `[data-rates-year]` 요소에 표시
+- `assets/data/rates.json` — 세율/요율 단일 진실 공급원. 수치 변경 시 이 파일만 수정하면 전 페이지 즉시 반영. GitHub Actions로 분기별 자동 업데이트. (상세: `RATES_UPDATE_MANUAL.md`)
 
 ### 현재 구현된 페이지 목록
 | 카테고리 | 파일 | 도구 |
@@ -54,6 +60,10 @@ git push
 | daily | `dday.html` | D-day 계산기 |
 | daily | `bmi.html` | BMI 계산기 |
 | daily | `age.html` | 나이 계산기 (만나이·띠·별자리) |
+| payroll | `weekly-holiday.html` | 주휴수당 계산기 |
+| payroll | `severance.html` | 퇴직금 계산기 |
+| payroll | `ordinary-wage.html` | 통상임금 시급 계산기 |
+| payroll | `annual-leave.html` | 연차 계산기 |
 
 ### UX 가이드
 `UX_GUIDE.md` 참조. 핵심 요약:
