@@ -90,6 +90,13 @@ body {
   padding: 0 16px;
 }
 
+/* 데스크탑에서 컨테이너 확장 */
+@media (min-width: 1080px) {
+  .container {
+    max-width: 1040px;
+  }
+}
+
 /* 사이트 헤더 */
 .site-header {
   background-color: var(--white);
@@ -402,6 +409,17 @@ input::placeholder {
 
 .footer-links a:hover {
   color: var(--primary);
+}
+
+/* 반응형 - 데스크탑 이상 (1080px+) */
+@media (min-width: 1080px) {
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .calc-card {
+    max-width: 680px;
+  }
 }
 
 /* 반응형 - 태블릿 이상 (768px+) */
