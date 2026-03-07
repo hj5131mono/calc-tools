@@ -595,6 +595,33 @@ input::placeholder {
   display: block;
 }
 
+/* 날짜 선택 (연/월/일 select 그룹) */
+.date-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.date-select {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color 0.2s;
+  -webkit-appearance: auto;
+}
+
+.date-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
+}
+
 /* 모바일에서 nav 오버플로우 처리 */
 @media (max-width: 480px) {
   .header-inner {

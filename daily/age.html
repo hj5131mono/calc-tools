@@ -218,7 +218,11 @@
       <div class="calc-card">
         <div class="form-group">
           <label for="birthDate">생년월일</label>
-          <input type="date" id="birthDate" max="">
+          <div class="date-selects">
+            <select id="birthYear" class="date-select"><option value="">연도</option></select>
+            <select id="birthMonth" class="date-select"><option value="">월</option></select>
+            <select id="birthDay" class="date-select"><option value="">일</option></select>
+          </div>
           <div class="today-badge">
             <i data-lucide="calendar" style="width:13px;height:13px;"></i>
             기준일: <strong id="todayLabel">오늘</strong>
@@ -449,18 +453,18 @@
 
     // ========== 메인 계산 ==========
     function calcAge() {
-      const val = document.getElementById('birthDate').value;
-      if (!val) { hideResult('resultBox'); return; }
+      const by = parseInt(document.getElementById('birthYear').value);
+      const bm = parseInt(document.getElementById('birthMonth').value);
+      const bd = parseInt(document.getElementById('birthDay').value);
+      if (!by || !bm || !bd) { hideResult('resultBox'); return; }
 
-      const birth = new Date(val + 'T00:00:00');
+      const birth = new Date(by, bm - 1, bd);
       if (isNaN(birth.getTime())) { hideResult('resultBox'); return; }
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       if (birth > today) { hideResult('resultBox'); return; }
-
-      const by = birth.getFullYear(), bm = birth.getMonth() + 1, bd = birth.getDate();
       const ty = today.getFullYear(), tm = today.getMonth() + 1, td = today.getDate();
 
       // 만 나이
@@ -524,18 +528,40 @@
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
 
-      // 오늘 날짜 표시 및 max 설정
+      // 오늘 날짜 기준일 표시
       const today = new Date();
-      const todayStr = today.toISOString().split('T')[0];
-      document.getElementById('birthDate').max = todayStr;
       document.getElementById('todayLabel').textContent =
         `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
 
-      document.getElementById('birthDate').addEventListener('change', calcAge);
+      // 연/월/일 select 초기화
+      const yEl = document.getElementById('birthYear');
+      const mEl = document.getElementById('birthMonth');
+      const dEl = document.getElementById('birthDay');
+      for (let y = today.getFullYear(); y >= 1920; y--) yEl.add(new Option(`${y}년`, y));
+      for (let m = 1; m <= 12; m++) mEl.add(new Option(`${m}월`, m));
+
+      function updateBirthDays() {
+        const y = parseInt(yEl.value) || 2000;
+        const m = parseInt(mEl.value) || 1;
+        const maxDay = new Date(y, m, 0).getDate();
+        const prev = parseInt(dEl.value);
+        dEl.innerHTML = '<option value="">일</option>';
+        for (let d = 1; d <= maxDay; d++) {
+          const o = new Option(`${d}일`, d);
+          if (d === prev) o.selected = true;
+          dEl.add(o);
+        }
+      }
+      updateBirthDays();
+      yEl.addEventListener('change', function() { updateBirthDays(); calcAge(); });
+      mEl.addEventListener('change', function() { updateBirthDays(); calcAge(); });
+      dEl.addEventListener('change', calcAge);
     });
 
     document.getElementById('resetBtn').addEventListener('click', function() {
-      document.getElementById('birthDate').value = '';
+      document.getElementById('birthYear').value = '';
+      document.getElementById('birthMonth').value = '';
+      document.getElementById('birthDay').value = '';
       hideResult('resultBox');
     });
   </script>

@@ -265,8 +265,12 @@
         <div class="tab-content active" id="mode1">
           <form id="form1">
             <div class="form-group">
-              <label for="targetDate">목표 날짜</label>
-              <input type="date" id="targetDate" required>
+              <label>목표 날짜</label>
+              <div class="date-selects">
+                <select id="targetYear" class="date-select"></select>
+                <select id="targetMonth" class="date-select"></select>
+                <select id="targetDay" class="date-select"></select>
+              </div>
             </div>
 
             <button type="submit" class="btn-primary" style="width: 100%;">
@@ -446,12 +450,36 @@
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
 
-      // 오늘 날짜 기본값 설정
+      // 오늘 날짜 기준, 내일을 기본값으로 설정
       const today = new Date();
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      document.getElementById('targetDate').valueAsDate = tomorrow;
+      const tyEl = document.getElementById('targetYear');
+      const tmEl = document.getElementById('targetMonth');
+      const tdEl = document.getElementById('targetDay');
+      for (let y = today.getFullYear() - 3; y <= today.getFullYear() + 30; y++) tyEl.add(new Option(`${y}년`, y));
+      for (let m = 1; m <= 12; m++) tmEl.add(new Option(`${m}월`, m));
+
+      function updateTargetDays() {
+        const y = parseInt(tyEl.value) || today.getFullYear();
+        const m = parseInt(tmEl.value) || 1;
+        const maxDay = new Date(y, m, 0).getDate();
+        const prev = parseInt(tdEl.value);
+        tdEl.innerHTML = '';
+        for (let d = 1; d <= maxDay; d++) {
+          const o = new Option(`${d}일`, d);
+          if (d === prev) o.selected = true;
+          tdEl.add(o);
+        }
+      }
+      tyEl.addEventListener('change', updateTargetDays);
+      tmEl.addEventListener('change', updateTargetDays);
+
+      tyEl.value = tomorrow.getFullYear();
+      tmEl.value = tomorrow.getMonth() + 1;
+      updateTargetDays();
+      tdEl.value = tomorrow.getDate();
     });
 
     // 탭 전환
@@ -479,7 +507,11 @@
     document.getElementById('form1').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const targetDate = new Date(document.getElementById('targetDate').value);
+      const ty = parseInt(document.getElementById('targetYear').value);
+      const tm = parseInt(document.getElementById('targetMonth').value);
+      const td = parseInt(document.getElementById('targetDay').value);
+      if (!ty || !tm || !td) return;
+      const targetDate = new Date(ty, tm - 1, td);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       targetDate.setHours(0, 0, 0, 0);

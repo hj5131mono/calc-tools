@@ -562,7 +562,11 @@
           <!-- 생년월일 -->
           <div class="form-group">
             <label for="birthDate">생년월일 (양력)</label>
-            <input type="date" id="birthDate" required min="1900-01-01" max="2030-12-31">
+            <div class="date-selects">
+              <select id="birthYear" class="date-select"><option value="">연도</option></select>
+              <select id="birthMonth" class="date-select"><option value="">월</option></select>
+              <select id="birthDay" class="date-select"><option value="">일</option></select>
+            </div>
           </div>
 
           <!-- 태어난 시간 -->
@@ -887,6 +891,29 @@
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
+
+      // 생년월일 연/월/일 select 초기화
+      const yEl = document.getElementById('birthYear');
+      const mEl = document.getElementById('birthMonth');
+      const dEl = document.getElementById('birthDay');
+      for (let y = new Date().getFullYear(); y >= 1900; y--) yEl.add(new Option(`${y}년`, y));
+      for (let m = 1; m <= 12; m++) mEl.add(new Option(`${m}월`, m));
+
+      function updateSajuDays() {
+        const y = parseInt(yEl.value) || 2000;
+        const m = parseInt(mEl.value) || 1;
+        const maxDay = new Date(y, m, 0).getDate();
+        const prev = parseInt(dEl.value);
+        dEl.innerHTML = '<option value="">일</option>';
+        for (let d = 1; d <= maxDay; d++) {
+          const o = new Option(`${d}일`, d);
+          if (d === prev) o.selected = true;
+          dEl.add(o);
+        }
+      }
+      updateSajuDays();
+      yEl.addEventListener('change', updateSajuDays);
+      mEl.addEventListener('change', updateSajuDays);
     });
 
     // 사주 계산 상수
@@ -1141,13 +1168,13 @@
       e.preventDefault();
 
       // 입력값 가져오기
-      const birthDate = document.getElementById('birthDate').value;
-      if (!birthDate) {
+      const year = parseInt(document.getElementById('birthYear').value);
+      const month = parseInt(document.getElementById('birthMonth').value);
+      const day = parseInt(document.getElementById('birthDay').value);
+      if (!year || !month || !day) {
         alert('생년월일을 입력해주세요.');
         return;
       }
-
-      const [year, month, day] = birthDate.split('-').map(Number);
       const birthHour = document.getElementById('birthHour').value;
       const gender = document.querySelector('input[name="gender"]:checked').value;
 
@@ -1326,10 +1353,25 @@
       }
     });
 
-    // 카카오톡 공유
-    document.getElementById('kakaoBtn').addEventListener('click', function() {
-      const url = window.location.href;
-      window.open(`https://sharer.kakao.com/talk/friends/picker/link?app_key=YOUR_APP_KEY&validation_action=share&validation_params=${encodeURIComponent(JSON.stringify({url}))}`, '_blank');
+    // 카카오톡 공유 (Web Share API → 모바일 공유 시트 활용, PC는 클립보드 복사)
+    document.getElementById('kakaoBtn').addEventListener('click', async function() {
+      const shareData = {
+        title: '사주 행운번호 🔮',
+        text: window.shareText || '사주팔자 기반 오늘의 행운번호를 확인해보세요!',
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) { /* 취소됨 */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          const btn = this;
+          btn.textContent = '✅ 링크 복사됨';
+          setTimeout(() => { btn.innerHTML = '💬 카카오톡'; }, 2000);
+        } catch (e) {
+          prompt('링크를 복사하세요:', window.location.href);
+        }
+      }
     });
 
     // 트위터 공유
