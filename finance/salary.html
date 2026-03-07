@@ -414,21 +414,22 @@
       <!-- 직군별 연봉 위치 -->
       <div id="jobBandBox" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:var(--spacing-md);margin-bottom:var(--spacing-md);box-shadow:var(--shadow);">
         <h3 style="font-size:var(--type-title-md);margin-bottom:4px;">직군별 연봉 위치</h3>
-        <p style="font-size:var(--type-body-sm);color:var(--text-light);margin-bottom:14px;">직군·직업·연차를 선택하면 내 연봉이 어느 위치인지 확인할 수 있습니다.</p>
-        <div class="job-selects">
-          <select id="jobCatSel" onchange="onJobCatChange()">
+        <p style="font-size:var(--type-body-sm);color:var(--text-light);margin-bottom:14px;">직군과 연차를 선택하면 해당 직군 전체 기준으로 내 연봉 위치를 확인할 수 있습니다.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+          <select id="jobCatSel" onchange="onJobCatChange()" style="flex:1;min-width:120px;">
             <option value="">직군 선택</option>
           </select>
-          <select id="jobRoleSel" onchange="onJobRoleChange()">
-            <option value="">직업 선택</option>
-          </select>
-          <select id="jobExpSel" onchange="onJobRoleChange()">
+          <select id="jobExpSel" onchange="renderBand()" style="flex:1;min-width:120px;">
             <option value="">연차 (전체)</option>
             <option value="0-2">0-2년 (신입·주니어)</option>
             <option value="3-5">3-5년 (미드레벨)</option>
             <option value="6-9">6-9년 (시니어)</option>
             <option value="10+">10년+ (리드·수석)</option>
           </select>
+          <div class="view-toggle" style="flex-shrink:0;">
+            <button class="view-toggle-btn active" id="bandMeanBtn" onclick="setBandMode('mean')">평균값</button>
+            <button class="view-toggle-btn" id="bandMedianBtn" onclick="setBandMode('median')">중위값</button>
+          </div>
         </div>
         <div id="jobBandViz" style="display:none;">
           <!-- 범례 -->
@@ -875,7 +876,7 @@
       renderPercentile(salaryMan * 10000);
       renderSalaryChart(salaryMan, dependents, children, nonTaxable);
       document.getElementById('jobBandBox').style.display = 'block';
-      onJobRoleChange(); // 직군 선택돼 있으면 재계산
+      renderBand(); // 직군 선택돼 있으면 재계산
     }
 
     // ── 소득 분위 시각화 ─────────────────────────────────────────
@@ -1139,31 +1140,45 @@
     }
 
     function onJobCatChange() {
-      const catId   = document.getElementById('jobCatSel').value;
-      const roleSel = document.getElementById('jobRoleSel');
-      roleSel.innerHTML = '<option value="">직업 선택</option>';
-      if (catId && JOB_BANDS[catId]) {
-        JOB_BANDS[catId].jobs.forEach(job => roleSel.add(new Option(job.n, job.n)));
-      }
-      document.getElementById('jobBandViz').style.display = 'none';
+      renderBand();
     }
 
-    function onJobRoleChange() {
+    // 평균 / 중위값 모드
+    let bandMode = 'mean';
+    function setBandMode(mode) {
+      bandMode = mode;
+      document.getElementById('bandMeanBtn').classList.toggle('active', mode === 'mean');
+      document.getElementById('bandMedianBtn').classList.toggle('active', mode === 'median');
+      renderBand();
+    }
+
+    // 직군 내 모든 직업의 분위수 집계
+    function aggregateBand(catId, expId) {
+      const jobs  = JOB_BANDS[catId].jobs;
+      const bands = jobs.map(j => expId && j.exp?.[expId] ? j.exp[expId] : j.all);
+      return [0,1,2,3,4].map(i => {
+        const vals = bands.map(b => b[i]);
+        if (bandMode === 'mean') {
+          return Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
+        } else {
+          const sorted = [...vals].sort((a, b) => a - b);
+          const mid = Math.floor(sorted.length / 2);
+          return sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid-1] + sorted[mid]) / 2);
+        }
+      });
+    }
+
+    function renderBand() {
       const catId    = document.getElementById('jobCatSel').value;
-      const roleName = document.getElementById('jobRoleSel').value;
       const expId    = document.getElementById('jobExpSel').value;
 
-      if (!catId || !roleName) { document.getElementById('jobBandViz').style.display = 'none'; return; }
-
-      const cat = JOB_BANDS[catId];
-      const job = cat?.jobs.find(j => j.n === roleName);
-      if (!job) return;
+      if (!catId) { document.getElementById('jobBandViz').style.display = 'none'; return; }
 
       const salaryMan = parseNumber(document.getElementById('annualSalary').value);
       if (!salaryMan) return;
 
-      // 경력 선택 여부에 따라 밴드 결정
-      const band = expId && job.exp[expId] ? job.exp[expId] : job.all;
+      // 직군 전체 집계 밴드
+      const band = aggregateBand(catId, expId);
       const [q10, q25, q50, q75, q90] = band;
 
       // 최솟값(Q5 추정 ≈ Q10×0.82) / 최댓값(Q95 추정 ≈ Q90×1.28)
@@ -1202,13 +1217,15 @@
       document.getElementById('jbMinLabel').textContent    = fmtM(qMin) + '원';
       document.getElementById('jbMaxLabel').textContent    = fmtM(qMax) + '원';
 
+      const catName  = JOB_BANDS[catId].name;
       const expLabel = expId ? { '0-2':'신입·주니어(0-2년)', '3-5':'미드레벨(3-5년)', '6-9':'시니어(6-9년)', '10+':'리드·수석(10년+)' }[expId] : '연차 전체';
+      const modeLabel = bandMode === 'mean' ? '평균값' : '중위값';
       const topStr   = topPct <= 5 ? '상위 5% 이내' : `상위 ${topPct}%`;
       document.getElementById('jobBandSummary').innerHTML =
-        `<strong>${roleName}</strong> · ${expLabel} 기준 ` +
+        `<strong>${catName}</strong> · ${expLabel} · ${modeLabel} 기준<br>` +
         `<strong style="color:var(--primary);font-size:1.1em;">${topStr}</strong> 수준입니다.<br>` +
         `<span style="font-size:var(--type-caption);color:var(--text-light);">` +
-        `중위 ${fmtM(q50)} · 하위25% ${fmtM(q25)} · 상위25% ${fmtM(q75)}</span>`;
+        `집계 ${modeLabel} ${fmtM(q50)} · 하위25% ${fmtM(q25)} · 상위25% ${fmtM(q75)}</span>`;
 
       document.getElementById('jobBandViz').style.display = 'block';
     }
