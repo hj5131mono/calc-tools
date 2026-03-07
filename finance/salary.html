@@ -972,6 +972,10 @@
       document.getElementById('viewChart').classList.toggle('active', mode === 'chart');
       tableWrap.style.display = mode === 'table' ? '' : 'none';
       chartWrap.style.display = mode === 'chart' ? 'block' : 'none';
+      // display:none 상태에서 렌더된 Chart.js는 크기를 못 잡으므로 보일 때 resize
+      if (mode === 'chart' && salaryChartInstance) {
+        requestAnimationFrame(() => salaryChartInstance.resize());
+      }
     }
 
     function renderSalaryChart(currentMan, dependents, children, nonTaxable) {
