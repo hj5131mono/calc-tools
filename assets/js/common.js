@@ -32,6 +32,17 @@ function applyAutoComma(inputElement) {
       return;
     }
 
+    // 소수점 포함 시: 정수 부분만 콤마 포맷하고 소수 부분은 그대로 유지
+    // (parseFloat("4.") = 4 로 소수점이 사라지는 버그 방지)
+    if (value.includes('.')) {
+      const dotIdx = value.indexOf('.');
+      const intPart = value.slice(0, dotIdx);
+      const decPart = value.slice(dotIdx); // '.' 포함
+      const intNum = parseFloat(intPart) || 0;
+      e.target.value = intPart === '' ? decPart : formatNumber(intNum) + decPart;
+      return;
+    }
+
     // 숫자로 변환 후 다시 포맷팅
     const num = parseFloat(value);
     if (!isNaN(num)) {

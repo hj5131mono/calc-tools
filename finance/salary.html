@@ -207,14 +207,17 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="container">
-      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+    <div class="container header-inner">
+      <a href="../index.html" class="site-logo">
+        <i data-lucide="calculator" class="icon"></i>
+        <span>계산기 도구 모음</span>
+      </a>
       <nav>
         <ul class="nav-links">
           <li><a href="../index.html">홈</a></li>
-          <li><a href="../index.html#금융">금융계산기</a></li>
+          <li><a href="../index.html#금융" class="active">금융/투자</a></li>
           <li><a href="../index.html#로또">로또/운세</a></li>
-          <li><a href="../index.html#유틸리티">일상유틸리티</a></li>
+          <li><a href="../index.html#유틸리티">일상 유틸리티</a></li>
         </ul>
       </nav>
     </div>
@@ -254,10 +257,10 @@
 
           <div class="form-group">
             <label for="nonTaxable">비과세액
-              <span style="font-weight:400; font-size:0.8rem; color:var(--text-light);">(월, 식대 등)</span>
+              <span style="font-weight:400; font-size:0.8rem; color:var(--text-light);">(월, 식대 등 · 한도 20만원)</span>
             </label>
             <div class="input-with-unit">
-              <input type="text" id="nonTaxable" class="auto-comma" value="100,000" placeholder="100,000">
+              <input type="text" id="nonTaxable" class="auto-comma" value="200,000" placeholder="200,000">
               <span class="unit-badge">원/월</span>
             </div>
           </div>
@@ -657,7 +660,7 @@
       document.getElementById('nonTaxable').addEventListener('input', dCalcSalary);
 
       // 초기 비교 표 렌더링
-      renderComparisonTable(0, 1, 0, 100000);
+      renderComparisonTable(0, 1, 0, 200000);
     });
 
     document.getElementById('salaryForm').addEventListener('submit', function(e) {
@@ -668,9 +671,9 @@
     document.getElementById('resetBtn').addEventListener('click', function() {
       document.getElementById('salaryForm').reset();
       // value 속성으로 reset되지 않는 필드 수동 복원
-      document.getElementById('nonTaxable').value = '100,000';
+      document.getElementById('nonTaxable').value = '200,000';
       hideResult('resultBox');
-      renderComparisonTable(0, 1, 0, 100000);
+      renderComparisonTable(0, 1, 0, 200000);
     });
   </script>
 </body>
