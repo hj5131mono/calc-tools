@@ -238,6 +238,7 @@ function initToolFilter() {
 document.addEventListener('DOMContentLoaded', function() {
   initLayout();
   initAutoComma();
+  initAmountHint();
   initKeyboardShortcuts();
   initKeyboardHint();
   initToolFilter();
@@ -247,6 +248,40 @@ document.addEventListener('DOMContentLoaded', function() {
     lucide.createIcons();
   }
 });
+
+// 숫자를 한국어 금액 단위로 변환 (예: 300000000 → "3억원")
+function toKoreanAmount(rawValue, unit) {
+  const multiplier = (unit === '만원') ? 10000 : 1;
+  const num = parseNumber(rawValue) * multiplier;
+  if (!num || num <= 0) return '';
+
+  const jo   = Math.floor(num / 1_000_000_000_000);
+  const uk   = Math.floor((num % 1_000_000_000_000) / 100_000_000);
+  const man  = Math.floor((num % 100_000_000) / 10_000);
+  const rest = Math.floor(num % 10_000);
+
+  const parts = [];
+  if (jo   > 0) parts.push(jo.toLocaleString('ko-KR')  + '조');
+  if (uk   > 0) parts.push(uk.toLocaleString('ko-KR')  + '억');
+  if (man  > 0) parts.push(man.toLocaleString('ko-KR') + '만');
+  if (rest > 0) parts.push(rest.toLocaleString('ko-KR'));
+
+  return parts.length ? parts.join(' ') + '원' : '';
+}
+
+// data-amount-hint 속성이 있는 입력 필드에 한국어 금액 인디케이터 부착
+function initAmountHint() {
+  document.querySelectorAll('[data-amount-hint]').forEach(input => {
+    const hint = document.createElement('span');
+    hint.className = 'amount-hint-text';
+    input.insertAdjacentElement('afterend', hint);
+
+    const unit = input.dataset.amountHint || '원';
+    input.addEventListener('input', () => {
+      hint.textContent = toKoreanAmount(input.value, unit);
+    });
+  });
+}
 
 // 결과 박스 표시/숨김
 function showResult(resultBoxId) {

@@ -365,6 +365,18 @@ input::placeholder {
   letter-spacing: -0.02em;
 }
 
+/* 금액 인디케이터 (입력 중 한국어 단위 표시) */
+.amount-hint-text {
+  display: block;
+  text-align: right;
+  font-size: 0.8125rem;
+  color: var(--primary-500);
+  font-weight: 500;
+  margin-top: 4px;
+  min-height: 1.2em;
+  font-variant-numeric: tabular-nums;
+}
+
 /* 광고 영역 */
 .ad-space {
   min-height: 90px;
