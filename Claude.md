@@ -8,7 +8,7 @@
 - 순수 HTML + CSS + Vanilla JavaScript (프레임워크 없음)
 - 빌드 과정 없음 (HTML 파일을 그대로 서빙)
 - 서버 없음 (모든 계산은 클라이언트 JS로 처리)
-- 호스팅: GitHub Pages 또는 Cloudflare Pages (무료)
+- 호스팅: GitHub Pages (calc-tools.kr)
 
 ## 디자인 원칙
 - 모바일 퍼스트 반응형 디자인 (트래픽의 70%+ 가 모바일)
