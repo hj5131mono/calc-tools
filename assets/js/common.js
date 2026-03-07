@@ -7,15 +7,15 @@ const RATES_URL = '/assets/data/rates.json';
 
 // 자동화 실패 시 최후 안전망 (common.js 직접 업데이트도 필요)
 const FALLBACK_RATES = {
-  _meta: { year: 2025, updated: '2025-01-01', updatedBy: 'fallback' },
-  minimumWage: { hourly: 10030, monthly: 2096270, year: 2025 },
+  _meta: { year: 2026, updated: '2026-01-01', updatedBy: 'fallback' },
+  minimumWage: { hourly: 10030, monthly: 2096270, year: 2026 },
   insurance: {
     nationalPension: {
-      employeeRate: 0.045,
+      employeeRate: 0.0475,
       incomeUpperLimit: 6170000,
       incomeLowerLimit: 370000
     },
-    healthInsurance: { employeeRate: 0.03545, longTermCareRate: 0.1295 },
+    healthInsurance: { employeeRate: 0.03595, longTermCareRate: 0.1314 },
     employmentInsurance: { employeeRate: 0.009 }
   }
 };

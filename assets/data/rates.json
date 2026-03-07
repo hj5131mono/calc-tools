@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "year": 2025,
-    "updated": "2025-01-01",
+    "year": 2026,
+    "updated": "2026-01-01",
     "updatedBy": "manual",
     "note": "이 파일은 GitHub Actions로 자동 갱신됩니다. 수동 수정 시 RATES_UPDATE_MANUAL.md 참조"
   },
@@ -15,19 +15,19 @@
   },
 
   "insurance": {
-    "effectiveYear": 2025,
+    "effectiveYear": 2026,
     "nationalPension": {
-      "employeeRate": 0.045,
-      "employerRate": 0.045,
+      "employeeRate": 0.0475,
+      "employerRate": 0.0475,
       "incomeUpperLimit": 6170000,
       "incomeLowerLimit": 370000,
       "limitEffectiveFrom": "2024-07-01",
       "note": "기준소득월액 상·하한은 매년 7월 변경. nps.or.kr 확인"
     },
     "healthInsurance": {
-      "employeeRate": 0.03545,
-      "employerRate": 0.03545,
-      "longTermCareRate": 0.1295,
+      "employeeRate": 0.03595,
+      "employerRate": 0.03595,
+      "longTermCareRate": 0.1314,
       "note": "장기요양보험료율은 건강보험료에 곱함. nhis.or.kr 확인"
     },
     "employmentInsurance": {

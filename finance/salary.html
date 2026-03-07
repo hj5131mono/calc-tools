@@ -341,15 +341,15 @@
           </thead>
           <tbody>
             <tr>
-              <td>국민연금 (4.5%)</td>
+              <td>국민연금 (4.75%)</td>
               <td id="pensionAmt">—</td>
             </tr>
             <tr>
-              <td>건강보험 (3.545%)</td>
+              <td>건강보험 (3.595%)</td>
               <td id="healthAmt">—</td>
             </tr>
             <tr>
-              <td>장기요양보험 (건강보험료 × 12.81%)</td>
+              <td>장기요양보험 (건강보험료 × 13.14%)</td>
               <td id="ltcAmt">—</td>
             </tr>
             <tr>
@@ -372,8 +372,8 @@
         </table>
 
         <div class="warning-box">
-          <strong>참고사항:</strong> 국민연금은 2024년 연금개혁으로 보험료율이 단계적으로 인상될 예정입니다.
-          현재 계산기는 근로자 부담분 4.5% 기준이며, 최신 요율은 국민연금공단(nps.or.kr)에서 확인하세요.
+          <strong>참고사항:</strong> 국민연금 보험료율이 2026년부터 4.75%로 인상됩니다(연금개혁 단계 인상).
+          건강보험 3.595%, 장기요양보험 13.14% 기준이며, 최신 요율은 각 공단에서 확인하세요.
           소득세는 간이세액표 근사치로, 실제 연말정산 결과와 다를 수 있습니다.
         </div>
       </div>
@@ -416,9 +416,9 @@
 
         <h3 style="margin:24px 0 12px; color:var(--text); font-size:1rem;">4대보험 공제 항목 (근로자 부담분)</h3>
         <ul style="margin-left:20px; line-height:1.9; color:var(--text);">
-          <li><strong>국민연금 4.5%:</strong> 노후 연금 재원. 월 과세급여 기준, 기준소득월액 상한 적용</li>
-          <li><strong>건강보험 3.545%:</strong> 의료비 보장. 근로자가 절반(나머지는 사업주) 부담</li>
-          <li><strong>장기요양보험 12.81%:</strong> 건강보험료에 곱하여 산출. 노인 장기요양 서비스 재원</li>
+          <li><strong>국민연금 4.75%:</strong> 노후 연금 재원. 월 과세급여 기준, 기준소득월액 상한 적용 (2026년 인상)</li>
+          <li><strong>건강보험 3.595%:</strong> 의료비 보장. 근로자가 절반(나머지는 사업주) 부담</li>
+          <li><strong>장기요양보험 13.14%:</strong> 건강보험료에 곱하여 산출. 노인 장기요양 서비스 재원</li>
           <li><strong>고용보험 0.9%:</strong> 실업급여·육아휴직급여 등 고용안전망 재원</li>
         </ul>
 
@@ -571,10 +571,10 @@
     // ========== 세율 상수 (rates.json에서 자동 로드) ==========
     // 이 변수들은 DOMContentLoaded에서 loadRates()로 채워집니다.
     // 직접 수정 금지 — assets/data/rates.json을 수정하세요.
-    let PENSION_RATE    = 0.045;
+    let PENSION_RATE    = 0.0475;
     let PENSION_CAP     = 6170000;
-    let HEALTH_RATE     = 0.03545;
-    let LTC_RATE        = 0.1295;
+    let HEALTH_RATE     = 0.03595;
+    let LTC_RATE        = 0.1314;
     let EMPLOYMENT_RATE = 0.009;
 
     // 연봉 구간별 비교 표에 표시할 구간 (만원)
