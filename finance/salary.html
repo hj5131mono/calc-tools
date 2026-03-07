@@ -278,6 +278,22 @@
         </form>
       </div>
 
+      <!-- 소득 분위 시각화 -->
+      <div id="percentileBox" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:var(--spacing-md);margin-bottom:var(--spacing-md);box-shadow:var(--shadow);">
+        <h3 style="font-size:var(--type-title-md);margin-bottom:4px;">나의 연봉 위치</h3>
+        <p style="font-size:var(--type-body-sm);color:var(--text-light);margin-bottom:16px;">전체 근로소득자 중 <strong id="pctTopLabel" style="color:var(--primary);"></strong> 수준입니다.</p>
+        <div style="position:relative;height:20px;background:var(--gray-100);border-radius:10px;overflow:visible;margin:0 8px;">
+          <div id="pctBarFill" style="height:100%;background:linear-gradient(90deg,var(--primary-100),var(--primary-500));border-radius:10px;transition:width 0.6s ease;"></div>
+          <div id="pctMarker" style="position:absolute;top:-5px;transform:translateX(-50%);width:4px;height:30px;background:var(--primary-700);border-radius:2px;transition:left 0.6s ease;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:var(--type-caption);color:var(--text-light);">
+          <span>하위</span>
+          <span id="pctBottomLabel" style="color:var(--gray-700);font-weight:600;"></span>
+          <span>상위</span>
+        </div>
+        <p style="margin-top:12px;font-size:var(--type-caption);color:var(--gray-400);">출처: 국세청 근로소득 백분위 통계 (2022년 귀속 기준) — 참고용이며 실제 분포와 다를 수 있습니다.</p>
+      </div>
+
       <!-- 광고 영역 -->
       <div class="ad-space" style="min-height:90px; text-align:center; margin:20px 0;">
       <ins class="adsbygoogle"
@@ -699,7 +715,50 @@
       document.getElementById('totalDeductionsTable').textContent = formatNumber(r.deductions) + '원';
 
       showResult('resultBox');
+      renderPercentile(salaryMan * 10000);
     }
+
+    // ── 소득 분위 시각화 ─────────────────────────────────────────
+    // 출처: 국세청 국세통계 근로소득 백분위 (2022년 귀속)
+    // https://stats.nts.go.kr
+    const INCOME_PERCENTILES = [
+      { pct: 99, min: 150000000 }, // 상위 1%
+      { pct: 95, min:  95000000 }, // 상위 5%
+      { pct: 90, min:  70000000 }, // 상위 10%
+      { pct: 80, min:  50000000 }, // 상위 20%
+      { pct: 70, min:  40000000 }, // 상위 30%
+      { pct: 60, min:  32000000 }, // 상위 40%
+      { pct: 50, min:  26000000 }, // 상위 50% (중위소득)
+      { pct: 40, min:  21000000 }, // 상위 60%
+      { pct: 30, min:  17000000 }, // 상위 70%
+      { pct: 20, min:  13000000 }, // 상위 80%
+      { pct: 10, min:   9000000 }, // 상위 90%
+    ];
+
+    function getPercentile(annualWon) {
+      for (const p of INCOME_PERCENTILES) {
+        if (annualWon >= p.min) return p.pct;
+      }
+      return 5; // 하위 10% 이하
+    }
+
+    function renderPercentile(annualWon) {
+      const box = document.getElementById('percentileBox');
+      if (!box) return;
+
+      const pct  = getPercentile(annualWon);
+      const top  = 100 - pct; // 상위 %
+      const barW = Math.max(2, Math.min(pct, 98)); // 바 너비 (하위→좌, 상위→우)
+
+      box.style.display = 'block';
+      document.getElementById('pctTopLabel').textContent  = top <= 1 ? '상위 1% 이내' : `상위 ${top}%`;
+      document.getElementById('pctBottomLabel').textContent = `하위 ${100 - pct}%`;
+
+      // 바 채우기 (왼쪽부터 현재 위치까지)
+      document.getElementById('pctBarFill').style.width = barW + '%';
+      document.getElementById('pctMarker').style.left   = barW + '%';
+    }
+
 
     document.addEventListener('DOMContentLoaded', async function() {
       lucide.createIcons();

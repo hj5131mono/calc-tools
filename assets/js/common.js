@@ -132,13 +132,77 @@ async function initExchangeWidget() {
       </div>`;
   }).join('');
 
-  widget.classList.remove('exchange-skeleton'); // 스켈레톤 해제 → 숫자 visible
+  widget.classList.remove('exchange-skeleton');
   widget.innerHTML = `
     <div class="exchange-header">
       <span class="exchange-title">실시간 환율</span>
       <span class="exchange-updated">${updatedText}</span>
     </div>
-    <div class="exchange-grid">${itemsHtml}</div>`;
+    <div class="exchange-grid">${itemsHtml}</div>
+
+    <div class="fx-calc-section">
+      <div class="fx-calc-row">
+        <div class="fx-calc-group">
+          <label class="fx-label">환전할 금액</label>
+          <div class="fx-input-wrap">
+            <input id="fxKrwInput" type="text" class="fx-input auto-comma" value="1,000" inputmode="numeric">
+            <span class="fx-unit">원</span>
+          </div>
+        </div>
+        <div class="fx-calc-group">
+          <label class="fx-label">
+            <input type="checkbox" id="fxDiscountCheck" style="margin-right:4px;">
+            환전우대 적용
+          </label>
+          <div class="fx-input-wrap">
+            <input id="fxDiscountRate" type="number" class="fx-input" value="70" min="0" max="100" style="width:70px;" inputmode="numeric">
+            <span class="fx-unit">%</span>
+          </div>
+        </div>
+      </div>
+      <div id="fxResults" class="fx-results"></div>
+    </div>`;
+
+  // 수수료율 (은행 공시 스프레드 기준, 환종별 참고값)
+  const BASE_SPREAD = { USD: 0.0175, JPY: 0.0175, EUR: 0.0175, CNY: 0.0200 };
+
+  function calcFx() {
+    const krw      = parseNumber(document.getElementById('fxKrwInput').value) || 1000;
+    const discount = document.getElementById('fxDiscountCheck').checked
+      ? (parseFloat(document.getElementById('fxDiscountRate').value) || 0) / 100
+      : 0;
+
+    const lines = ['USD', 'JPY', 'EUR', 'CNY'].map(code => {
+      const item   = fx[code];
+      if (!item) return '';
+      const spread      = BASE_SPREAD[code] ?? 0.0175;
+      const effectiveFee = spread * (1 - discount);
+      // 은행 매도율 = 미드레이트 × (1 + 스프레드)
+      const bankRate     = item.krw * (1 + effectiveFee);
+      const foreign      = krw / bankRate * item.unit;
+
+      const symbol = { USD:'$', JPY:'¥', EUR:'€', CNY:'¥' }[code];
+      const formatted = code === 'JPY'
+        ? foreign.toFixed(0) + '엔'
+        : symbol + foreign.toFixed(2);
+
+      return `<div class="fx-result-item">
+        <span>${item.flag} ${item.label}</span>
+        <strong>${formatted}</strong>
+        ${discount > 0 ? `<span class="fx-fee-note">수수료 ${(effectiveFee*100).toFixed(2)}%</span>` : ''}
+      </div>`;
+    }).join('');
+
+    document.getElementById('fxResults').innerHTML = lines;
+  }
+
+  // 이벤트 연결
+  document.getElementById('fxKrwInput')?.addEventListener('input', calcFx);
+  document.getElementById('fxDiscountCheck')?.addEventListener('change', calcFx);
+  document.getElementById('fxDiscountRate')?.addEventListener('input', calcFx);
+  // auto-comma 수동 적용 (common.js initAutoComma는 이미 실행됐으므로 직접 연결)
+  applyAutoComma(document.getElementById('fxKrwInput'));
+  calcFx(); // 최초 계산
 }
 
 // ─────────────────────────────────────────────────────────────────

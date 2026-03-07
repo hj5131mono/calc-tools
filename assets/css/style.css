@@ -445,6 +445,95 @@ select.input-error {
 .exchange-change.down { color: #2563EB; }
 .exchange-change.flat { color: var(--gray-400); }
 
+/* 환전 계산기 섹션 */
+.fx-calc-section {
+  border-top: 1px solid var(--gray-100);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.fx-calc-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.fx-calc-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fx-label {
+  font-size: var(--type-caption);
+  font-weight: 600;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+.fx-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+
+.fx-input {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  font-size: var(--type-body-sm);
+  font-family: inherit;
+  color: var(--text);
+  min-height: auto !important;
+  box-shadow: none !important;
+  outline: none;
+  width: 90px;
+}
+
+.fx-unit {
+  font-size: var(--type-caption);
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.fx-results {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.fx-result-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: var(--type-body-sm);
+  flex: 1;
+  min-width: 100px;
+}
+
+.fx-result-item strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--primary-700);
+}
+
+.fx-fee-note {
+  font-size: var(--type-caption);
+  color: var(--gray-400);
+  margin-left: auto;
+}
+
 .exchange-skeleton .exchange-rate {
   background: var(--gray-200);
   color: transparent;

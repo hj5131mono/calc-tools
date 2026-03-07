@@ -120,6 +120,14 @@
               <option value="under5">5인 미만 (연차 미적용)</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="calcMode">계산 기준</label>
+            <select id="calcMode">
+              <option value="hire">입사일 기준 (법적 원칙)</option>
+              <option value="fiscal">회계연도 기준 (1월 1일 기준)</option>
+            </select>
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">회계연도 기준은 회사가 1월 1일 일괄 지급하는 방식을 채택한 경우 사용</small>
+          </div>
           <div class="btn-group">
             <button type="submit" class="btn-primary">계산하기</button>
             <button type="button" class="btn-reset" id="resetBtn">다시 입력</button>
@@ -152,6 +160,22 @@
           </div>
           <div id="firstYearNote" style="display:none;margin-top:12px;font-size:var(--type-body-sm);background:var(--primary-50);padding:10px 14px;border-radius:var(--radius-sm);color:var(--gray-700);">
             <strong>입사 첫 해 안내:</strong> 1개월 개근마다 1일씩 발생 (최대 11일). 1년이 지나면 연차로 전환됩니다.
+          </div>
+
+          <!-- 입사일 vs 회계연도 비교 -->
+          <div id="compareSection" style="display:none;margin-top:16px;background:var(--gray-50);border-radius:var(--radius-sm);padding:12px 14px;">
+            <p style="font-size:var(--type-caption);font-weight:600;color:var(--text-light);margin-bottom:8px;">두 기준 비교</p>
+            <div style="display:flex;gap:12px;">
+              <div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:var(--type-caption);color:var(--text-light);margin-bottom:4px;">입사일 기준</div>
+                <div style="font-size:var(--type-title-md);font-weight:700;color:var(--text);" id="hireBasisDays">—</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:10px;background:var(--white);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:var(--type-caption);color:var(--text-light);margin-bottom:4px;">회계연도 기준</div>
+                <div style="font-size:var(--type-title-md);font-weight:700;color:var(--text);" id="fiscalBasisDays">—</div>
+              </div>
+            </div>
+            <p style="margin-top:8px;font-size:var(--type-caption);color:var(--text-light);" id="fiscalBasisNote"></p>
           </div>
 
           <!-- 연도별 연차 발생 타임라인 -->
@@ -242,51 +266,117 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../assets/js/common.js"></script>
   <script>
+    // ── 안전한 셀렉트 초기화 ─────────────────────────────────────
+    function fillSel(id, items) {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      while (sel.options.length > 1) sel.remove(1);
+      items.forEach(([text, val]) => sel.add(new Option(text, String(val))));
+    }
+
     function initDateSelects() {
       const today    = new Date();
       const thisYear = today.getFullYear();
 
-      ['hireYear', 'refYear'].forEach(id => {
-        const sel = document.getElementById(id);
-        for (let y = thisYear + 1; y >= 1980; y--) sel.add(new Option(y + '년', y));
-      });
-      ['hireMonth', 'refMonth'].forEach(id => {
-        const sel = document.getElementById(id);
-        for (let m = 1; m <= 12; m++) sel.add(new Option(m + '월', m));
-      });
+      const years = [];
+      for (let y = thisYear + 1; y >= 1980; y--) years.push([y + '년', y]);
+      const months = Array.from({length:12}, (_, i) => [(i+1) + '월', i+1]);
 
-      // 기준일 오늘로 기본값 설정
-      document.getElementById('refYear').value  = thisYear;
-      document.getElementById('refMonth').value = today.getMonth() + 1;
+      fillSel('hireYear', years);
+      fillSel('refYear',  years);
+      fillSel('hireMonth', months);
+      fillSel('refMonth',  months);
+
+      // 기준일 오늘 기본값
+      document.getElementById('refYear').value  = String(thisYear);
+      document.getElementById('refMonth').value = String(today.getMonth() + 1);
       updateDays('ref');
-      document.getElementById('refDay').value   = today.getDate();
+      document.getElementById('refDay').value   = String(today.getDate());
 
-      ['hireYear', 'refYear'].forEach(id =>
-        document.getElementById(id).addEventListener('change', () => updateDays(id.replace('Year', ''))));
-      ['hireMonth', 'refMonth'].forEach(id =>
-        document.getElementById(id).addEventListener('change', () => updateDays(id.replace('Month', ''))));
+      // 이벤트 연결
+      ['hireYear','refYear'].forEach(id =>
+        document.getElementById(id)?.addEventListener('change', () => updateDays(id.replace('Year',''))));
+      ['hireMonth','refMonth'].forEach(id =>
+        document.getElementById(id)?.addEventListener('change', () => updateDays(id.replace('Month',''))));
     }
 
     function updateDays(prefix) {
-      const year  = parseInt(document.getElementById(prefix + 'Year').value);
-      const month = parseInt(document.getElementById(prefix + 'Month').value);
-      const sel   = document.getElementById(prefix + 'Day');
-      const prev  = sel.value;
+      const y   = parseInt(document.getElementById(prefix + 'Year')?.value);
+      const m   = parseInt(document.getElementById(prefix + 'Month')?.value);
+      const sel = document.getElementById(prefix + 'Day');
+      if (!sel) return;
+      const prev = sel.value;
       sel.innerHTML = '<option value="">일</option>';
-      if (year && month) {
-        const days = new Date(year, month, 0).getDate();
-        for (let d = 1; d <= days; d++) sel.add(new Option(d + '일', d));
+      if (y && m) {
+        const days = new Date(y, m, 0).getDate();
+        for (let d = 1; d <= days; d++) sel.add(new Option(d + '일', String(d)));
         if (prev && parseInt(prev) <= days) sel.value = prev;
       }
     }
 
-    // ── 연차 발생 일수 계산 ───────────────────────────────────────
-    // completeYears: 만 근속연수
-    function annualLeaveDays(completeYears) {
-      if (completeYears < 1) return 0;
-      const base = 15;
-      const extra = Math.floor((completeYears - 1) / 2);
-      return Math.min(base + extra, 25);
+    // ── 연차 발생 일수 (근속연수 기준) ────────────────────────────
+    function leaveDaysByYears(y) {
+      if (y < 1) return 0;
+      return Math.min(15 + Math.floor((y - 1) / 2), 25);
+    }
+
+    // ── 입사일 기준 계산 ──────────────────────────────────────────
+    function calcHireBasis(hireDate, refDate) {
+      const totalDays = Math.floor((refDate - hireDate) / 86400000);
+      const years  = Math.floor(totalDays / 365.25);
+      const months = Math.floor((totalDays % 365) / 30);
+
+      if (years < 1) {
+        const fullMonths = Math.floor(totalDays / 30);
+        return { days: Math.min(fullMonths, 11), firstYear: true, years, months };
+      }
+      return { days: leaveDaysByYears(years), firstYear: false, years, months };
+    }
+
+    // ── 회계연도 기준 계산 ────────────────────────────────────────
+    // 매년 1월 1일에 전년도 근무 기준으로 연차 지급
+    function calcFiscalBasis(hireDate, refDate) {
+      const refYear   = refDate.getFullYear();
+      const hireYear  = hireDate.getFullYear();
+
+      // 입사 당해연도: 입사일~12/31 동안 1개월 개근 시 1일 (최대 11)
+      const dec31hire = new Date(hireYear, 11, 31);
+      const daysInHireYear = Math.floor((dec31hire - hireDate) / 86400000) + 1;
+      const hireYearLeave  = Math.min(Math.floor(daysInHireYear / 30), 11);
+
+      if (hireYear === refYear) {
+        // 아직 첫 회계연도
+        const elapsed = Math.floor(Math.floor((refDate - hireDate) / 86400000) / 30);
+        return {
+          days: Math.min(elapsed, 11),
+          hireYearLeave,
+          fiscalNote: `입사년도 비례 연차 중 (최대 11일)`,
+          fullYears: 0
+        };
+      }
+
+      // 기준일 연도 1월 1일 기준 근속연수
+      const jan1 = new Date(refYear, 0, 1);
+      const tenureDays   = Math.floor((jan1 - hireDate) / 86400000);
+      const fullYearsJan1 = Math.floor(tenureDays / 365.25);
+
+      if (fullYearsJan1 < 1) {
+        // 1월 1일 기준 1년 미만 → 입사년도 비례 연차만
+        return {
+          days: hireYearLeave,
+          hireYearLeave,
+          fiscalNote: `${refYear}년 1월 1일 기준 근속 ${Math.floor(tenureDays/30)}개월 (1년 미만, 입사년도 비례 연차)`,
+          fullYears: fullYearsJan1
+        };
+      }
+
+      const fiscalLeave = leaveDaysByYears(fullYearsJan1);
+      return {
+        days: fiscalLeave,
+        hireYearLeave,
+        fiscalNote: `${refYear}년 1월 1일 지급분 — 근속 ${fullYearsJan1}년 기준`,
+        fullYears: fullYearsJan1
+      };
     }
 
     function calc() {
@@ -299,66 +389,59 @@
       const rY = document.getElementById('refYear').value;
       const rM = document.getElementById('refMonth').value;
       const rD = document.getElementById('refDay').value;
-      if (!hY || !hM || !hD || !rY || !rM || !rD) return;
+      if (!hY||!hM||!hD||!rY||!rM||!rD) return;
 
-      const hireDate = new Date(hY, hM - 1, hD);
-      const refDate  = new Date(rY, rM - 1, rD);
+      const hireDate = new Date(+hY, +hM - 1, +hD);
+      const refDate  = new Date(+rY, +rM - 1, +rD);
 
       if (refDate <= hireDate) {
         document.getElementById('ineligibleBox').classList.add('show');
         document.getElementById('ineligibleReason').textContent = '기준일이 입사일보다 이전입니다.';
         return;
       }
-
       if (document.getElementById('bizSize').value === 'under5') {
         document.getElementById('ineligibleBox').classList.add('show');
-        document.getElementById('ineligibleReason').textContent =
-          '5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 적용 제외입니다.';
+        document.getElementById('ineligibleReason').textContent = '5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 적용 제외입니다.';
         return;
       }
 
-      const totalDays = Math.floor((refDate - hireDate) / 86400000);
-      const years  = Math.floor(totalDays / 365);
-      const months = Math.floor((totalDays % 365) / 30);
-
-      // 현재 연도에 발생하는 연차 (기준일 기준 가장 최근 입사 기념일 이후 연차)
-      let currentLeave;
-      let firstYear = false;
-
-      if (years < 1) {
-        // 입사 1년 미만: 경과 완전 월수만큼 발생 (최대 11)
-        const fullMonths = Math.floor(totalDays / 30);
-        currentLeave = Math.min(fullMonths, 11);
-        firstYear = true;
-      } else {
-        currentLeave = annualLeaveDays(years);
-      }
-
+      const mode      = document.getElementById('calcMode').value;
       const usedLeave = parseInt(document.getElementById('usedLeave').value) || 0;
-      const remaining = Math.max(0, currentLeave - usedLeave);
 
-      const yearStr  = years > 0 ? years + '년 ' : '';
-      const monthStr = months > 0 ? months + '개월' : '';
+      // 두 기준 모두 계산
+      const hireBasis   = calcHireBasis(hireDate, refDate);
+      const fiscalBasis = calcFiscalBasis(hireDate, refDate);
+      const active      = mode === 'fiscal' ? fiscalBasis : hireBasis;
 
-      document.getElementById('currentYearLeave').textContent = currentLeave + '일';
+      const remaining = Math.max(0, active.days - usedLeave);
+      const yearStr   = (hireBasis.years > 0 ? hireBasis.years + '년 ' : '') + (hireBasis.months > 0 ? hireBasis.months + '개월' : '');
+
+      document.getElementById('currentYearLeave').textContent = active.days + '일';
       document.getElementById('remainingLeave').textContent   = remaining + '일';
-      document.getElementById('servicePeriod').textContent    = (yearStr + monthStr) || totalDays + '일';
-      document.getElementById('maxLeave').textContent         = (years >= 1 ? annualLeaveDays(years) : '미발생 (1년 미만)') + (years >= 1 ? '일' : '');
-      document.getElementById('firstYearNote').style.display  = firstYear ? 'block' : 'none';
+      document.getElementById('servicePeriod').textContent    = yearStr || '1개월 미만';
+      document.getElementById('maxLeave').textContent         =
+        hireBasis.years >= 1 ? leaveDaysByYears(hireBasis.years) + '일' : '미발생 (1년 미만)';
+      document.getElementById('firstYearNote').style.display  = active.firstYear ? 'block' : 'none';
 
-      // 연도별 타임라인 (입사년도부터 지금까지)
+      // 두 기준 비교 표시
+      const compareEl = document.getElementById('compareSection');
+      compareEl.style.display = 'block';
+      document.getElementById('hireBasisDays').textContent   = hireBasis.days + '일';
+      document.getElementById('fiscalBasisDays').textContent = fiscalBasis.days + '일';
+      document.getElementById('fiscalBasisNote').textContent = fiscalBasis.fiscalNote || '';
+
+      // 연도별 타임라인 (입사일 기준)
       const timeline = document.getElementById('leaveTimeline');
       timeline.innerHTML = '';
-      const hireYear = parseInt(hY);
-      const refYear  = parseInt(rY);
-      for (let y = hireYear; y <= Math.min(refYear, hireYear + 30); y++) {
-        const annivDate = new Date(y, hireDate.getMonth(), hireDate.getDate());
-        if (annivDate > refDate) break;
-        const yearNum = y - hireYear; // 완전 근속 연수
-        const days = yearNum === 0 ? '입사년 (월 1일)' : annualLeaveDays(yearNum) + '일';
+      const hYn = +hY, rYn = +rY;
+      for (let y = hYn; y <= Math.min(rYn, hYn + 30); y++) {
+        const anniv = new Date(y, hireDate.getMonth(), hireDate.getDate());
+        if (anniv > refDate) break;
+        const yNum = y - hYn;
+        const days = yNum === 0 ? '입사년 (월 1일)' : leaveDaysByYears(yNum) + '일';
         const row = document.createElement('div');
         row.className = 'leave-year-row';
-        row.innerHTML = `<span class="leave-year-label">${y}년 (입사 ${yearNum}년차)</span><span class="leave-days-badge">${days}</span>`;
+        row.innerHTML = `<span class="leave-year-label">${y}년 (입사 ${yNum}년차)</span><span class="leave-days-badge">${days}</span>`;
         timeline.appendChild(row);
       }
 

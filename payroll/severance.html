@@ -80,8 +80,7 @@
         <p><span data-rates-year>2025년 기준</span> · 1년 이상 근무 + 4주 평균 주 15시간 이상 근로자에게 적용됩니다.</p>
 
         <div class="info-box">
-          퇴직금 = 평균임금 × 30일 × (재직일수 ÷ 365)<br>
-          평균임금 = (퇴직 전 3개월 총임금 + 상여금 3/12) ÷ 해당 기간 일수
+          💡 월급 정보만 입력하면 <strong>평균임금</strong>과 <strong>통상임금</strong>을 모두 계산해 법적으로 유리한 기준을 자동 적용합니다.
         </div>
 
         <form id="severanceForm">
@@ -95,7 +94,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>퇴직일 (마지막 근무일 다음날)</label>
+            <label>퇴직일 <span style="font-weight:400;color:var(--text-light);">(마지막 근무일 다음날)</span></label>
             <div class="date-selects">
               <select id="retireYear" class="date-select"><option value="">연도</option></select>
               <select id="retireMonth" class="date-select"><option value="">월</option></select>
@@ -103,17 +102,25 @@
             </div>
           </div>
 
-          <p class="section-divider">💰 임금 정보</p>
+          <p class="section-divider">💰 월 급여 정보</p>
           <div class="form-group">
-            <label for="salary3months">최근 3개월 급여 합계 (원)
-              <span style="font-weight:400;color:var(--text-light);"> — 기본급+수당 포함</span>
-            </label>
-            <input type="text" id="salary3months" class="auto-comma" placeholder="예: 9,000,000" data-amount-hint="원" inputmode="numeric" required>
+            <label for="baseSalary">월 기본급 (원) <span style="color:var(--danger-500);">*</span></label>
+            <input type="text" id="baseSalary" class="auto-comma" placeholder="예: 3,000,000" data-amount-hint="원" inputmode="numeric" required>
+          </div>
+          <div class="form-group">
+            <label for="fixedAllowance">월 고정수당 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
+            <input type="text" id="fixedAllowance" class="auto-comma" placeholder="예: 200,000" data-amount-hint="원" inputmode="numeric">
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">매달 고정으로 받는 식대·교통비·직책수당 등 합계</small>
+          </div>
+          <div class="form-group">
+            <label for="irregularBonus">성과급·인센티브 — 최근 3개월 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
+            <input type="text" id="irregularBonus" class="auto-comma" placeholder="예: 1,500,000" data-amount-hint="원" inputmode="numeric">
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">성과급, 특근수당 등 비정기 수당의 최근 3개월 합계</small>
           </div>
           <div class="form-group">
             <label for="annualBonus">연간 상여금 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
-            <input type="text" id="annualBonus" class="auto-comma" placeholder="예: 3,000,000" data-amount-hint="원" inputmode="numeric">
-            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">연간 상여금의 3/12을 평균임금에 산입합니다.</small>
+            <input type="text" id="annualBonus" class="auto-comma" placeholder="예: 6,000,000" data-amount-hint="원" inputmode="numeric">
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">명절상여·정기상여 등 연간 합계 (3/12 자동 산입)</small>
           </div>
 
           <div class="btn-group">
@@ -129,6 +136,10 @@
 
         <div id="resultBox" class="result-box">
           <h3>퇴직금 계산 결과</h3>
+
+          <!-- 적용 임금 기준 배지 -->
+          <div id="wageStandardBadge" style="margin-bottom:16px;padding:10px 14px;border-radius:var(--radius-sm);font-size:var(--type-body-sm);"></div>
+
           <div class="result-item">
             <span class="result-label">예상 퇴직금</span>
             <span class="result-value highlight" id="severancePay">—</span>
@@ -139,19 +150,41 @@
             <span class="result-value" id="serviceDays">—</span>
           </div>
           <div class="result-item">
-            <span class="result-label">평균임금 (1일)</span>
-            <span class="result-value" id="avgDailyWage">—</span>
+            <span class="result-label">적용 일급 임금</span>
+            <span class="result-value" id="effectiveDaily">—</span>
           </div>
-          <div class="result-item">
-            <span class="result-label">3개월 기간 일수</span>
-            <span class="result-value" id="period3months">—</span>
-          </div>
-          <div class="result-item">
-            <span class="result-label">3개월 총임금 (상여 포함)</span>
-            <span class="result-value" id="total3months">—</span>
-          </div>
+
+          <!-- 상세 접기/펼치기 -->
+          <details style="margin-top:12px;">
+            <summary style="cursor:pointer;font-size:var(--type-body-sm);color:var(--primary);padding:4px 0;">계산 상세 보기</summary>
+            <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+              <p style="font-size:var(--type-caption);color:var(--text-light);margin-bottom:8px;">▸ 평균임금</p>
+              <div class="result-item" style="padding:6px 0;">
+                <span class="result-label" style="font-size:var(--type-caption);">3개월 총임금</span>
+                <span style="font-size:var(--type-body-sm);font-weight:600;" id="total3months">—</span>
+              </div>
+              <div class="result-item" style="padding:6px 0;">
+                <span class="result-label" style="font-size:var(--type-caption);">3개월 일수</span>
+                <span style="font-size:var(--type-body-sm);font-weight:600;" id="period3months">—</span>
+              </div>
+              <div class="result-item" style="padding:6px 0;">
+                <span class="result-label" style="font-size:var(--type-caption);">평균임금 (1일)</span>
+                <span style="font-size:var(--type-body-sm);font-weight:600;" id="avgDailyWage">—</span>
+              </div>
+              <p style="font-size:var(--type-caption);color:var(--text-light);margin:12px 0 8px;">▸ 통상임금</p>
+              <div class="result-item" style="padding:6px 0;">
+                <span class="result-label" style="font-size:var(--type-caption);">월 통상임금 (기본급+고정수당)</span>
+                <span style="font-size:var(--type-body-sm);font-weight:600;" id="monthlyOrdinary">—</span>
+              </div>
+              <div class="result-item" style="padding:6px 0;">
+                <span class="result-label" style="font-size:var(--type-caption);">통상임금 (1일)</span>
+                <span style="font-size:var(--type-body-sm);font-weight:600;" id="ordinaryDaily">—</span>
+              </div>
+            </div>
+          </details>
+
           <p style="margin-top:12px;font-size:var(--type-caption);color:var(--text-light);">
-            ※ 이 계산은 참고용입니다. 실제 퇴직금은 평균임금 산정 기간의 정확한 일수와 임금 구성에 따라 달라질 수 있습니다.
+            ※ 참고용 계산입니다. 실제 퇴직금은 임금 구성·특수 상황에 따라 달라질 수 있습니다.
           </p>
         </div>
       </div>
@@ -250,42 +283,64 @@
 
       if (!hY || !hM || !hD || !rY || !rM || !rD) return;
 
-      const hireDate   = new Date(hY, hM - 1, hD);
-      const retireDate = new Date(rY, rM - 1, rD);
+      const hireDate   = new Date(+hY, +hM - 1, +hD);
+      const retireDate = new Date(+rY, +rM - 1, +rD);
       const serviceDays = Math.floor((retireDate - hireDate) / 86400000);
 
       if (serviceDays < 365) {
         document.getElementById('ineligibleBox').classList.add('show');
         document.getElementById('ineligibleReason').textContent =
-          `재직일수가 ${serviceDays}일로 1년(365일) 미만입니다. 퇴직금은 1년 이상 근무 시 발생합니다.`;
+          `재직일수 ${serviceDays}일 — 퇴직금은 1년(365일) 이상 근무 시 발생합니다.`;
         return;
       }
 
-      const salary3m = parseNumber(document.getElementById('salary3months').value);
-      const bonus    = parseNumber(document.getElementById('annualBonus').value) || 0;
-      if (!salary3m) return;
+      const baseSalary     = parseNumber(document.getElementById('baseSalary').value);
+      if (!baseSalary) return;
+      const fixedAllowance = parseNumber(document.getElementById('fixedAllowance').value) || 0;
+      const irregularBonus = parseNumber(document.getElementById('irregularBonus').value) || 0;
+      const annualBonus    = parseNumber(document.getElementById('annualBonus').value) || 0;
 
-      // 퇴직 전 3개월 정확한 일수 계산
-      const p3End   = new Date(retireDate);
+      // ── 평균임금 계산 ───────────────────────────────────────────
       const p3Start = new Date(retireDate);
       p3Start.setMonth(p3Start.getMonth() - 3);
-      const period3days = Math.floor((p3End - p3Start) / 86400000);
+      const period3days  = Math.floor((retireDate - p3Start) / 86400000);
 
-      // 3개월 상여금 산입 (연간 상여의 3/12)
-      const bonusPart    = bonus * (3 / 12);
-      const total3months = salary3m + bonusPart;
+      const monthly3      = (baseSalary + fixedAllowance) * 3;  // 고정급 3개월
+      const bonusPart     = annualBonus * (3 / 12);              // 상여금 3/12 산입
+      const total3months  = monthly3 + irregularBonus + bonusPart;
+      const avgDaily      = total3months / period3days;
 
-      // 평균임금 (1일)
-      const avgDaily = total3months / period3days;
+      // ── 통상임금 계산 (월 통상임금 × 12 ÷ 365) ─────────────────
+      // 통상임금 = 기본급 + 정기·일률적 고정수당 (성과급·비정기수당 제외)
+      const monthlyOrdinary = baseSalary + fixedAllowance;
+      const ordinaryDaily   = (monthlyOrdinary * 12) / 365;
 
-      // 퇴직금
-      const severance = Math.round(avgDaily * 30 * (serviceDays / 365));
+      // ── 법적 보호: 평균임금 < 통상임금이면 통상임금 사용 ─────────
+      const useOrdinary = ordinaryDaily > avgDaily;
+      const effectiveDaily = useOrdinary ? ordinaryDaily : avgDaily;
 
-      document.getElementById('severancePay').textContent  = formatNumber(severance) + '원';
-      document.getElementById('serviceDays').textContent   = serviceDays.toLocaleString() + '일';
-      document.getElementById('avgDailyWage').textContent  = formatNumber(Math.round(avgDaily)) + '원';
-      document.getElementById('period3months').textContent = period3days + '일';
-      document.getElementById('total3months').textContent  = formatNumber(Math.round(total3months)) + '원';
+      // ── 퇴직금 ──────────────────────────────────────────────────
+      const severance = Math.round(effectiveDaily * 30 * (serviceDays / 365));
+
+      // ── 적용 기준 배지 ───────────────────────────────────────────
+      const badge = document.getElementById('wageStandardBadge');
+      if (useOrdinary) {
+        badge.style.cssText = 'background:var(--success-50);border:1px solid var(--success-500);color:var(--success-600);';
+        badge.innerHTML = `✅ <strong>통상임금 기준 적용</strong> — 평균임금(${formatNumber(Math.round(avgDaily))}원)보다 통상임금(${formatNumber(Math.round(ordinaryDaily))}원)이 높아 근로자에게 유리한 통상임금 기준을 자동 적용했습니다.`;
+      } else {
+        badge.style.cssText = 'background:var(--primary-50);border:1px solid var(--primary-100);color:var(--primary-700);';
+        badge.innerHTML = `ℹ️ <strong>평균임금 기준 적용</strong> — 통상임금(${formatNumber(Math.round(ordinaryDaily))}원)보다 평균임금(${formatNumber(Math.round(avgDaily))}원)이 높아 평균임금 기준으로 계산했습니다.`;
+      }
+
+      // ── DOM 업데이트 ─────────────────────────────────────────────
+      document.getElementById('severancePay').textContent   = formatNumber(severance) + '원';
+      document.getElementById('serviceDays').textContent    = serviceDays.toLocaleString() + '일';
+      document.getElementById('effectiveDaily').textContent = formatNumber(Math.round(effectiveDaily)) + '원';
+      document.getElementById('total3months').textContent   = formatNumber(Math.round(total3months)) + '원';
+      document.getElementById('period3months').textContent  = period3days + '일';
+      document.getElementById('avgDailyWage').textContent   = formatNumber(Math.round(avgDaily)) + '원';
+      document.getElementById('monthlyOrdinary').textContent= formatNumber(monthlyOrdinary) + '원';
+      document.getElementById('ordinaryDaily').textContent  = formatNumber(Math.round(ordinaryDaily)) + '원';
 
       showResult('resultBox');
     }
