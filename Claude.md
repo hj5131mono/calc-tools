@@ -40,6 +40,8 @@ git push
 | 카테고리 | 파일 | 도구 |
 |----------|------|------|
 | 루트 | `index.html` | 도구 모음 홈 (검색+탭 필터 포함) |
+| 루트 | `privacy.html` | 개인정보처리방침 |
+| 루트 | `googleb2a5ced0d3571b8d.html` | Google Search Console 인증 파일 (건드리지 말 것) |
 | finance | `compound.html` | 복리 계산기 |
 | finance | `percent.html` | 퍼센트 계산기 |
 | finance | `salary.html` | 연봉 실수령액 계산기 (구간비교 포함) |
@@ -52,6 +54,20 @@ git push
 | daily | `dday.html` | D-day 계산기 |
 | daily | `bmi.html` | BMI 계산기 |
 | daily | `age.html` | 나이 계산기 (만나이·띠·별자리) |
+
+### UX 가이드
+`UX_GUIDE.md` 참조. 핵심 요약:
+- 금액 입력 필드에 `data-amount-hint="원"` 또는 `data-amount-hint="만원"` 속성 추가 시 입력 중 한국어 단위 실시간 표시 (예: `3억원`)
+- 금액 입력 필드에 `inputmode="numeric"` 필수 (모바일 숫자 키패드)
+- `toKoreanAmount(value, unit)` 함수는 `common.js`에 위치
+
+### 디자인 토큰 (style.css :root)
+새 CSS 변수 목록 — 반드시 하드코딩 대신 변수 사용:
+- `--type-display` ~ `--type-caption` — 타이포그래피 7단계
+- `--gray-400` — disabled 텍스트
+- `--focus-ring` — 포커스 링 (모든 input/select/button에 통일)
+- `--focus-ring` = `0 0 0 3px rgba(49, 130, 246, 0.15)`
+- 에러 상태: `input.input-error` + `.error-message` 클래스 사용
 
 ### 계산 방식 원칙
 **계산은 반드시 버튼 클릭으로만 작동한다.** `input` 이벤트로 실시간 자동계산을 하지 않는다.
@@ -128,12 +144,20 @@ git push
 - 내부 링크를 가능한 많이 연결 (관련 도구끼리)
 
 ## 광고 영역 규칙
-- 각 페이지 계산 결과 위/아래에 아래 마크업 삽입:
-  <div class="ad-space" style="min-height:90px; text-align:center; margin:20px 0;">
-    <!-- AdSense 광고 자리 -->
-  </div>
-- 페이지당 광고 영역 2~3개
-- 실제 애드센스 코드는 나중에 승인 후 삽입
+- 각 페이지 계산 결과 위/아래에 아래 마크업 삽입 (이미 전 페이지 삽입 완료):
+```html
+<div class="ad-space" style="min-height:90px; text-align:center; margin:20px 0;">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-9632606296515258"
+    data-ad-slot="1446574188"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+```
+- 페이지당 광고 영역 2~3개 (트래픽 높은 7개 페이지는 3개)
+- Auto Ads + 수동 광고 단위 병행 운영 중
 
 ## 코딩 규칙
 - const/let 사용 (var 금지)
