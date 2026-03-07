@@ -1,0 +1,98 @@
+{
+  "_meta": {
+    "year": 2025,
+    "updated": "2025-01-01",
+    "updatedBy": "manual",
+    "note": "이 파일은 GitHub Actions로 자동 갱신됩니다. 수동 수정 시 RATES_UPDATE_MANUAL.md 참조"
+  },
+
+  "minimumWage": {
+    "year": 2025,
+    "hourly": 10030,
+    "monthly": 2096270,
+    "effectiveFrom": "2025-01-01",
+    "source": "https://www.moel.go.kr/info/lawinfo/announ/list.do"
+  },
+
+  "insurance": {
+    "effectiveYear": 2025,
+    "nationalPension": {
+      "employeeRate": 0.045,
+      "employerRate": 0.045,
+      "incomeUpperLimit": 6170000,
+      "incomeLowerLimit": 370000,
+      "limitEffectiveFrom": "2024-07-01",
+      "note": "기준소득월액 상·하한은 매년 7월 변경. nps.or.kr 확인"
+    },
+    "healthInsurance": {
+      "employeeRate": 0.03545,
+      "employerRate": 0.03545,
+      "longTermCareRate": 0.1295,
+      "note": "장기요양보험료율은 건강보험료에 곱함. nhis.or.kr 확인"
+    },
+    "employmentInsurance": {
+      "employeeRate": 0.009,
+      "employerRateUnder150": 0.0115,
+      "employerRateUnder1000": 0.0125,
+      "employerRateOver1000": 0.0165,
+      "note": "사업주 요율은 규모(150인/1000인)에 따라 다름"
+    }
+  },
+
+  "incomeTax": {
+    "year": 2025,
+    "localTaxRate": 0.1,
+    "source": "소득세법 제55조, nts.go.kr 간이세액표",
+    "brackets": [
+      { "from": 0,          "to": 14000000,  "rate": 0.06,  "deduction": 0        },
+      { "from": 14000000,   "to": 50000000,  "rate": 0.15,  "deduction": 1260000  },
+      { "from": 50000000,   "to": 88000000,  "rate": 0.24,  "deduction": 5760000  },
+      { "from": 88000000,   "to": 150000000, "rate": 0.35,  "deduction": 15440000 },
+      { "from": 150000000,  "to": 300000000, "rate": 0.38,  "deduction": 19940000 },
+      { "from": 300000000,  "to": 500000000, "rate": 0.40,  "deduction": 25940000 },
+      { "from": 500000000,  "to": 1000000000,"rate": 0.42,  "deduction": 35940000 },
+      { "from": 1000000000, "to": null,       "rate": 0.45,  "deduction": 65940000 }
+    ],
+    "workIncomeDeduction": [
+      { "from": 0,          "to": 5000000,   "base": 0,        "rate": 0.70 },
+      { "from": 5000000,    "to": 15000000,  "base": 3500000,  "rate": 0.40 },
+      { "from": 15000000,   "to": 45000000,  "base": 7500000,  "rate": 0.15 },
+      { "from": 45000000,   "to": 100000000, "base": 12000000, "rate": 0.05 },
+      { "from": 100000000,  "to": null,       "base": 14750000, "rate": 0.00 }
+    ],
+    "workCreditCap": [
+      { "incomeUpTo": 33000000,  "cap": 740000 },
+      { "incomeUpTo": 70000000,  "cap": 660000 },
+      { "incomeUpTo": null,       "cap": 500000 }
+    ],
+    "childCredit": [
+      { "children": 0, "credit": 0      },
+      { "children": 1, "credit": 150000 },
+      { "children": 2, "credit": 350000 }
+    ],
+    "childCreditExtra": 300000
+  },
+
+  "laborLaw": {
+    "annualLeave": {
+      "basedays": 15,
+      "maxDays": 25,
+      "accrualMinMonths": 1,
+      "fullYearAttendanceRate": 0.80,
+      "addPerEvery2Years": 1,
+      "smallBizThreshold": 5,
+      "source": "근로기준법 제60조"
+    },
+    "severance": {
+      "dailyBase": 30,
+      "minimumServiceDays": 365,
+      "source": "근로자퇴직급여보장법 제8조"
+    },
+    "weeklyHoliday": {
+      "minWeeklyHours": 15,
+      "fullTimeWeeklyHours": 40,
+      "holidayHours": 8,
+      "source": "근로기준법 제55조, 시행령 제30조"
+    }
+  }
+}

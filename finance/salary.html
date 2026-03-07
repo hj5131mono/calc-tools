@@ -5,8 +5,8 @@
   <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <title>연봉 실수령액 계산기 2026 — 세후 월급 계산</title>
-  <meta name="description" content="2026년 기준 연봉 실수령액을 자동 계산합니다. 4대보험, 소득세 공제 후 실제 월급을 확인하세요.">
+  <title>연봉 실수령액 계산기 2025 — 세후 월급 계산</title>
+  <meta name="description" content="2025년 기준 연봉 실수령액을 자동 계산합니다. 4대보험, 소득세 공제 후 실제 월급을 확인하세요.">
   <meta name="keywords" content="연봉 실수령액, 연봉계산기, 세후 월급, 4대보험 계산, 소득세 계산, 2026 연봉">
 
   <!-- Open Graph -->
@@ -229,7 +229,7 @@
       <!-- 페이지 제목 -->
       <div class="calc-card">
         <h2><i data-lucide="wallet" class="icon"></i> 연봉 실수령액 계산기</h2>
-        <p>2026년 4대보험·소득세 기준으로 세후 실제 월급을 자동 계산합니다. 연봉을 입력하면 즉시 확인됩니다.</p>
+        <p><span data-rates-year>2025년 기준</span> 4대보험·소득세 기준으로 세후 실제 월급을 자동 계산합니다. 연봉을 입력하면 즉시 확인됩니다.</p>
       </div>
 
       <!-- 계산 폼 -->
@@ -552,14 +552,14 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
-    // ========== 2026년 기준 세율 상수 ==========
-    // 주의: 국민연금 요율은 2024년 연금개혁에 따라 단계적으로 인상 예정
-    // 최신 요율은 국민연금공단(nps.or.kr)에서 반드시 확인하세요.
-    const PENSION_RATE       = 0.045;       // 국민연금 근로자 부담률 (현행 4.5%)
-    const PENSION_CAP        = 5900000;     // 기준소득월액 상한 (월, 원)
-    const HEALTH_RATE        = 0.03545;     // 건강보험 근로자 부담률 3.545%
-    const LTC_RATE           = 0.1281;      // 장기요양보험 (건강보험료의 12.81%)
-    const EMPLOYMENT_RATE    = 0.009;       // 고용보험 근로자 부담률 0.9%
+    // ========== 세율 상수 (rates.json에서 자동 로드) ==========
+    // 이 변수들은 DOMContentLoaded에서 loadRates()로 채워집니다.
+    // 직접 수정 금지 — assets/data/rates.json을 수정하세요.
+    let PENSION_RATE    = 0.045;
+    let PENSION_CAP     = 6170000;
+    let HEALTH_RATE     = 0.03545;
+    let LTC_RATE        = 0.1295;
+    let EMPLOYMENT_RATE = 0.009;
 
     // 연봉 구간별 비교 표에 표시할 구간 (만원)
     const SALARY_RANGE = [2400, 3000, 3600, 4200, 4800, 5400, 6000, 7000, 8000, 9000, 10000, 12000];
@@ -701,8 +701,20 @@
       showResult('resultBox');
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       lucide.createIcons();
+
+      // rates.json에서 최신 세율 로드
+      const rates = await loadRates();
+      const ins = rates.insurance;
+      PENSION_RATE    = ins.nationalPension.employeeRate;
+      PENSION_CAP     = ins.nationalPension.incomeUpperLimit;
+      HEALTH_RATE     = ins.healthInsurance.employeeRate;
+      LTC_RATE        = ins.healthInsurance.longTermCareRate;
+      EMPLOYMENT_RATE = ins.employmentInsurance.employeeRate;
+
+      // 기준 연도 표시 업데이트
+      applyRatesYear(rates);
 
       // 초기 비교 표 렌더링
       renderComparisonTable(0, 1, 0, 200000);

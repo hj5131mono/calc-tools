@@ -1,0 +1,12 @@
+{
+  "name": "calc-tools-scripts",
+  "version": "1.0.0",
+  "description": "세율/요율 자동 업데이트 스크립트",
+  "type": "module",
+  "scripts": {
+    "update-rates": "node update-rates.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

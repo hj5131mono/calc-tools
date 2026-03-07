@@ -1,0 +1,132 @@
+name: 세율/요율 자동 업데이트
+
+on:
+  schedule:
+    # 매년 1월 2일 09:00 KST (건강보험·최저임금·고용보험 신규 요율 적용일 다음날)
+    - cron: '0 0 2 1 *'
+    # 매년 7월 2일 09:00 KST (국민연금 기준소득월액 변경일 다음날)
+    - cron: '0 0 2 7 *'
+    # 매 분기 첫날 체크 (4월, 10월 — 중간 법령 개정 대응)
+    - cron: '0 0 1 4,10 *'
+
+  # 긴급 수동 실행
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '수동 실행 사유 (선택)'
+        required: false
+        default: '수동 점검'
+
+jobs:
+  update-rates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # rates.json 커밋용
+      issues: write     # 실패 시 Issue 생성용
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 의존성 설치
+        working-directory: scripts
+        run: npm install
+
+      - name: 세율 자동 수집 실행
+        id: update
+        working-directory: scripts
+        run: node update-rates.js
+        env:
+          DATA_GO_KR_API_KEY: ${{ secrets.DATA_GO_KR_API_KEY }}
+        continue-on-error: true  # 실패해도 이후 단계(Issue 생성) 실행
+
+      - name: 변경사항 확인
+        id: diff
+        run: |
+          if git diff --quiet assets/data/rates.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "변경된 내용:"
+            git diff assets/data/rates.json
+          fi
+
+      - name: rates.json 변경 시 자동 커밋 & 배포
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add assets/data/rates.json
+          CHANGES=$(git diff HEAD assets/data/rates.json | grep '^[+-]' | grep -v '^---\|^+++' | head -10)
+          git commit -m "auto: 세율/요율 자동 업데이트 $(date +'%Y-%m-%d')
+
+          변경 항목:
+          ${CHANGES}"
+          git push
+          echo "✅ rates.json 업데이트 완료 — GitHub Pages 자동 배포 진행 중"
+
+      - name: 수동 확인 필요 항목 발생 시 GitHub Issue 자동 생성
+        if: steps.update.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const today = new Date().toISOString().split('T')[0];
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const title = `[세율 점검 필요] 수동 확인 항목 발생 — ${today}`;
+            const body = [
+              `## ⚠ 세율/요율 수동 확인이 필요합니다`,
+              ``,
+              `자동 업데이트 스크립트 실행 결과, 아래 항목을 수동으로 확인해주세요.`,
+              ``,
+              `### 확인 체크리스트`,
+              ``,
+              `- [ ] **최저임금** → https://www.moel.go.kr/info/lawinfo/announ/list.do`,
+              `- [ ] **건강보험료율** → https://www.nhis.or.kr`,
+              `- [ ] **장기요양보험료율** → https://www.nhis.or.kr`,
+              `- [ ] **고용보험료율** → https://www.ei.go.kr`,
+              `- [ ] **국민연금 기준소득월액** → https://www.nps.or.kr`,
+              `- [ ] **소득세 간이세액표** → https://www.nts.go.kr`,
+              ``,
+              `### 업데이트 방법`,
+              ``,
+              ` \`assets/data/rates.json\` 수정 후 커밋하면 전 계산기에 즉시 반영됩니다.`,
+              `자세한 방법: \`RATES_UPDATE_MANUAL.md\` §7 참조`,
+              ``,
+              `### 워크플로우 로그`,
+              `[실행 로그 보기](${runUrl})`,
+              ``,
+              `---`,
+              `> 이 이슈는 GitHub Actions에 의해 자동 생성되었습니다.`
+            ].join('\n');
+
+            // 같은 제목의 open 이슈가 있으면 중복 생성 방지
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'rates-update'
+            });
+
+            const duplicate = existing.data.find(i =>
+              i.title.includes('세율 점검 필요') &&
+              i.title.includes(today.slice(0, 7)) // 같은 월
+            );
+
+            if (!duplicate) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['rates-update', 'maintenance']
+              });
+              console.log('GitHub Issue 생성 완료');
+            } else {
+              console.log('같은 달 이슈 이미 존재 — 중복 생성 건너뜀');
+            }

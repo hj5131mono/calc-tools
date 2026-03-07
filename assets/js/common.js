@@ -1,3 +1,58 @@
+// ─────────────────────────────────────────────────────────────────
+// rates.json 로더 — 모든 세율/요율 계산기가 이 함수로 최신 수치를 가져옴
+// ─────────────────────────────────────────────────────────────────
+
+const RATES_CACHE_KEY = 'calc_rates_v1';
+const RATES_URL = '/assets/data/rates.json';
+
+// 자동화 실패 시 최후 안전망 (common.js 직접 업데이트도 필요)
+const FALLBACK_RATES = {
+  _meta: { year: 2025, updated: '2025-01-01', updatedBy: 'fallback' },
+  minimumWage: { hourly: 10030, monthly: 2096270, year: 2025 },
+  insurance: {
+    nationalPension: {
+      employeeRate: 0.045,
+      incomeUpperLimit: 6170000,
+      incomeLowerLimit: 370000
+    },
+    healthInsurance: { employeeRate: 0.03545, longTermCareRate: 0.1295 },
+    employmentInsurance: { employeeRate: 0.009 }
+  }
+};
+
+async function loadRates() {
+  // 세션 캐시 확인 (같은 탭에서 페이지 이동 시 재요청 방지)
+  try {
+    const cached = sessionStorage.getItem(RATES_CACHE_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      // 캐시가 현재 날짜 기준 당일 데이터면 재사용
+      if (parsed._cacheDate === new Date().toDateString()) return parsed;
+    }
+  } catch (_) { /* sessionStorage 접근 불가 환경 무시 */ }
+
+  try {
+    const res = await fetch(RATES_URL + '?_=' + Date.now());
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    data._cacheDate = new Date().toDateString();
+    try { sessionStorage.setItem(RATES_CACHE_KEY, JSON.stringify(data)); } catch (_) {}
+    return data;
+  } catch (e) {
+    console.warn('[calc-tools] rates.json 로드 실패, 기본값 사용:', e.message);
+    return FALLBACK_RATES;
+  }
+}
+
+// 기준 연도 배지 업데이트 (data-rates-year 속성이 있는 요소에 자동 삽입)
+function applyRatesYear(rates) {
+  document.querySelectorAll('[data-rates-year]').forEach(el => {
+    el.textContent = rates._meta.year + '년 기준';
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+
 // 숫자를 천단위 콤마 포맷으로 변환
 function formatNumber(num) {
   if (num === null || num === undefined || num === '') {
