@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>물타기 계산기 — 주식 코인 평단가 계산</title>
+  <meta name="description" content="주식, 코인 물타기 후 평균 매입단가를 자동으로 계산합니다. 추가 매수 시 변동되는 평단가를 미리 확인하세요.">
+  <meta name="keywords" content="물타기 계산기, 평단가 계산기, 주식 평단가, 코인 평단가, 평균단가 계산, 추가매수 계산기">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="물타기 계산기 — 주식 코인 평단가 계산">
+  <meta property="og:description" content="주식, 코인 물타기 후 평균 매입단가를 자동으로 계산합니다. 추가 매수 시 변동되는 평단가를 미리 확인하세요.">
+  <meta property="og:url" content="https://yourdomain.com/stock/averaging.html">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .add-row-btn {
+      background-color: var(--gray-100);
+      color: var(--primary);
+      border: 2px dashed var(--primary);
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .add-row-btn:hover {
+      background-color: var(--primary-50);
+      border-color: var(--primary-600);
+    }
+
+    .additional-purchase {
+      background-color: var(--gray-50);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+
+    .remove-row-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: var(--danger-500);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .remove-row-btn:hover {
+      background-color: var(--danger-600);
+    }
+
+    .row-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+      font-size: 0.875rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-box {
+      background-color: var(--primary-50);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+    }
+
+    .info-box p {
+      font-size: 0.875rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .related-tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .related-tool-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .related-tool-link .icon {
+      color: var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .related-tools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/index.html">홈</a></li>
+          <li><a href="/index.html#금융">금융계산기</a></li>
+          <li><a href="/index.html#로또">로또/운세</a></li>
+          <li><a href="/index.html#유틸리티">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- 페이지 제목 -->
+      <div class="calc-card">
+        <h2><i data-lucide="trending-up" class="icon"></i> 물타기 계산기</h2>
+        <p>주식이나 코인 추가 매수 시 변동되는 평균 매입단가(평단가)를 자동으로 계산합니다.</p>
+      </div>
+
+      <!-- 안내 박스 -->
+      <div class="info-box">
+        <p>
+          <strong>💡 사용 팁:</strong> 현재 보유 중인 종목 정보를 입력하고, 추가 매수 계획을 입력하면
+          새로운 평균 단가를 미리 확인할 수 있습니다. "행 추가" 버튼으로 여러 차례 물타기 계획을 시뮬레이션할 수 있습니다.
+        </p>
+      </div>
+
+      <!-- 계산 폼 -->
+      <div class="calc-card">
+        <form id="averagingForm">
+          <!-- 현재 보유 -->
+          <h3 style="margin-bottom: 20px; color: var(--text); font-size: 1.125rem;">
+            <i data-lucide="wallet" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+            현재 보유
+          </h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="currentPrice">보유 평단가 (원)</label>
+              <input type="text" id="currentPrice" class="auto-comma" placeholder="예: 50,000" required>
+            </div>
+            <div class="form-group">
+              <label for="currentQuantity">보유 수량</label>
+              <input type="text" id="currentQuantity" class="auto-comma" placeholder="예: 10" required>
+            </div>
+          </div>
+
+          <!-- 추가 매수 -->
+          <h3 style="margin: 32px 0 20px; color: var(--text); font-size: 1.125rem;">
+            <i data-lucide="plus-circle" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+            추가 매수
+          </h3>
+          <div id="additionalPurchases">
+            <!-- 첫 번째 추가 매수 행 -->
+            <div class="additional-purchase" data-index="1">
+              <div class="row-title">추가 매수 #1</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>매수가 (원)</label>
+                  <input type="text" class="auto-comma purchase-price" placeholder="예: 45,000" required>
+                </div>
+                <div class="form-group">
+                  <label>매수 수량</label>
+                  <input type="text" class="auto-comma purchase-quantity" placeholder="예: 5" required>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 행 추가 버튼 -->
+          <button type="button" class="add-row-btn" id="addRowBtn">
+            <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+            추가 매수 행 추가
+          </button>
+
+          <!-- 버튼 그룹 -->
+          <div class="btn-group">
+            <button type="submit" class="btn-primary">
+              <i data-lucide="calculator" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              계산하기
+            </button>
+            <button type="button" class="btn-reset" id="resetBtn">
+              <i data-lucide="rotate-ccw" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              초기화
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 계산 결과 -->
+      <div class="result-box" id="resultBox">
+        <h3>
+          <i data-lucide="check-circle" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          계산 결과
+        </h3>
+
+        <div class="result-item">
+          <span class="result-label">매수 후 평균단가</span>
+          <span class="result-value highlight" id="newAverage">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">총 보유 수량</span>
+          <span class="result-value" id="totalQuantity">0</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">총 투자금액</span>
+          <span class="result-value" id="totalInvestment">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">기존 대비 평단가 변화</span>
+          <span class="result-value" id="priceChange">-</span>
+        </div>
+      </div>
+
+      <!-- 물타기란? 설명 -->
+      <div class="calc-card" style="margin-top: 48px;">
+        <h2><i data-lucide="book-open" class="icon"></i> 물타기란?</h2>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <strong>물타기</strong>는 주식이나 코인 등의 투자 자산 가격이 하락했을 때, 추가로 매수하여 평균 매입단가(평단가)를 낮추는 투자 전략입니다.
+          예를 들어 50,000원에 10주를 매수했는데 주가가 40,000원으로 떨어졌다면, 40,000원에 10주를 추가 매수하면 평균 단가가 45,000원으로 낮아집니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          물타기의 장점은 적은 가격 상승으로도 손익분기점에 도달할 수 있다는 점입니다. 하지만 자산 가격이 계속 하락할 경우 손실이 확대될 수 있으므로,
+          기업이나 자산의 펀더멘털을 충분히 검토하고 투자 여력을 고려하여 신중하게 결정해야 합니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          본 계산기는 추가 매수 시 변동되는 평균 단가를 미리 시뮬레이션할 수 있도록 도와줍니다.
+          여러 차례 물타기를 계획 중이라면 "행 추가" 버튼을 통해 단계별 시나리오를 확인할 수 있으며,
+          총 투자금액과 최종 평단가를 한눈에 파악하여 합리적인 투자 의사결정을 내릴 수 있습니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text-light); font-size: 0.875rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+          ⚠️ <strong>투자 유의사항:</strong> 물타기는 투자 전략 중 하나이며, 반드시 수익을 보장하지 않습니다.
+          투자는 본인의 판단과 책임 하에 진행하시기 바라며, 중요한 투자 결정 시에는 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom: 20px; color: var(--text);">
+          <i data-lucide="link" class="icon"></i>
+          관련 계산기
+        </h3>
+        <div class="related-tools">
+          <a href="/stock/return-rate.html" class="related-tool-link">
+            <i data-lucide="percent" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">수익률 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">매수/매도 수익률 계산</div>
+            </div>
+          </a>
+          <a href="/finance/compound.html" class="related-tool-link">
+            <i data-lucide="trending-up" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">복리 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">장기 투자 수익 계산</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/index.html">홈</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size: 0.75rem; margin-top: 8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/common.js"></script>
+
+  <script>
+    let purchaseRowCount = 1;
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+    });
+
+    // 행 추가 버튼
+    document.getElementById('addRowBtn').addEventListener('click', function() {
+      purchaseRowCount++;
+      const container = document.getElementById('additionalPurchases');
+
+      const newRow = document.createElement('div');
+      newRow.className = 'additional-purchase';
+      newRow.setAttribute('data-index', purchaseRowCount);
+      newRow.innerHTML = `
+        <button type="button" class="remove-row-btn" onclick="removeRow(this)">
+          <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+          삭제
+        </button>
+        <div class="row-title">추가 매수 #${purchaseRowCount}</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>매수가 (원)</label>
+            <input type="text" class="auto-comma purchase-price" placeholder="예: 45,000" required>
+          </div>
+          <div class="form-group">
+            <label>매수 수량</label>
+            <input type="text" class="auto-comma purchase-quantity" placeholder="예: 5" required>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(newRow);
+
+      // 새로 추가된 입력 필드에 자동 콤마 적용
+      const newInputs = newRow.querySelectorAll('.auto-comma');
+      newInputs.forEach(input => {
+        applyAutoComma(input);
+      });
+
+      // 아이콘 다시 생성
+      lucide.createIcons();
+    });
+
+    // 행 삭제
+    function removeRow(button) {
+      const row = button.closest('.additional-purchase');
+      row.remove();
+
+      // 남은 행들 번호 재정렬
+      const remainingRows = document.querySelectorAll('.additional-purchase');
+      remainingRows.forEach((row, index) => {
+        const title = row.querySelector('.row-title');
+        title.textContent = `추가 매수 #${index + 1}`;
+        row.setAttribute('data-index', index + 1);
+      });
+
+      purchaseRowCount = remainingRows.length;
+    }
+
+    // 계산하기
+    document.getElementById('averagingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // 현재 보유 정보
+      const currentPrice = parseNumber(document.getElementById('currentPrice').value);
+      const currentQuantity = parseNumber(document.getElementById('currentQuantity').value);
+
+      if (currentPrice <= 0 || currentQuantity <= 0) {
+        alert('현재 보유 정보를 올바르게 입력해주세요.');
+        return;
+      }
+
+      // 추가 매수 정보 수집
+      const purchaseRows = document.querySelectorAll('.additional-purchase');
+      let totalPrice = currentPrice * currentQuantity;
+      let totalQty = currentQuantity;
+
+      let hasValidPurchase = false;
+
+      purchaseRows.forEach(row => {
+        const price = parseNumber(row.querySelector('.purchase-price').value);
+        const quantity = parseNumber(row.querySelector('.purchase-quantity').value);
+
+        if (price > 0 && quantity > 0) {
+          totalPrice += price * quantity;
+          totalQty += quantity;
+          hasValidPurchase = true;
+        }
+      });
+
+      if (!hasValidPurchase) {
+        alert('최소 1개 이상의 추가 매수 정보를 입력해주세요.');
+        return;
+      }
+
+      // 새 평균단가 계산
+      const newAverage = totalPrice / totalQty;
+      const totalInvestment = totalPrice;
+      const priceChange = newAverage - currentPrice;
+      const priceChangePercent = ((priceChange / currentPrice) * 100).toFixed(2);
+
+      // 결과 표시
+      document.getElementById('newAverage').textContent = formatNumber(Math.round(newAverage)) + '원';
+      document.getElementById('totalQuantity').textContent = formatNumber(totalQty);
+      document.getElementById('totalInvestment').textContent = formatNumber(Math.round(totalInvestment)) + '원';
+
+      // 평단가 변화 표시
+      const changeElement = document.getElementById('priceChange');
+      const changeText = formatNumber(Math.round(Math.abs(priceChange))) + '원 (' + Math.abs(priceChangePercent) + '%)';
+
+      if (priceChange < 0) {
+        changeElement.textContent = '▼ ' + changeText + ' 하락';
+        changeElement.style.color = 'var(--primary)';
+      } else if (priceChange > 0) {
+        changeElement.textContent = '▲ ' + changeText + ' 상승';
+        changeElement.style.color = 'var(--danger-500)';
+      } else {
+        changeElement.textContent = '변동 없음';
+        changeElement.style.color = 'var(--text-light)';
+      }
+
+      // 결과 박스 표시
+      showResult('resultBox');
+    });
+
+    // 초기화
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('averagingForm').reset();
+      hideResult('resultBox');
+
+      // 추가 매수 행 초기화 (첫 번째만 남기고 삭제)
+      const purchaseRows = document.querySelectorAll('.additional-purchase');
+      for (let i = 1; i < purchaseRows.length; i++) {
+        purchaseRows[i].remove();
+      }
+      purchaseRowCount = 1;
+
+      // 첫 번째 행 제목 초기화
+      const firstRow = document.querySelector('.additional-purchase');
+      if (firstRow) {
+        const removeBtn = firstRow.querySelector('.remove-row-btn');
+        if (removeBtn) removeBtn.remove();
+      }
+    });
+  </script>
+</body>
+</html>

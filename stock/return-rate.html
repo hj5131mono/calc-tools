@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수익률 계산기 — 주식 코인 수익률 계산</title>
+  <meta name="description" content="매수가와 매도가를 입력하면 수익률과 수익금을 자동 계산합니다. 수수료, 세금까지 반영한 실수익을 확인하세요.">
+  <meta name="keywords" content="수익률 계산기, 주식 수익률, 코인 수익률, 투자 수익률, 수수료 계산, 세금 계산">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="수익률 계산기 — 주식 코인 수익률 계산">
+  <meta property="og:description" content="매수가와 매도가를 입력하면 수익률과 수익금을 자동 계산합니다. 수수료, 세금까지 반영한 실수익을 확인하세요.">
+  <meta property="og:url" content="https://yourdomain.com/stock/return-rate.html">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .info-box {
+      background-color: var(--primary-50);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+    }
+
+    .info-box p {
+      font-size: 0.875rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .option-group {
+      background-color: var(--gray-50);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-top: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .option-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .radio-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .radio-option label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .fee-input-group {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .fee-input-group.active {
+      display: block;
+    }
+
+    .fee-input-group input {
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .result-profit {
+      color: var(--success-500);
+    }
+
+    .result-loss {
+      color: var(--danger-500);
+    }
+
+    .related-tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .related-tool-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .related-tool-link .icon {
+      color: var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .related-tools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .radio-group {
+        flex-direction: row;
+        gap: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/index.html">홈</a></li>
+          <li><a href="/index.html#금융">금융계산기</a></li>
+          <li><a href="/index.html#로또">로또/운세</a></li>
+          <li><a href="/index.html#유틸리티">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- 페이지 제목 -->
+      <div class="calc-card">
+        <h2><i data-lucide="percent" class="icon"></i> 수익률 계산기</h2>
+        <p>주식이나 코인의 매수가와 매도가를 입력하면 수익률과 실제 수익금을 자동으로 계산합니다.</p>
+      </div>
+
+      <!-- 안내 박스 -->
+      <div class="info-box">
+        <p>
+          <strong>💡 사용 팁:</strong> 매수가, 매도가, 수량을 입력하고 수수료와 세금 옵션을 선택하면
+          실제 받게 될 순수익을 정확하게 확인할 수 있습니다. 국내주식과 해외주식의 세금이 다르니 주의하세요!
+        </p>
+      </div>
+
+      <!-- 계산 폼 -->
+      <div class="calc-card">
+        <form id="returnForm">
+          <!-- 기본 정보 -->
+          <div class="form-group">
+            <label for="buyPrice">매수가 (원)</label>
+            <input type="text" id="buyPrice" class="auto-comma" placeholder="예: 50,000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="sellPrice">매도가 (원)</label>
+            <input type="text" id="sellPrice" class="auto-comma" placeholder="예: 55,000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">수량</label>
+            <input type="text" id="quantity" class="auto-comma" placeholder="예: 10" required>
+          </div>
+
+          <!-- 수수료 옵션 -->
+          <div class="option-group">
+            <div class="option-title">
+              <i data-lucide="coins" style="width: 18px; height: 18px;"></i>
+              수수료
+            </div>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="includeFee" checked>
+              <label for="includeFee">수수료 포함하기 (기본 0.015%)</label>
+            </div>
+
+            <div class="fee-input-group" id="feeInputGroup">
+              <label for="feeRate" style="font-size: 0.875rem; color: var(--text-light); display: block; margin-bottom: 8px;">
+                수수료율 직접 입력 (%)
+              </label>
+              <input type="text" id="feeRate" class="auto-comma" placeholder="0.015" value="0.015">
+            </div>
+          </div>
+
+          <!-- 세금 옵션 -->
+          <div class="option-group">
+            <div class="option-title">
+              <i data-lucide="receipt" style="width: 18px; height: 18px;"></i>
+              세금
+            </div>
+
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="taxNone" name="taxType" value="none" checked>
+                <label for="taxNone">국내주식 (비과세)</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="taxOverseas" name="taxType" value="overseas">
+                <label for="taxOverseas">해외주식 (22%)</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="taxCrypto" name="taxType" value="crypto">
+                <label for="taxCrypto">가상화폐 (22%)</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 버튼 그룹 -->
+          <div class="btn-group">
+            <button type="submit" class="btn-primary">
+              <i data-lucide="calculator" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              수익률 계산
+            </button>
+            <button type="button" class="btn-reset" id="resetBtn">
+              <i data-lucide="rotate-ccw" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              초기화
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 계산 결과 -->
+      <div class="result-box" id="resultBox">
+        <h3>
+          <i data-lucide="check-circle" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          계산 결과
+        </h3>
+
+        <div class="result-item">
+          <span class="result-label">수익률</span>
+          <span class="result-value highlight" id="returnRate">0%</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">수익금 (세전)</span>
+          <span class="result-value" id="grossProfit">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">수수료</span>
+          <span class="result-value" id="totalFee">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">세금</span>
+          <span class="result-value" id="totalTax">0원</span>
+        </div>
+
+        <div class="result-item" style="border-top: 2px solid var(--primary); margin-top: 12px; padding-top: 16px;">
+          <span class="result-label" style="font-weight: 700; font-size: 1rem;">실수익 (순수익)</span>
+          <span class="result-value highlight" id="netProfit">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">총 매수금액</span>
+          <span class="result-value" id="totalBuy">0원</span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">총 매도금액</span>
+          <span class="result-value" id="totalSell">0원</span>
+        </div>
+      </div>
+
+      <!-- 수익률이란? 설명 -->
+      <div class="calc-card" style="margin-top: 48px;">
+        <h2><i data-lucide="book-open" class="icon"></i> 투자 수익률이란?</h2>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <strong>투자 수익률</strong>은 투자한 금액 대비 얼마나 이익 또는 손실을 보았는지를 백분율(%)로 나타낸 지표입니다.
+          수익률은 <code>(매도가 - 매수가) ÷ 매수가 × 100</code>으로 계산되며, 투자 성과를 평가하는 가장 기본적인 지표입니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          예를 들어 50,000원에 매수한 주식을 55,000원에 매도하면 수익률은 10%입니다.
+          하지만 실제로는 <strong>수수료</strong>와 <strong>세금</strong>이 공제되므로, 순수익은 수익률보다 낮아집니다.
+          국내 주식은 매매차익에 대한 세금이 없지만, 해외 주식이나 가상화폐는 양도소득세(22%)가 부과됩니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          본 계산기는 매수가, 매도가, 수량을 입력하면 수익률뿐만 아니라 수수료와 세금을 차감한 <strong>실제 순수익</strong>까지 자동으로 계산해줍니다.
+          투자 계획을 세울 때 목표 수익률을 입력하여 목표가를 역산하거나, 손절매 시점을 미리 계산하는 용도로도 활용할 수 있습니다.
+        </p>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+          <i data-lucide="info" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          수수료와 세금 안내
+        </h3>
+        <ul style="margin-left: 20px; line-height: 1.8; color: var(--text);">
+          <li><strong>국내 주식:</strong> 거래 수수료 약 0.015% (증권사마다 상이), 양도소득세 없음 (2023년 기준 대주주 제외)</li>
+          <li><strong>해외 주식:</strong> 거래 수수료 + 매매차익 250만원 초과 시 양도소득세 22%</li>
+          <li><strong>가상화폐:</strong> 거래소 수수료 + 매매차익 250만원 초과 시 기타소득세 22%</li>
+        </ul>
+
+        <p style="line-height: 1.8; color: var(--text-light); font-size: 0.875rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+          ⚠️ <strong>참고사항:</strong> 본 계산기는 일반적인 경우를 가정한 것이며, 실제 세금은 개인의 소득 상황, 공제 항목 등에 따라 달라질 수 있습니다.
+          정확한 세금 계산은 세무 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom: 20px; color: var(--text);">
+          <i data-lucide="link" class="icon"></i>
+          관련 계산기
+        </h3>
+        <div class="related-tools">
+          <a href="/stock/averaging.html" class="related-tool-link">
+            <i data-lucide="trending-up" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">물타기 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">평균 매입단가 계산</div>
+            </div>
+          </a>
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="target" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">목표가 계산기 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">목표 수익률 달성 가격</div>
+            </div>
+          </a>
+          <a href="/finance/compound.html" class="related-tool-link">
+            <i data-lucide="trending-up" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">복리 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">장기 투자 수익 계산</div>
+            </div>
+          </a>
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="piggy-bank" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">예적금 계산기 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">만기 수령액 계산</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/index.html">홈</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size: 0.75rem; margin-top: 8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/common.js"></script>
+
+  <script>
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+
+      // 수수료 체크박스 토글
+      const includeFeeCheckbox = document.getElementById('includeFee');
+      const feeInputGroup = document.getElementById('feeInputGroup');
+
+      includeFeeCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          feeInputGroup.classList.add('active');
+        } else {
+          feeInputGroup.classList.remove('active');
+        }
+      });
+
+      // 초기 상태 설정
+      if (includeFeeCheckbox.checked) {
+        feeInputGroup.classList.add('active');
+      }
+    });
+
+    // 계산하기
+    document.getElementById('returnForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // 입력값 가져오기
+      const buyPrice = parseNumber(document.getElementById('buyPrice').value);
+      const sellPrice = parseNumber(document.getElementById('sellPrice').value);
+      const quantity = parseNumber(document.getElementById('quantity').value);
+
+      if (buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
+        alert('모든 값을 올바르게 입력해주세요.');
+        return;
+      }
+
+      // 수수료 계산
+      const includeFee = document.getElementById('includeFee').checked;
+      const feeRate = includeFee ? parseNumber(document.getElementById('feeRate').value) / 100 : 0;
+
+      const totalBuyAmount = buyPrice * quantity;
+      const totalSellAmount = sellPrice * quantity;
+
+      // 수수료 (매수 시 + 매도 시)
+      const buyFee = totalBuyAmount * feeRate;
+      const sellFee = totalSellAmount * feeRate;
+      const totalFee = buyFee + sellFee;
+
+      // 세전 수익금
+      const grossProfit = totalSellAmount - totalBuyAmount;
+
+      // 세금 계산
+      const taxType = document.querySelector('input[name="taxType"]:checked').value;
+      let totalTax = 0;
+
+      if (taxType === 'overseas' || taxType === 'crypto') {
+        // 해외주식/가상화폐: 양도소득세 22% (250만원 초과 시)
+        const taxableProfit = Math.max(0, grossProfit - 2500000);
+        totalTax = taxableProfit * 0.22;
+      }
+
+      // 실수익 (순수익)
+      const netProfit = grossProfit - totalFee - totalTax;
+
+      // 수익률 계산
+      const returnRate = (grossProfit / totalBuyAmount) * 100;
+
+      // 결과 표시
+      document.getElementById('returnRate').textContent = returnRate.toFixed(2) + '%';
+      document.getElementById('grossProfit').textContent = formatNumber(Math.round(grossProfit)) + '원';
+      document.getElementById('totalFee').textContent = formatNumber(Math.round(totalFee)) + '원';
+      document.getElementById('totalTax').textContent = formatNumber(Math.round(totalTax)) + '원';
+      document.getElementById('netProfit').textContent = formatNumber(Math.round(netProfit)) + '원';
+      document.getElementById('totalBuy').textContent = formatNumber(Math.round(totalBuyAmount)) + '원';
+      document.getElementById('totalSell').textContent = formatNumber(Math.round(totalSellAmount)) + '원';
+
+      // 수익/손실에 따라 색상 변경
+      const returnRateElement = document.getElementById('returnRate');
+      const netProfitElement = document.getElementById('netProfit');
+      const grossProfitElement = document.getElementById('grossProfit');
+
+      if (netProfit > 0) {
+        returnRateElement.style.color = 'var(--success-500)';
+        netProfitElement.style.color = 'var(--success-500)';
+        grossProfitElement.style.color = 'var(--success-500)';
+      } else if (netProfit < 0) {
+        returnRateElement.style.color = 'var(--danger-500)';
+        netProfitElement.style.color = 'var(--danger-500)';
+        grossProfitElement.style.color = 'var(--danger-500)';
+      } else {
+        returnRateElement.style.color = 'var(--text-light)';
+        netProfitElement.style.color = 'var(--text-light)';
+        grossProfitElement.style.color = 'var(--text-light)';
+      }
+
+      // 결과 박스 표시
+      showResult('resultBox');
+    });
+
+    // 초기화
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('returnForm').reset();
+      hideResult('resultBox');
+
+      // 수수료 입력란 다시 표시
+      document.getElementById('feeInputGroup').classList.add('active');
+    });
+  </script>
+</body>
+</html>

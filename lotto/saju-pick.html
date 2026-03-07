@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사주 로또번호 추천 — 생년월일 오행 분석으로 행운번호 뽑기</title>
+  <meta name="description" content="사주팔자와 MBTI를 분석하여 나만의 로또 행운번호를 추천합니다. 생년월일, 태어난 시간, 성별, MBTI를 입력하고 오행 기반 번호를 확인하세요.">
+  <meta name="keywords" content="사주 로또, 로또 번호 추천, 오행 로또, 사주 행운번호, MBTI 로또, 생년월일 로또">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="사주 로또번호 추천 — 생년월일 오행 분석으로 행운번호 뽑기">
+  <meta property="og:description" content="사주팔자와 MBTI를 분석하여 나만의 로또 행운번호를 추천합니다. 생년월일, 태어난 시간, 성별, MBTI를 입력하고 오행 기반 번호를 확인하세요.">
+  <meta property="og:url" content="https://yourdomain.com/lotto/saju-pick.html">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    /* 사주 테마 오버라이드 */
+    .saju-theme {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      min-height: 100vh;
+    }
+
+    .saju-theme .site-header {
+      background-color: rgba(30, 27, 75, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .saju-theme .calc-card {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .saju-header {
+      text-align: center;
+      padding: 48px 0 32px;
+      color: white;
+    }
+
+    .saju-header h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .saju-header p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* MBTI 버튼 토글 */
+    .mbti-group {
+      margin-bottom: 20px;
+    }
+
+    .mbti-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+
+    .mbti-toggle {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mbti-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--border);
+      background-color: var(--white);
+      color: var(--text);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mbti-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .mbti-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* 로딩 애니메이션 */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .loading-content {
+      text-align: center;
+      color: white;
+    }
+
+    .taiji {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
+      animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    /* 사주 카드 */
+    .saju-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .saju-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px solid #d97706;
+      border-radius: var(--radius-md);
+      padding: 20px 12px;
+      text-align: center;
+    }
+
+    .saju-card-title {
+      font-size: 0.75rem;
+      color: #92400e;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .saju-char {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    .saju-element {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* 오행 색상 */
+    .wood { color: #22c55e; }
+    .fire { color: #ef4444; }
+    .earth { color: #eab308; }
+    .metal { color: #94a3b8; }
+    .water { color: #3b82f6; }
+
+    /* 오행 분석 */
+    .element-bars {
+      margin: 24px 0;
+    }
+
+    .element-bar {
+      margin-bottom: 16px;
+    }
+
+    .element-bar-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.875rem;
+    }
+
+    .element-bar-fill {
+      height: 24px;
+      background-color: var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .element-bar-value {
+      height: 100%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    /* 로또 볼 */
+    .lotto-balls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 32px 0;
+    }
+
+    .lotto-ball {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .lotto-ball-element {
+      position: absolute;
+      bottom: -20px;
+      font-size: 0.625rem;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    /* 로또 볼 색상 (번호대별) */
+    .ball-yellow { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+    .ball-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+    .ball-red { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+    .ball-gray { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); }
+    .ball-green { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+
+    /* 공유 버튼 */
+    .share-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .share-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-btn-copy {
+      background-color: var(--gray-200);
+      color: var(--text);
+    }
+
+    .share-btn-copy:hover {
+      background-color: var(--gray-300);
+    }
+
+    .share-btn-kakao {
+      background-color: #FEE500;
+      color: #000000;
+    }
+
+    .share-btn-kakao:hover {
+      background-color: #FDD835;
+    }
+
+    .share-btn-twitter {
+      background-color: #1DA1F2;
+      color: white;
+    }
+
+    .share-btn-twitter:hover {
+      background-color: #1A8CD8;
+    }
+
+    .related-tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .related-tool-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .related-tool-link .icon {
+      color: var(--primary);
+    }
+
+    @media (max-width: 640px) {
+      .saju-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .lotto-ball {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+      }
+
+      .share-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .related-tools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .saju-header h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="saju-theme">
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/index.html" style="color: rgba(255,255,255,0.8);">홈</a></li>
+          <li><a href="/index.html#금융" style="color: rgba(255,255,255,0.8);">금융계산기</a></li>
+          <li><a href="/index.html#로또" style="color: rgba(255,255,255,0.8);">로또/운세</a></li>
+          <li><a href="/index.html#유틸리티" style="color: rgba(255,255,255,0.8);">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- 페이지 헤더 -->
+      <div class="saju-header">
+        <h1>🔮 사주 로또 행운번호</h1>
+        <p>당신의 사주팔자와 MBTI를 분석하여 오행 기반 행운번호를 추천합니다</p>
+      </div>
+
+      <!-- 입력 폼 -->
+      <div class="calc-card">
+        <h2><i data-lucide="user" class="icon"></i> 내 정보 입력</h2>
+        <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 24px;">
+          정확한 생년월일과 태어난 시간을 입력할수록 더 정확한 사주 분석이 가능합니다.
+        </p>
+
+        <form id="sajuForm">
+          <!-- 생년월일 -->
+          <div class="form-group">
+            <label for="birthDate">생년월일 (양력)</label>
+            <input type="date" id="birthDate" required min="1900-01-01" max="2030-12-31">
+          </div>
+
+          <!-- 태어난 시간 -->
+          <div class="form-group">
+            <label for="birthHour">태어난 시간</label>
+            <select id="birthHour">
+              <option value="unknown">모름 (시주 제외)</option>
+              <option value="0">자시 (23:00~01:00)</option>
+              <option value="1">축시 (01:00~03:00)</option>
+              <option value="2">인시 (03:00~05:00)</option>
+              <option value="3">묘시 (05:00~07:00)</option>
+              <option value="4">진시 (07:00~09:00)</option>
+              <option value="5">사시 (09:00~11:00)</option>
+              <option value="6">오시 (11:00~13:00)</option>
+              <option value="7">미시 (13:00~15:00)</option>
+              <option value="8">신시 (15:00~17:00)</option>
+              <option value="9">유시 (17:00~19:00)</option>
+              <option value="10">술시 (19:00~21:00)</option>
+              <option value="11">해시 (21:00~23:00)</option>
+            </select>
+          </div>
+
+          <!-- 성별 -->
+          <div class="form-group">
+            <label>성별</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="genderM" name="gender" value="male" checked>
+                <label for="genderM">남성</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="genderF" name="gender" value="female">
+                <label for="genderF">여성</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- MBTI -->
+          <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+            <i data-lucide="brain" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+            MBTI
+          </h3>
+
+          <div class="mbti-group">
+            <div class="mbti-label">외향 / 내향</div>
+            <div class="mbti-toggle">
+              <button type="button" class="mbti-btn active" data-axis="ei" data-value="E">E (외향)</button>
+              <button type="button" class="mbti-btn" data-axis="ei" data-value="I">I (내향)</button>
+            </div>
+          </div>
+
+          <div class="mbti-group">
+            <div class="mbti-label">감각 / 직관</div>
+            <div class="mbti-toggle">
+              <button type="button" class="mbti-btn active" data-axis="sn" data-value="S">S (감각)</button>
+              <button type="button" class="mbti-btn" data-axis="sn" data-value="N">N (직관)</button>
+            </div>
+          </div>
+
+          <div class="mbti-group">
+            <div class="mbti-label">사고 / 감정</div>
+            <div class="mbti-toggle">
+              <button type="button" class="mbti-btn active" data-axis="tf" data-value="T">T (사고)</button>
+              <button type="button" class="mbti-btn" data-axis="tf" data-value="F">F (감정)</button>
+            </div>
+          </div>
+
+          <div class="mbti-group">
+            <div class="mbti-label">판단 / 인식</div>
+            <div class="mbti-toggle">
+              <button type="button" class="mbti-btn active" data-axis="jp" data-value="J">J (판단)</button>
+              <button type="button" class="mbti-btn" data-axis="jp" data-value="P">P (인식)</button>
+            </div>
+          </div>
+
+          <!-- 제출 버튼 -->
+          <div class="btn-group" style="margin-top: 32px;">
+            <button type="submit" class="btn-primary" style="flex: 1;">
+              <i data-lucide="sparkles" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              내 행운번호 보기
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 결과 영역 -->
+      <div id="resultSection" style="display: none;">
+        <!-- 사주팔자 -->
+        <div class="calc-card">
+          <h2><i data-lucide="book-open" class="icon"></i> 당신의 사주팔자</h2>
+          <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 24px;">
+            사주는 시-일-월-년 순서로 읽습니다. 각 글자의 색상은 오행을 나타냅니다.
+          </p>
+          <div class="saju-cards" id="sajuCards"></div>
+        </div>
+
+        <!-- 오행 분석 -->
+        <div class="calc-card">
+          <h2><i data-lucide="pie-chart" class="icon"></i> 오행 분석</h2>
+          <div class="element-bars" id="elementBars"></div>
+
+          <div style="background-color: var(--primary-50); padding: 20px; border-radius: var(--radius-md); margin-top: 24px;">
+            <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 1rem;">
+              <i data-lucide="zap" style="width: 18px; height: 18px; vertical-align: middle;"></i>
+              나의 주요 기운
+            </h4>
+            <p id="mainElement" style="margin: 0; color: var(--text);"></p>
+          </div>
+
+          <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-top: 16px;">
+            <h4 style="color: var(--text); margin-bottom: 12px; font-size: 1rem;">
+              <i data-lucide="trending-up" style="width: 18px; height: 18px; vertical-align: middle;"></i>
+              보완이 필요한 기운
+            </h4>
+            <p id="weakElement" style="margin: 0; color: var(--text-light);"></p>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-space">
+          <!-- AdSense 광고 자리 -->
+        </div>
+
+        <!-- 행운 번호 -->
+        <div class="calc-card">
+          <h2 style="text-align: center; margin-bottom: 16px;">
+            <i data-lucide="clover" class="icon"></i> 이번 주 행운의 번호
+          </h2>
+          <p style="text-align: center; color: var(--text-light); font-size: 0.875rem; margin-bottom: 32px;">
+            당신의 사주와 MBTI를 분석하여 추천된 번호입니다
+          </p>
+          <div class="lotto-balls" id="lottoBalls"></div>
+
+          <div style="text-align: center; margin-top: 32px;">
+            <button class="btn-primary" id="regenerateBtn" style="min-width: 200px;">
+              <i data-lucide="refresh-cw" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 4px;"></i>
+              다시 뽑기
+            </button>
+          </div>
+
+          <!-- 공유 버튼 -->
+          <div class="share-buttons">
+            <button class="share-btn share-btn-copy" id="copyBtn">
+              <i data-lucide="copy" style="width: 18px; height: 18px;"></i>
+              결과 복사
+            </button>
+            <button class="share-btn share-btn-kakao" id="kakaoBtn">
+              💬 카카오톡
+            </button>
+            <button class="share-btn share-btn-twitter" id="twitterBtn">
+              🐦 트위터
+            </button>
+          </div>
+        </div>
+
+        <!-- 면책조항 -->
+        <div class="calc-card" style="background-color: var(--warning-50); border-left: 4px solid var(--warning-500);">
+          <p style="margin: 0; color: var(--text); font-size: 0.875rem; line-height: 1.6;">
+            ⚠️ <strong>면책조항:</strong> 본 서비스는 사주 명리학과 통계를 활용한 재미/참고용이며, 당첨을 보장하지 않습니다.
+            실제 로또 구매는 신중하게 결정하시기 바랍니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 설명 섹션 -->
+      <div class="calc-card" style="margin-top: 48px;">
+        <h2><i data-lucide="book-open" class="icon"></i> 사주(四柱)란?</h2>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <strong>사주(四柱)</strong>는 태어난 연(年), 월(月), 일(日), 시(時)를 각각 천간(天干)과 지지(地支)로 표현한 것으로,
+          총 8개의 글자로 이루어져 있어 <strong>사주팔자(四柱八字)</strong>라고도 합니다.
+          이 8개의 글자는 각각 오행(木火土金水)의 기운을 가지고 있으며, 이를 통해 사람의 성향과 운명을 분석합니다.
+        </p>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          사주 분석은 수천 년간 전해 내려온 동양의 명리학으로, 태어난 시간의 우주적 기운이 개인에게 영향을 준다는 철학을 바탕으로 합니다.
+          본 서비스는 이러한 전통 명리학의 원리를 현대적으로 재해석하여 로또 번호 추천에 활용한 것입니다.
+        </p>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+          <i data-lucide="shapes" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          오행(五行)과 행운 번호의 관계
+        </h3>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <strong>오행(五行)</strong>은 우주 만물을 구성하는 다섯 가지 기본 요소입니다:
+        </p>
+        <ul style="margin-left: 20px; line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <li><strong class="wood">목(木):</strong> 성장과 발전, 창조성 - 번호 1~9 영역</li>
+          <li><strong class="fire">화(火):</strong> 열정과 활동, 번영 - 번호 10~18 영역</li>
+          <li><strong class="earth">토(土):</strong> 안정과 중심, 조화 - 번호 19~27 영역</li>
+          <li><strong class="metal">금(金):</strong> 단단함과 결단, 수확 - 번호 28~36 영역</li>
+          <li><strong class="water">수(水):</strong> 지혜와 유연, 흐름 - 번호 37~45 영역</li>
+        </ul>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          본 서비스는 사주팔자에서 강한 오행과 부족한 오행을 분석하여, 당신에게 필요한 기운을 보충할 수 있는 번호를 우선적으로 추천합니다.
+          강한 기운은 이미 가지고 있는 행운을, 약한 기운은 채워야 할 균형을 상징합니다.
+        </p>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+          <i data-lucide="users" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          MBTI와 사주의 만남
+        </h3>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          MBTI는 현대 심리학에서 사용하는 성격 유형 지표이며, 사주는 전통 명리학입니다.
+          본 서비스는 이 두 가지를 창의적으로 결합하여 더욱 개인화된 번호를 추천합니다:
+        </p>
+        <ul style="margin-left: 20px; line-height: 1.8; color: var(--text);">
+          <li><strong>E(외향) = 화:</strong> 활발하고 밝은 에너지</li>
+          <li><strong>I(내향) = 수:</strong> 깊이 있고 차분한 에너지</li>
+          <li><strong>S(감각) = 토:</strong> 현실적이고 안정적인 에너지</li>
+          <li><strong>N(직관) = 목:</strong> 성장하고 확장하는 에너지</li>
+          <li><strong>T(사고) = 금:</strong> 논리적이고 단단한 에너지</li>
+          <li><strong>F(감정) = 화:</strong> 따뜻하고 공감하는 에너지</li>
+          <li><strong>J(판단) = 금:</strong> 결단력 있는 에너지</li>
+          <li><strong>P(인식) = 수:</strong> 유연하고 적응적인 에너지</li>
+        </ul>
+
+        <p style="line-height: 1.8; color: var(--text-light); font-size: 0.875rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+          💡 <strong>재미로 즐기세요:</strong> 사주와 MBTI를 기반으로 한 번호 추천은 과학적 근거가 있는 것은 아니며,
+          재미와 흥미를 위한 서비스입니다. 로또는 확률 게임이므로 과도한 구매는 피하시기 바랍니다.
+        </p>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom: 20px; color: var(--text);">
+          <i data-lucide="link" class="icon"></i>
+          관련 도구
+        </h3>
+        <div class="related-tools">
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="dice-6" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">로또 번호 생성기 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">AI 추천 로또 번호</div>
+            </div>
+          </a>
+          <a href="/stock/averaging.html" class="related-tool-link">
+            <i data-lucide="trending-up" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">물타기 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">평균 매입단가 계산</div>
+            </div>
+          </a>
+          <a href="/finance/compound.html" class="related-tool-link">
+            <i data-lucide="piggy-bank" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">복리 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">장기 투자 수익 계산</div>
+            </div>
+          </a>
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="heart" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">MBTI 궁합 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">MBTI 유형별 궁합</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+    </div>
+  </main>
+
+  <!-- 로딩 오버레이 -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="taiji">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#fff"/>
+          <path d="M50,5 A45,45,0,0,1,50,95 A22.5,22.5,0,0,0,50,50 A22.5,22.5,0,0,1,50,5" fill="#000"/>
+          <circle cx="50" cy="27.5" r="7" fill="#fff"/>
+          <circle cx="50" cy="72.5" r="7" fill="#000"/>
+        </svg>
+      </div>
+      <div class="loading-text">사주 분석 중...</div>
+    </div>
+  </div>
+
+  <footer class="site-footer" style="background-color: rgba(30, 27, 75, 0.95); color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/index.html" style="color: rgba(255,255,255,0.6);">홈</a>
+          <a href="/privacy.html" style="color: rgba(255,255,255,0.6);">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size: 0.75rem; margin-top: 8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/common.js"></script>
+
+  <script>
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+    });
+
+    // 사주 계산 상수
+    const 천간 = ['갑','을','병','정','무','기','경','신','임','계'];
+    const 지지 = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+    const 천간오행 = {갑:'목',을:'목',병:'화',정:'화',무:'토',기:'토',경:'금',신:'금',임:'수',계:'수'};
+    const 지지오행 = {자:'수',축:'토',인:'목',묘:'목',진:'토',사:'화',오:'화',미:'토',신:'금',유:'금',술:'토',해:'수'};
+    const 오행색상 = {목:'#22c55e', 화:'#ef4444', 토:'#eab308', 금:'#94a3b8', 수:'#3b82f6'};
+    const 오행번호대 = {
+      목: [1,2,3,4,5,6,7,8,9],
+      화: [10,11,12,13,14,15,16,17,18],
+      토: [19,20,21,22,23,24,25,26,27],
+      금: [28,29,30,31,32,33,34,35,36],
+      수: [37,38,39,40,41,42,43,44,45]
+    };
+    const MBTI오행 = {E:'화', I:'수', S:'토', N:'목', T:'금', F:'화', J:'금', P:'수'};
+
+    let currentSaju = null;
+    let currentMBTI = {ei: 'E', sn: 'S', tf: 'T', jp: 'J'};
+    let randomSeed = 0;
+
+    // MBTI 버튼 토글
+    const mbtiButtons = document.querySelectorAll('.mbti-btn');
+    mbtiButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const axis = this.getAttribute('data-axis');
+        const value = this.getAttribute('data-value');
+
+        // 같은 축의 다른 버튼 비활성화
+        document.querySelectorAll(`[data-axis="${axis}"]`).forEach(b => {
+          b.classList.remove('active');
+        });
+
+        this.classList.add('active');
+        currentMBTI[axis] = value;
+      });
+    });
+
+    // 년주 계산
+    function 년주계산(year) {
+      const 간 = ((year - 4) % 10 + 10) % 10;
+      const 지 = ((year - 4) % 12 + 12) % 12;
+      return { 천간: 천간[간], 지지: 지지[지] };
+    }
+
+    // 월주 계산
+    function 월주계산(year, month) {
+      const 년간인덱스 = ((year - 4) % 10 + 10) % 10;
+      const 월간인덱스 = (년간인덱스 * 2 + month) % 10;
+      const 월지인덱스 = (month + 1) % 12;
+      return { 천간: 천간[월간인덱스], 지지: 지지[월지인덱스] };
+    }
+
+    // 일주 계산
+    function 일주계산(year, month, day) {
+      const a = Math.floor((14 - month) / 12);
+      const y = year + 4800 - a;
+      const m = month + 12 * a - 3;
+      const jdn = day + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
+      const offset = ((jdn - 2451551) % 60 + 60) % 60;
+      return { 천간: 천간[offset % 10], 지지: 지지[offset % 12] };
+    }
+
+    // 시주 계산
+    function 시주계산(일간인덱스, 시지인덱스) {
+      const 시간인덱스 = (일간인덱스 * 2 + 시지인덱스) % 10;
+      return { 천간: 천간[시간인덱스], 지지: 지지[시지인덱스] };
+    }
+
+    // 오행 분포 계산
+    function 오행분포계산(사주) {
+      const 분포 = {목:0, 화:0, 토:0, 금:0, 수:0};
+
+      사주.forEach(주 => {
+        if (주) {
+          분포[천간오행[주.천간]]++;
+          분포[지지오행[주.지지]]++;
+        }
+      });
+
+      return 분포;
+    }
+
+    // 행운번호 생성
+    function 행운번호생성(오행분포, mbti, gender, seed) {
+      const 번호풀 = [];
+
+      // MBTI 오행 추가
+      const mbtiValues = Object.values(mbti);
+      mbtiValues.forEach(v => {
+        const 오행 = MBTI오행[v];
+        오행분포[오행]++;
+      });
+
+      // 가장 강한 오행 2개
+      const sorted = Object.entries(오행분포).sort((a, b) => b[1] - a[1]);
+      const 강한오행1 = sorted[0][0];
+      const 강한오행2 = sorted[1][0];
+      const 약한오행 = sorted[sorted.length - 1][0];
+
+      // 강한 오행에서 각 2개씩
+      오행번호대[강한오행1].forEach(n => 번호풀.push({n, 오행: 강한오행1}));
+      오행번호대[강한오행2].forEach(n => 번호풀.push({n, 오행: 강한오행2}));
+
+      // 약한 오행에서 2개 (보완)
+      오행번호대[약한오행].forEach(n => 번호풀.push({n, 오행: 약한오행}));
+
+      // 성별 시드 조정
+      const genderSeed = gender === 'male' ? 1 : 2;
+      const finalSeed = seed + genderSeed;
+
+      // 랜덤 선택 (시드 기반)
+      const selected = [];
+      const used = new Set();
+
+      // 간단한 시드 기반 랜덤
+      let rng = finalSeed;
+      const random = () => {
+        rng = (rng * 9301 + 49297) % 233280;
+        return rng / 233280;
+      };
+
+      while (selected.length < 6 && 번호풀.length > 0) {
+        const idx = Math.floor(random() * 번호풀.length);
+        const item = 번호풀[idx];
+
+        if (!used.has(item.n)) {
+          selected.push(item);
+          used.add(item.n);
+        }
+
+        번호풀.splice(idx, 1);
+      }
+
+      // 오름차순 정렬
+      selected.sort((a, b) => a.n - b.n);
+
+      return selected;
+    }
+
+    // 로또 볼 색상 (번호대별)
+    function getBallColor(num) {
+      if (num >= 1 && num <= 10) return 'ball-yellow';
+      if (num >= 11 && num <= 20) return 'ball-blue';
+      if (num >= 21 && num <= 30) return 'ball-red';
+      if (num >= 31 && num <= 40) return 'ball-gray';
+      if (num >= 41 && num <= 45) return 'ball-green';
+      return 'ball-yellow';
+    }
+
+    // 오행 이름 매핑
+    const 오행이름 = {목:'목', 화:'화', 토:'토', 금:'금', 수:'수'};
+    const 오행설명 = {
+      목: '성장과 창조의 기운이 강합니다. 새로운 시작과 확장의 에너지를 가지고 있습니다.',
+      화: '열정과 활동의 기운이 강합니다. 밝고 따뜻한 에너지로 주변을 밝힙니다.',
+      토: '안정과 조화의 기운이 강합니다. 중심을 잡고 균형을 유지하는 힘이 있습니다.',
+      금: '결단과 수확의 기운이 강합니다. 단단하고 명확한 판단력을 가지고 있습니다.',
+      수: '지혜와 유연의 기운이 강합니다. 흐르는 물처럼 적응력이 뛰어납니다.'
+    };
+
+    // 폼 제출
+    document.getElementById('sajuForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // 입력값 가져오기
+      const birthDate = document.getElementById('birthDate').value;
+      if (!birthDate) {
+        alert('생년월일을 입력해주세요.');
+        return;
+      }
+
+      const [year, month, day] = birthDate.split('-').map(Number);
+      const birthHour = document.getElementById('birthHour').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+
+      // 사주 계산
+      const 년주 = 년주계산(year);
+      const 월주 = 월주계산(year, month);
+      const 일주 = 일주계산(year, month, day);
+
+      let 시주 = null;
+      if (birthHour !== 'unknown') {
+        const 일간인덱스 = 천간.indexOf(일주.천간);
+        시주 = 시주계산(일간인덱스, parseInt(birthHour));
+      }
+
+      currentSaju = [시주, 일주, 월주, 년주];
+
+      // 로딩 시작
+      document.getElementById('loadingOverlay').classList.add('show');
+
+      // 2.5초 후 결과 표시
+      setTimeout(() => {
+        displayResults(currentSaju, currentMBTI, gender);
+        document.getElementById('loadingOverlay').classList.remove('show');
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+      }, 2500);
+    });
+
+    // 결과 표시
+    function displayResults(사주, mbti, gender) {
+      randomSeed = Date.now();
+
+      // 사주 카드 표시
+      const sajuCards = document.getElementById('sajuCards');
+      sajuCards.innerHTML = '';
+
+      const titles = ['시주 (時柱)', '일주 (日柱)', '월주 (月柱)', '년주 (年柱)'];
+      사주.forEach((주, idx) => {
+        if (!주 && idx === 0) {
+          sajuCards.innerHTML += `
+            <div class="saju-card" style="opacity: 0.5;">
+              <div class="saju-card-title">${titles[idx]}</div>
+              <div class="saju-char" style="color: var(--text-light);">?</div>
+              <div class="saju-char" style="color: var(--text-light);">?</div>
+              <div class="saju-element" style="color: var(--text-light);">미입력</div>
+            </div>
+          `;
+        } else if (주) {
+          const 천간색 = 오행색상[천간오행[주.천간]];
+          const 지지색 = 오행색상[지지오행[주.지지]];
+
+          sajuCards.innerHTML += `
+            <div class="saju-card">
+              <div class="saju-card-title">${titles[idx]}</div>
+              <div class="saju-char" style="color: ${천간색};">${주.천간}</div>
+              <div class="saju-char" style="color: ${지지색};">${주.지지}</div>
+              <div class="saju-element">
+                <span style="color: ${천간색};">${천간오행[주.천간]}</span> ·
+                <span style="color: ${지지색};">${지지오행[주.지지]}</span>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      // 오행 분포 계산
+      const 오행분포 = 오행분포계산(사주.filter(x => x));
+
+      // 오행 막대 차트
+      const elementBars = document.getElementById('elementBars');
+      const maxCount = Math.max(...Object.values(오행분포));
+
+      elementBars.innerHTML = '';
+      Object.entries(오행분포).forEach(([오행, count]) => {
+        const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        const 한글 = {목:'목(木)', 화:'화(火)', 토:'토(土)', 금:'금(金)', 수:'수(水)'}[오행];
+
+        elementBars.innerHTML += `
+          <div class="element-bar">
+            <div class="element-bar-label">
+              <span style="font-weight: 600; color: ${오행색상[오행]};">${한글}</span>
+              <span>${count}개</span>
+            </div>
+            <div class="element-bar-fill">
+              <div class="element-bar-value" style="width: ${percentage}%; background-color: ${오행색상[오행]};">
+                ${count > 0 ? count : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      // 주요 기운 / 약한 기운
+      const sorted = Object.entries(오행분포).sort((a, b) => b[1] - a[1]);
+      const 주요오행 = sorted[0][0];
+      const 약한오행 = sorted[sorted.length - 1][0];
+
+      document.getElementById('mainElement').textContent =
+        `${오행이름[주요오행]}(${sorted[0][1]}개): ${오행설명[주요오행]}`;
+      document.getElementById('weakElement').textContent =
+        `${오행이름[약한오행]}(${sorted[sorted.length-1][1]}개): 이 기운을 보완하면 균형을 맞출 수 있습니다.`;
+
+      // 행운번호 생성
+      const 행운번호 = 행운번호생성({...오행분포}, mbti, gender, randomSeed);
+
+      // 로또 볼 표시
+      const lottoBalls = document.getElementById('lottoBalls');
+      lottoBalls.innerHTML = '';
+
+      행운번호.forEach((item, idx) => {
+        const ballColor = getBallColor(item.n);
+        setTimeout(() => {
+          lottoBalls.innerHTML += `
+            <div class="lotto-ball ${ballColor}">
+              ${item.n}
+              <div class="lotto-ball-element">${오행이름[item.오행]}행</div>
+            </div>
+          `;
+          lucide.createIcons();
+        }, idx * 100);
+      });
+
+      // 공유 텍스트 준비
+      window.shareText = `🔮 나의 사주 행운번호: ${행운번호.map(x => x.n).join(', ')} | 일간: ${사주[1]?.천간}${천간오행[사주[1]?.천간]} | MBTI: ${Object.values(mbti).join('')}`;
+
+      lucide.createIcons();
+    }
+
+    // 다시 뽑기
+    document.getElementById('regenerateBtn').addEventListener('click', function() {
+      if (currentSaju) {
+        const gender = document.querySelector('input[name="gender"]:checked').value;
+        displayResults(currentSaju, currentMBTI, gender);
+      }
+    });
+
+    // 복사 버튼
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      if (window.shareText) {
+        navigator.clipboard.writeText(window.shareText).then(() => {
+          alert('결과가 복사되었습니다!');
+        });
+      }
+    });
+
+    // 카카오톡 공유
+    document.getElementById('kakaoBtn').addEventListener('click', function() {
+      const url = window.location.href;
+      window.open(`https://sharer.kakao.com/talk/friends/picker/link?app_key=YOUR_APP_KEY&validation_action=share&validation_params=${encodeURIComponent(JSON.stringify({url}))}`, '_blank');
+    });
+
+    // 트위터 공유
+    document.getElementById('twitterBtn').addEventListener('click', function() {
+      const url = window.location.href;
+      const text = window.shareText || '사주 로또 행운번호';
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    });
+  </script>
+</body>
+</html>

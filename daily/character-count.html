@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>글자수 세기 — 공백 포함/제외, 바이트 수 계산</title>
+  <meta name="description" content="글자수를 실시간으로 세어줍니다. 공백 포함/제외, 바이트 수, 단어 수까지 한 번에 확인하세요.">
+  <meta name="keywords" content="글자수 세기, 글자 수 계산, 바이트 수 계산, 단어 수 세기, 텍스트 카운터">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="글자수 세기 — 공백 포함/제외, 바이트 수 계산">
+  <meta property="og:description" content="글자수를 실시간으로 세어줍니다. 공백 포함/제외, 바이트 수, 단어 수까지 한 번에 확인하세요.">
+  <meta property="og:url" content="https://yourdomain.com/daily/character-count.html">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .info-box {
+      background-color: var(--primary-50);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+    }
+
+    .info-box p {
+      font-size: 0.875rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* 텍스트 입력 영역 */
+    .text-input-area {
+      width: 100%;
+      min-height: 300px;
+      padding: 20px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      line-height: 1.8;
+      resize: vertical;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .text-input-area:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
+    }
+
+    .text-input-area::placeholder {
+      color: var(--text-light);
+    }
+
+    /* 통계 그리드 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background-color: var(--gray-50);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+      border-color: var(--primary);
+    }
+
+    .stat-card.highlight .stat-value {
+      font-size: 2.5rem;
+    }
+
+    /* 버튼 그룹 */
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-copy {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-copy:hover {
+      background-color: var(--primary-600);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-clear {
+      background-color: var(--gray-200);
+      color: var(--text);
+    }
+
+    .btn-clear:hover {
+      background-color: var(--gray-300);
+    }
+
+    /* 활용 예시 */
+    .usage-examples {
+      background-color: var(--gray-50);
+      padding: 24px;
+      border-radius: var(--radius-md);
+      margin-top: 24px;
+    }
+
+    .usage-examples h4 {
+      color: var(--text);
+      margin-bottom: 16px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .usage-examples ul {
+      margin-left: 20px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .related-tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .related-tool-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .related-tool-link:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+
+    .related-tool-link .icon {
+      color: var(--primary);
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-value {
+        font-size: 1.75rem;
+      }
+
+      .stat-card.highlight .stat-value {
+        font-size: 2rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .related-tools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/index.html">홈</a></li>
+          <li><a href="/index.html#금융">금융계산기</a></li>
+          <li><a href="/index.html#로또">로또/운세</a></li>
+          <li><a href="/index.html#유틸리티">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- 페이지 제목 -->
+      <div class="calc-card">
+        <h2><i data-lucide="type" class="icon"></i> 글자수 세기</h2>
+        <p>텍스트를 입력하면 실시간으로 글자수, 바이트 수, 단어 수 등을 자동으로 계산합니다.</p>
+      </div>
+
+      <!-- 안내 박스 -->
+      <div class="info-box">
+        <p>
+          <strong>💡 사용 팁:</strong> 글을 입력하거나 붙여넣으면 자동으로 계산됩니다.
+          블로그 포스팅, 과제 작성, SNS 글 작성 시 글자수 제한을 확인하세요!
+        </p>
+      </div>
+
+      <!-- 메인 입력 영역 -->
+      <div class="calc-card">
+        <label for="textInput" style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text);">
+          <i data-lucide="edit-3" style="width: 18px; height: 18px; vertical-align: middle;"></i>
+          텍스트 입력
+        </label>
+        <textarea
+          id="textInput"
+          class="text-input-area"
+          placeholder="여기에 텍스트를 입력하거나 붙여넣으세요...
+
+블로그 글, 과제, 보고서, SNS 게시글 등 어떤 텍스트든 입력 가능합니다.
+실시간으로 글자수가 카운팅됩니다!"
+        ></textarea>
+
+        <!-- 통계 -->
+        <div class="stats-grid">
+          <div class="stat-card highlight">
+            <div class="stat-label">공백 포함</div>
+            <div class="stat-value" id="charWithSpace">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">공백 제외</div>
+            <div class="stat-value" id="charWithoutSpace">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">바이트 수</div>
+            <div class="stat-value" id="byteCount">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">단어 수</div>
+            <div class="stat-value" id="wordCount">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">줄 수</div>
+            <div class="stat-value" id="lineCount">0</div>
+          </div>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="action-buttons">
+          <button class="btn-action btn-copy" id="copyBtn">
+            <i data-lucide="copy" style="width: 18px; height: 18px;"></i>
+            텍스트 복사
+          </button>
+          <button class="btn-action btn-clear" id="clearBtn">
+            <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+            모두 지우기
+          </button>
+        </div>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 활용 예시 -->
+      <div class="calc-card">
+        <div class="usage-examples">
+          <h4>
+            <i data-lucide="lightbulb" style="width: 20px; height: 20px;"></i>
+            이런 분들께 유용합니다
+          </h4>
+          <ul>
+            <li><strong>학생:</strong> 과제나 보고서의 글자수 제한 확인</li>
+            <li><strong>블로거/작가:</strong> 포스팅 길이 관리 및 최적화</li>
+            <li><strong>SNS 사용자:</strong> 트위터(280자), 인스타그램 등 글자수 제한</li>
+            <li><strong>마케터:</strong> 광고 문구, 메타 설명(description) 길이 확인</li>
+            <li><strong>개발자:</strong> SMS(90바이트), 데이터베이스 필드 길이 확인</li>
+            <li><strong>번역가:</strong> 원문과 번역문의 길이 비교</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 설명 섹션 -->
+      <div class="calc-card" style="margin-top: 48px;">
+        <h2><i data-lucide="book-open" class="icon"></i> 글자수 세기란?</h2>
+        <p style="line-height: 1.8; color: var(--text); margin-bottom: 16px;">
+          <strong>글자수 세기</strong>는 텍스트의 문자 개수를 정확하게 계산하는 도구입니다.
+          단순히 글자 수만 세는 것이 아니라, 공백 포함/제외, 바이트 수, 단어 수, 줄 수 등
+          다양한 통계를 제공하여 글쓰기와 편집 작업을 효율적으로 도와줍니다.
+        </p>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+          <i data-lucide="info" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          통계 항목 설명
+        </h3>
+
+        <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 16px;">
+          <p style="margin-bottom: 12px; color: var(--text);"><strong>1. 공백 포함 글자수</strong></p>
+          <p style="margin-left: 16px; color: var(--text-light); font-size: 0.875rem;">
+            공백(스페이스), 탭, 줄바꿈을 포함한 모든 문자의 개수입니다.
+            대부분의 글자수 제한은 공백을 포함하여 계산합니다.
+          </p>
+        </div>
+
+        <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 16px;">
+          <p style="margin-bottom: 12px; color: var(--text);"><strong>2. 공백 제외 글자수</strong></p>
+          <p style="margin-left: 16px; color: var(--text-light); font-size: 0.875rem;">
+            순수하게 글자만 센 개수입니다. 공백, 탭, 줄바꿈을 제외한 실제 문자 수를 확인할 수 있습니다.
+          </p>
+        </div>
+
+        <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 16px;">
+          <p style="margin-bottom: 12px; color: var(--text);"><strong>3. 바이트 수 (UTF-8)</strong></p>
+          <p style="margin-left: 16px; color: var(--text-light); font-size: 0.875rem;">
+            텍스트가 컴퓨터에서 차지하는 실제 메모리 크기입니다.
+            한글은 글자당 3바이트, 영문/숫자는 1바이트입니다.
+            SMS(90바이트), 데이터베이스 필드 크기 등을 확인할 때 유용합니다.
+          </p>
+        </div>
+
+        <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 16px;">
+          <p style="margin-bottom: 12px; color: var(--text);"><strong>4. 단어 수</strong></p>
+          <p style="margin-left: 16px; color: var(--text-light); font-size: 0.875rem;">
+            공백으로 구분된 단어의 개수입니다. 영문 글에서는 정확하게 단어 수를 세며,
+            한글에서는 띄어쓰기로 구분된 어절 수를 셉니다.
+          </p>
+        </div>
+
+        <div style="background-color: var(--gray-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 16px;">
+          <p style="margin-bottom: 12px; color: var(--text);"><strong>5. 줄 수</strong></p>
+          <p style="margin-left: 16px; color: var(--text-light); font-size: 0.875rem;">
+            Enter 키로 구분된 줄의 개수입니다. 단락 수를 파악하거나 시, 가사 등의 행 수를 세는 데 유용합니다.
+          </p>
+        </div>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px; color: var(--text); font-size: 1.125rem;">
+          <i data-lucide="target" style="width: 20px; height: 20px; vertical-align: middle;"></i>
+          플랫폼별 글자수 제한
+        </h3>
+        <ul style="margin-left: 20px; line-height: 1.8; color: var(--text);">
+          <li><strong>트위터(X):</strong> 280자 (한글/영문 모두)</li>
+          <li><strong>인스타그램 캡션:</strong> 2,200자</li>
+          <li><strong>페이스북 게시글:</strong> 63,206자 (권장 80자 이하)</li>
+          <li><strong>네이버 블로그 제목:</strong> 50자</li>
+          <li><strong>유튜브 제목:</strong> 100자</li>
+          <li><strong>구글 메타 설명:</strong> 160자 (권장)</li>
+          <li><strong>SMS:</strong> 90바이트 (한글 45자, 영문 90자)</li>
+          <li><strong>카카오톡 메시지:</strong> 제한 없음 (권장 1,000자 이하)</li>
+        </ul>
+
+        <p style="line-height: 1.8; color: var(--text-light); font-size: 0.875rem; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+          💡 <strong>팁:</strong> SEO 최적화를 위한 메타 설명은 120~160자, 블로그 제목은 30~40자가 적당합니다.
+          모바일에서 읽기 좋은 문단은 2~3줄(약 60~90자) 내외가 좋습니다.
+        </p>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom: 20px; color: var(--text);">
+          <i data-lucide="link" class="icon"></i>
+          관련 도구
+        </h3>
+        <div class="related-tools">
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="repeat" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">대소문자 변환 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">영문 대소문자 변환</div>
+            </div>
+          </a>
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="git-compare" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">텍스트 비교 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">두 텍스트 차이점 확인</div>
+            </div>
+          </a>
+          <a href="/finance/percent.html" class="related-tool-link">
+            <i data-lucide="percent" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">퍼센트 계산기</div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">% 계산, 비율 계산</div>
+            </div>
+          </a>
+          <a href="#" class="related-tool-link" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">
+            <i data-lucide="ruler" class="icon"></i>
+            <div>
+              <div style="font-weight: 600; color: var(--text);">단위 변환기 <span style="background-color: var(--gray-200); color: var(--text-light); font-size: 0.625rem; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">준비중</span></div>
+              <div style="font-size: 0.75rem; color: var(--text-light);">길이, 무게, 온도 변환</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space">
+        <!-- AdSense 광고 자리 -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/index.html">홈</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size: 0.75rem; margin-top: 8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/common.js"></script>
+
+  <script>
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+
+      // 초기 카운트
+      updateCounts();
+    });
+
+    const textInput = document.getElementById('textInput');
+
+    // UTF-8 바이트 수 계산
+    function getByteLength(str) {
+      return new Blob([str]).size;
+    }
+
+    // 실시간 카운트 업데이트
+    function updateCounts() {
+      const text = textInput.value;
+
+      // 공백 포함 글자수
+      const charWithSpace = text.length;
+
+      // 공백 제외 글자수
+      const charWithoutSpace = text.replace(/\s/g, '').length;
+
+      // 바이트 수 (UTF-8)
+      const byteCount = getByteLength(text);
+
+      // 단어 수 (공백으로 구분, 빈 문자열 제외)
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+      const wordCount = text.trim().length > 0 ? words.length : 0;
+
+      // 줄 수
+      const lines = text.split('\n');
+      const lineCount = text.length > 0 ? lines.length : 0;
+
+      // 결과 표시
+      document.getElementById('charWithSpace').textContent = formatNumber(charWithSpace);
+      document.getElementById('charWithoutSpace').textContent = formatNumber(charWithoutSpace);
+      document.getElementById('byteCount').textContent = formatNumber(byteCount);
+      document.getElementById('wordCount').textContent = formatNumber(wordCount);
+      document.getElementById('lineCount').textContent = formatNumber(lineCount);
+    }
+
+    // 입력 시 자동 업데이트
+    textInput.addEventListener('input', updateCounts);
+    textInput.addEventListener('paste', function() {
+      // paste 이벤트는 값이 실제로 변경되기 전에 발생하므로 약간의 딜레이 필요
+      setTimeout(updateCounts, 10);
+    });
+
+    // 복사 버튼
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const text = textInput.value;
+
+      if (!text) {
+        alert('복사할 텍스트가 없습니다.');
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        // 버튼 텍스트 임시 변경
+        const btn = this;
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="check" style="width: 18px; height: 18px;"></i> 복사 완료!';
+        btn.style.backgroundColor = 'var(--success-500)';
+
+        lucide.createIcons();
+
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.style.backgroundColor = '';
+          lucide.createIcons();
+        }, 2000);
+      }).catch(err => {
+        alert('복사에 실패했습니다.');
+        console.error(err);
+      });
+    });
+
+    // 지우기 버튼
+    document.getElementById('clearBtn').addEventListener('click', function() {
+      if (textInput.value && !confirm('입력한 텍스트를 모두 지우시겠습니까?')) {
+        return;
+      }
+
+      textInput.value = '';
+      updateCounts();
+      textInput.focus();
+    });
+  </script>
+</body>
+</html>
