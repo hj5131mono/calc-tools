@@ -389,27 +389,27 @@
           </thead>
           <tbody>
             <tr>
-              <td>국민연금 (4.75%)</td>
+              <td>국민연금 <span style="font-size:0.75rem;color:var(--text-light);">(기준소득월액 × 4.75%, 하한37만·상한617만)</span></td>
               <td id="pensionAmt">—</td>
             </tr>
             <tr>
-              <td>건강보험 (3.595%)</td>
+              <td>건강보험 <span style="font-size:0.75rem;color:var(--text-light);">(보수월액 × 3.595%)</span></td>
               <td id="healthAmt">—</td>
             </tr>
             <tr>
-              <td>장기요양보험 (건강보험료 × 13.14%)</td>
+              <td>장기요양보험 <span style="font-size:0.75rem;color:var(--text-light);">(건강보험료 × 13.14%)</span></td>
               <td id="ltcAmt">—</td>
             </tr>
             <tr>
-              <td>고용보험 (0.9%)</td>
+              <td>고용보험 <span style="font-size:0.75rem;color:var(--text-light);">(보수월액 × 0.9%)</span></td>
               <td id="employmentAmt">—</td>
             </tr>
             <tr>
-              <td>소득세 (간이세액표 기준)</td>
+              <td>소득세 <span style="font-size:0.75rem;color:var(--text-light);">(연간 과세표준 기반 누진세율 ÷ 12)</span></td>
               <td id="incomeTaxAmt">—</td>
             </tr>
             <tr>
-              <td>지방소득세 (소득세 × 10%)</td>
+              <td>지방소득세 <span style="font-size:0.75rem;color:var(--text-light);">(소득세 × 10%)</span></td>
               <td id="localTaxAmt">—</td>
             </tr>
             <tr class="total-row">
@@ -420,9 +420,12 @@
         </table>
 
         <div class="warning-box">
-          <strong>참고사항:</strong> 국민연금 보험료율이 2026년부터 4.75%로 인상됩니다(연금개혁 단계 인상).
-          건강보험 3.595%, 장기요양보험 13.14% 기준이며, 최신 요율은 각 공단에서 확인하세요.
-          소득세는 간이세액표 근사치로, 실제 연말정산 결과와 다를 수 있습니다.
+          <strong>계산 기준:</strong>
+          4대보험은 모두 <strong>보수월액(월 급여−비과세)</strong> 기준.
+          국민연금은 기준소득월액 하한(37만)·상한(617만원) 적용, 10원 미만 버림.
+          건강보험·장기요양도 10원 미만 버림. 장기요양은 보수월액이 아닌 <strong>건강보험료</strong>에 요율을 곱합니다.
+          소득세는 연간 과세표준 기준 누진세율 적용 후 12등분. 연말정산 결과와 다를 수 있습니다.
+          (2026년 요율: 국민연금 4.75%, 건강보험 3.595%, 장기요양 13.14%)
         </div>
       </div>
 
@@ -747,7 +750,8 @@
     // 이 변수들은 DOMContentLoaded에서 loadRates()로 채워집니다.
     // 직접 수정 금지 — assets/data/rates.json을 수정하세요.
     let PENSION_RATE    = 0.0475;
-    let PENSION_CAP     = 6170000;
+    let PENSION_CAP     = 6170000;  // 기준소득월액 상한 (매년 7월 조정)
+    let PENSION_FLOOR   = 370000;   // 기준소득월액 하한 (매년 7월 조정)
     let HEALTH_RATE     = 0.03595;
     let LTC_RATE        = 0.1314;
     let EMPLOYMENT_RATE = 0.009;
@@ -778,17 +782,32 @@
       return 174060000 + (base - 500000000) * 0.42;
     }
 
+    // 반올림 유틸 — 법령별 반올림 규칙
+    const floor10 = v => Math.floor(v / 10) * 10;  // 10원 미만 버림 (국민연금·건강보험·장기요양)
+    const floor1  = v => Math.floor(v);              // 원 미만 버림  (고용보험)
+
     // 핵심: 연봉(원) 기준 월 실수령 상세 계산
     function calcMonthlyDetail(annualWon, dependents, children, nonTaxable) {
       const monthly        = annualWon / 12;
+      // 보수월액 = 월 급여 − 비과세액 (국민연금·건강보험·고용보험 공통 기초)
       const monthlyTaxable = Math.max(0, monthly - nonTaxable);
       const annualTaxable  = monthlyTaxable * 12;
 
-      // 4대보험 (월)
-      const pension    = Math.min(monthlyTaxable, PENSION_CAP) * PENSION_RATE;
-      const health     = monthlyTaxable * HEALTH_RATE;
-      const ltc        = health * LTC_RATE;
-      const employment = monthlyTaxable * EMPLOYMENT_RATE;
+      // ── 4대보험 (월) ─────────────────────────────────────────────
+      // 국민연금: 기준소득월액(보수월액) × 4.75%, 하한 37만/상한 617만원, 10원 미만 버림
+      const pensionBase = Math.min(Math.max(monthlyTaxable, PENSION_FLOOR), PENSION_CAP);
+      const pension     = floor10(pensionBase * PENSION_RATE);
+
+      // 건강보험: 보수월액 × 3.595%, 10원 미만 버림
+      const health = floor10(monthlyTaxable * HEALTH_RATE);
+
+      // 장기요양: 건강보험료(위에서 계산된 금액) × 13.14%, 10원 미만 버림
+      const ltc = floor10(health * LTC_RATE);
+
+      // 고용보험: 보수월액 × 0.9%, 원 미만 버림
+      const employment = floor1(monthlyTaxable * EMPLOYMENT_RATE);
+
+      // 소득세 과세표준 계산 시 사회보험료 소득공제 적용 (연간 환산)
       const annualInsurance = (pension + health + ltc + employment) * 12;
 
       // 과세표준 계산
@@ -819,18 +838,18 @@
       const monthlyIncomeTax = Math.round(annualTax / 12);
       const monthlyLocalTax  = Math.round(monthlyIncomeTax * 0.1);
 
-      const deductions = Math.round(pension) + Math.round(health) + Math.round(ltc)
-                       + Math.round(employment) + monthlyIncomeTax + monthlyLocalTax;
+      // pension/health/ltc/employment 는 이미 정수 (floor10/floor1 적용됨)
+      const deductions = pension + health + ltc + employment + monthlyIncomeTax + monthlyLocalTax;
       const net = Math.round(monthly) - deductions;
 
       return {
         monthly:    Math.round(monthly),
         deductions,
         net,
-        pension:    Math.round(pension),
-        health:     Math.round(health),
-        ltc:        Math.round(ltc),
-        employment: Math.round(employment),
+        pension,
+        health,
+        ltc,
+        employment,
         incomeTax:  monthlyIncomeTax,
         localTax:   monthlyLocalTax,
       };
@@ -1288,6 +1307,7 @@
       const ins = rates.insurance;
       PENSION_RATE    = ins.nationalPension.employeeRate;
       PENSION_CAP     = ins.nationalPension.incomeUpperLimit;
+      PENSION_FLOOR   = ins.nationalPension.incomeLowerLimit;
       HEALTH_RATE     = ins.healthInsurance.employeeRate;
       LTC_RATE        = ins.healthInsurance.longTermCareRate;
       EMPLOYMENT_RATE = ins.employmentInsurance.employeeRate;
