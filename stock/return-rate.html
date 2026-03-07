@@ -427,39 +427,23 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
-    // 페이지 로드 시 초기화
-    document.addEventListener('DOMContentLoaded', function() {
-      lucide.createIcons();
+    // debounce 유틸리티
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
 
-      // 수수료 체크박스 토글
-      const includeFeeCheckbox = document.getElementById('includeFee');
-      const feeInputGroup = document.getElementById('feeInputGroup');
-
-      includeFeeCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-          feeInputGroup.classList.add('active');
-        } else {
-          feeInputGroup.classList.remove('active');
-        }
-      });
-
-      // 초기 상태 설정
-      if (includeFeeCheckbox.checked) {
-        feeInputGroup.classList.add('active');
-      }
-    });
-
-    // 계산하기
-    document.getElementById('returnForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      // 입력값 가져오기
+    // 수익률 계산 함수
+    function calcReturn() {
       const buyPrice = parseNumber(document.getElementById('buyPrice').value);
       const sellPrice = parseNumber(document.getElementById('sellPrice').value);
       const quantity = parseNumber(document.getElementById('quantity').value);
 
-      if (buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
-        alert('모든 값을 올바르게 입력해주세요.');
+      if (!buyPrice || !sellPrice || !quantity || buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
+        hideResult('resultBox');
         return;
       }
 
@@ -470,28 +454,21 @@
       const totalBuyAmount = buyPrice * quantity;
       const totalSellAmount = sellPrice * quantity;
 
-      // 수수료 (매수 시 + 매도 시)
       const buyFee = totalBuyAmount * feeRate;
       const sellFee = totalSellAmount * feeRate;
       const totalFee = buyFee + sellFee;
 
-      // 세전 수익금
       const grossProfit = totalSellAmount - totalBuyAmount;
 
       // 세금 계산
       const taxType = document.querySelector('input[name="taxType"]:checked').value;
       let totalTax = 0;
-
       if (taxType === 'overseas' || taxType === 'crypto') {
-        // 해외주식/가상화폐: 양도소득세 22% (250만원 초과 시)
         const taxableProfit = Math.max(0, grossProfit - 2500000);
         totalTax = taxableProfit * 0.22;
       }
 
-      // 실수익 (순수익)
       const netProfit = grossProfit - totalFee - totalTax;
-
-      // 수익률 계산
       const returnRate = (grossProfit / totalBuyAmount) * 100;
 
       // 결과 표시
@@ -504,34 +481,66 @@
       document.getElementById('totalSell').textContent = formatNumber(Math.round(totalSellAmount)) + '원';
 
       // 수익/손실에 따라 색상 변경
-      const returnRateElement = document.getElementById('returnRate');
-      const netProfitElement = document.getElementById('netProfit');
-      const grossProfitElement = document.getElementById('grossProfit');
+      const returnRateEl = document.getElementById('returnRate');
+      const netProfitEl = document.getElementById('netProfit');
+      const grossProfitEl = document.getElementById('grossProfit');
 
       if (netProfit > 0) {
-        returnRateElement.style.color = 'var(--success-500)';
-        netProfitElement.style.color = 'var(--success-500)';
-        grossProfitElement.style.color = 'var(--success-500)';
+        returnRateEl.style.color = 'var(--success-500)';
+        netProfitEl.style.color = 'var(--success-500)';
+        grossProfitEl.style.color = 'var(--success-500)';
       } else if (netProfit < 0) {
-        returnRateElement.style.color = 'var(--danger-500)';
-        netProfitElement.style.color = 'var(--danger-500)';
-        grossProfitElement.style.color = 'var(--danger-500)';
+        returnRateEl.style.color = 'var(--danger-500)';
+        netProfitEl.style.color = 'var(--danger-500)';
+        grossProfitEl.style.color = 'var(--danger-500)';
       } else {
-        returnRateElement.style.color = 'var(--text-light)';
-        netProfitElement.style.color = 'var(--text-light)';
-        grossProfitElement.style.color = 'var(--text-light)';
+        returnRateEl.style.color = 'var(--text-light)';
+        netProfitEl.style.color = 'var(--text-light)';
+        grossProfitEl.style.color = 'var(--text-light)';
       }
 
-      // 결과 박스 표시
       showResult('resultBox');
+    }
+
+    const dCalcReturn = debounce(calcReturn, 200);
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+
+      // 수수료 체크박스 토글
+      const includeFeeCheckbox = document.getElementById('includeFee');
+      const feeInputGroup = document.getElementById('feeInputGroup');
+
+      includeFeeCheckbox.addEventListener('change', function() {
+        feeInputGroup.classList.toggle('active', this.checked);
+        dCalcReturn();
+      });
+
+      if (includeFeeCheckbox.checked) {
+        feeInputGroup.classList.add('active');
+      }
+
+      // 실시간 자동 계산
+      document.getElementById('buyPrice').addEventListener('input', dCalcReturn);
+      document.getElementById('sellPrice').addEventListener('input', dCalcReturn);
+      document.getElementById('quantity').addEventListener('input', dCalcReturn);
+      document.getElementById('feeRate').addEventListener('input', dCalcReturn);
+      document.querySelectorAll('input[name="taxType"]').forEach(radio => {
+        radio.addEventListener('change', dCalcReturn);
+      });
+    });
+
+    // 계산하기
+    document.getElementById('returnForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      calcReturn();
     });
 
     // 초기화
     document.getElementById('resetBtn').addEventListener('click', function() {
       document.getElementById('returnForm').reset();
       hideResult('resultBox');
-
-      // 수수료 입력란 다시 표시
       document.getElementById('feeInputGroup').classList.add('active');
     });
   </script>

@@ -518,6 +518,15 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
+    // 디바운스 유틸리티
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
@@ -530,84 +539,56 @@
     tabButtons.forEach(button => {
       button.addEventListener('click', function() {
         const targetTab = this.getAttribute('data-tab');
-
-        // 모든 탭 비활성화
         tabButtons.forEach(btn => btn.classList.remove('active'));
         tabContents.forEach(content => content.classList.remove('active'));
-
-        // 선택한 탭 활성화
         this.classList.add('active');
         document.getElementById(targetTab).classList.add('active');
-
-        // 결과 박스 숨기기
         document.querySelectorAll('.result-box').forEach(box => {
           box.style.display = 'none';
         });
       });
     });
 
-    // 모드 1: A의 B%는?
-    document.getElementById('form1').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const a = parseNumber(document.getElementById('mode1_a').value);
-      const b = parseNumber(document.getElementById('mode1_b').value);
-
-      if (a < 0 || b < 0) {
-        alert('0 이상의 숫자를 입력해주세요.');
-        return;
-      }
-
+    // 모드 1 계산 함수
+    function calc1() {
+      const aVal = document.getElementById('mode1_a').value;
+      const bVal = document.getElementById('mode1_b').value;
+      if (!aVal || !bVal) { document.getElementById('result1').style.display = 'none'; return; }
+      const a = parseNumber(aVal);
+      const b = parseNumber(bVal);
+      if (isNaN(a) || isNaN(b) || a < 0 || b < 0) { document.getElementById('result1').style.display = 'none'; return; }
       const result = a * (b / 100);
-
       document.getElementById('result1_value').textContent = formatNumber(Math.round(result));
       document.getElementById('result1_detail').textContent =
         `${formatNumber(a)}의 ${formatNumber(b)}% = ${formatNumber(Math.round(result))}`;
       document.getElementById('result1').style.display = 'block';
-    });
+    }
 
-    // 모드 2: A는 B의 몇%?
-    document.getElementById('form2').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const a = parseNumber(document.getElementById('mode2_a').value);
-      const b = parseNumber(document.getElementById('mode2_b').value);
-
-      if (b === 0) {
-        alert('기준 숫자(B)는 0이 될 수 없습니다.');
-        return;
-      }
-
-      if (a < 0 || b < 0) {
-        alert('0 이상의 숫자를 입력해주세요.');
-        return;
-      }
-
+    // 모드 2 계산 함수
+    function calc2() {
+      const aVal = document.getElementById('mode2_a').value;
+      const bVal = document.getElementById('mode2_b').value;
+      if (!aVal || !bVal) { document.getElementById('result2').style.display = 'none'; return; }
+      const a = parseNumber(aVal);
+      const b = parseNumber(bVal);
+      if (isNaN(a) || isNaN(b) || b === 0 || a < 0 || b < 0) { document.getElementById('result2').style.display = 'none'; return; }
       const result = (a / b) * 100;
-
       document.getElementById('result2_value').textContent = result.toFixed(2) + '%';
       document.getElementById('result2_detail').textContent =
         `${formatNumber(a)}는 ${formatNumber(b)}의 ${result.toFixed(2)}%입니다`;
       document.getElementById('result2').style.display = 'block';
-    });
+    }
 
-    // 모드 3: A에서 B% 증가/감소
-    document.getElementById('form3').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const a = parseNumber(document.getElementById('mode3_a').value);
-      const b = parseNumber(document.getElementById('mode3_b').value);
+    // 모드 3 계산 함수
+    function calc3() {
+      const aVal = document.getElementById('mode3_a').value;
+      const bVal = document.getElementById('mode3_b').value;
+      if (!aVal || !bVal) { document.getElementById('result3').style.display = 'none'; return; }
+      const a = parseNumber(aVal);
+      const b = parseNumber(bVal);
+      if (isNaN(a) || isNaN(b) || a < 0 || b < 0) { document.getElementById('result3').style.display = 'none'; return; }
       const changeType = document.querySelector('input[name="changeType"]:checked').value;
-
-      if (a < 0 || b < 0) {
-        alert('0 이상의 숫자를 입력해주세요.');
-        return;
-      }
-
-      let result;
-      let changeAmount;
-      let detailText;
-
+      let result, changeAmount, detailText;
       if (changeType === 'increase') {
         result = a * (1 + b / 100);
         changeAmount = result - a;
@@ -617,18 +598,32 @@
         changeAmount = a - result;
         detailText = `${formatNumber(a)}에서 ${formatNumber(b)}% 감소`;
       }
-
       document.getElementById('result3_value').textContent = formatNumber(Math.round(result));
       document.getElementById('result3_detail').textContent = detailText;
       document.getElementById('result3_change').textContent =
         (changeType === 'increase' ? '+' : '-') + formatNumber(Math.round(changeAmount));
-
-      // 변화량 색상
-      const changeElement = document.getElementById('result3_change');
-      changeElement.style.color = changeType === 'increase' ? 'var(--success-500)' : 'var(--danger-500)';
-
+      document.getElementById('result3_change').style.color =
+        changeType === 'increase' ? 'var(--success-500)' : 'var(--danger-500)';
       document.getElementById('result3').style.display = 'block';
-    });
+    }
+
+    const dCalc1 = debounce(calc1, 200);
+    const dCalc2 = debounce(calc2, 200);
+    const dCalc3 = debounce(calc3, 200);
+
+    // 실시간 입력 이벤트
+    document.getElementById('mode1_a').addEventListener('input', dCalc1);
+    document.getElementById('mode1_b').addEventListener('input', dCalc1);
+    document.getElementById('mode2_a').addEventListener('input', dCalc2);
+    document.getElementById('mode2_b').addEventListener('input', dCalc2);
+    document.getElementById('mode3_a').addEventListener('input', dCalc3);
+    document.getElementById('mode3_b').addEventListener('input', dCalc3);
+    document.querySelectorAll('input[name="changeType"]').forEach(r => r.addEventListener('change', calc3));
+
+    // 폼 submit (버튼 클릭)
+    document.getElementById('form1').addEventListener('submit', function(e) { e.preventDefault(); calc1(); });
+    document.getElementById('form2').addEventListener('submit', function(e) { e.preventDefault(); calc2(); });
+    document.getElementById('form3').addEventListener('submit', function(e) { e.preventDefault(); calc3(); });
   </script>
 </body>
 </html>

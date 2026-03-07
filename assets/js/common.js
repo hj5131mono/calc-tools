@@ -102,10 +102,54 @@ function initLayout() {
   }
 }
 
+// 키보드 단축키 초기화
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', function(e) {
+    const tag = document.activeElement.tagName;
+
+    // Enter 키: 계산하기 버튼 클릭
+    if (e.key === 'Enter' && tag === 'INPUT') {
+      e.preventDefault();
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.click();
+    }
+
+    // Escape 키: 초기화 버튼 클릭
+    if (e.key === 'Escape') {
+      const resetBtn = document.querySelector('.btn-reset');
+      if (resetBtn) resetBtn.click();
+    }
+
+    // 화살표 키: .auto-comma 입력 필드 값 1씩 조정
+    if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && tag === 'INPUT') {
+      const input = document.activeElement;
+      if (input.classList.contains('auto-comma')) {
+        e.preventDefault();
+        const current = parseNumber(input.value) || 0;
+        const next = current + (e.key === 'ArrowUp' ? 1 : -1);
+        input.value = formatNumber(next);
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+  });
+}
+
+// 키보드 단축키 안내 텍스트 삽입 (계산기 페이지에만)
+function initKeyboardHint() {
+  if (!document.querySelector('form')) return;
+  const hint = document.createElement('p');
+  hint.style.cssText = 'text-align:center; font-size:0.75rem; color:var(--text-light); margin: 0 0 16px;';
+  hint.textContent = '단축키: Enter=계산 | Esc=초기화 | 화살표=값 조정';
+  const footer = document.querySelector('.site-footer');
+  if (footer) footer.insertAdjacentElement('beforebegin', hint);
+}
+
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
   initLayout();
   initAutoComma();
+  initKeyboardShortcuts();
+  initKeyboardHint();
 
   // Lucide Icons 초기화 (동적으로 추가된 아이콘도 포함)
   if (typeof lucide !== 'undefined') {
