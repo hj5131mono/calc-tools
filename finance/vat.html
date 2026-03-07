@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <title>부가세 계산기 — 부가가치세 자동 계산</title>
+  <meta name="description" content="공급가액에서 부가세를 계산하거나, 합계금액에서 부가세를 역산합니다. 간편한 VAT 계산기.">
+  <meta name="keywords" content="부가세 계산기, 부가가치세, VAT 계산, 공급가액, 역산, 세금계산서">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="부가세 계산기 — 부가가치세 자동 계산">
+  <meta property="og:description" content="공급가액에서 부가세를 계산하거나, 합계금액에서 부가세를 역산합니다. 간편한 VAT 계산기.">
+  <meta property="og:url" content="https://calc-tools.kr/finance/vat.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    /* 모드 탭 */
+    .mode-tabs {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .mode-tab {
+      flex: 1;
+      padding: 14px 8px;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-light);
+      background: var(--white);
+      cursor: pointer;
+      border: none;
+      border-right: 1px solid var(--border);
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
+
+    .mode-tab:last-child { border-right: none; }
+
+    .mode-tab.active {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+
+    .mode-tab:hover:not(.active) { background: var(--gray-50); }
+
+    .mode-tab .tab-arrow {
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    /* 결과 카드 */
+    .vat-result-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vat-result-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      gap: 12px;
+    }
+
+    .vat-result-card.highlight {
+      border-color: var(--primary);
+      background: var(--primary-50);
+    }
+
+    .vat-result-card.highlight .rc-label {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .vat-result-card.is-input {
+      background: var(--gray-50);
+      border-style: dashed;
+    }
+
+    .rc-left { flex: 1; min-width: 0; }
+
+    .rc-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .rc-value {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .vat-result-card.highlight .rc-value { color: var(--primary); }
+
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    .copy-btn.copied {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #16a34a;
+    }
+
+    /* 입력 단위 */
+    .input-with-unit {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .input-with-unit input {
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .unit-badge {
+      background-color: var(--gray-100);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      white-space: nowrap;
+    }
+
+    /* 빠른 입력 버튼 */
+    .quick-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .quick-btn {
+      padding: 5px 12px;
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.775rem;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .quick-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-50);
+    }
+
+    /* 계산식 표시 */
+    .formula-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      font-size: 0.8125rem;
+      color: var(--text-light);
+      flex-wrap: wrap;
+    }
+
+    .formula-chip {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .formula-chip.accent { border-color: var(--primary); color: var(--primary); background: var(--primary-50); }
+
+    @media (max-width: 480px) {
+      .rc-value { font-size: 1.125rem; }
+      .vat-result-card { padding: 14px 14px; }
+    }
+  </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258"
+       crossorigin="anonymous"></script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KLECX1HME8');
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html">홈</a></li>
+          <li><a href="../index.html#금융">금융계산기</a></li>
+          <li><a href="../index.html#로또">로또/운세</a></li>
+          <li><a href="../index.html#유틸리티">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- 페이지 제목 -->
+      <div class="calc-card">
+        <h2><i data-lucide="receipt" class="icon"></i> 부가세 계산기</h2>
+        <p>공급가액 → 부가세 계산, 또는 합계금액 → 공급가액·부가세 역산. 결과는 클립보드로 바로 복사할 수 있습니다.</p>
+      </div>
+
+      <!-- 계산기 카드 -->
+      <div class="calc-card">
+        <!-- 모드 탭 -->
+        <div class="mode-tabs">
+          <button type="button" class="mode-tab active" id="tab-forward" onclick="setMode('forward')">
+            공급가액 → 합계
+            <span class="tab-arrow">공급가액 입력 ▶ 부가세·합계 계산</span>
+          </button>
+          <button type="button" class="mode-tab" id="tab-reverse" onclick="setMode('reverse')">
+            합계 → 역산
+            <span class="tab-arrow">합계 입력 ▶ 공급가액·부가세 분리</span>
+          </button>
+        </div>
+
+        <!-- 계산식 안내 -->
+        <div class="formula-row" id="formulaRow">
+          <span class="formula-chip">공급가액</span>
+          <span>×</span>
+          <span class="formula-chip accent">10%</span>
+          <span>=</span>
+          <span class="formula-chip">부가세</span>
+          <span style="margin: 0 4px;">|</span>
+          <span class="formula-chip">공급가액 + 부가세</span>
+          <span>=</span>
+          <span class="formula-chip accent">합계금액</span>
+        </div>
+
+        <!-- 입력 필드 -->
+        <div class="form-group">
+          <label for="amountInput" id="inputLabel">공급가액 (부가세 제외)</label>
+          <div class="input-with-unit">
+            <input type="text" id="amountInput" class="auto-comma" placeholder="예: 100,000">
+            <span class="unit-badge">원</span>
+          </div>
+          <!-- 빠른 입력 버튼 -->
+          <div class="quick-btns">
+            <button type="button" class="quick-btn" onclick="setQuick(100000)">10만</button>
+            <button type="button" class="quick-btn" onclick="setQuick(500000)">50만</button>
+            <button type="button" class="quick-btn" onclick="setQuick(1000000)">100만</button>
+            <button type="button" class="quick-btn" onclick="setQuick(5000000)">500만</button>
+            <button type="button" class="quick-btn" onclick="setQuick(10000000)">1000만</button>
+            <button type="button" class="quick-btn" onclick="setQuick(100000000)">1억</button>
+          </div>
+        </div>
+
+        <!-- 결과 -->
+        <div id="resultArea" class="vat-result-grid" style="display:none;">
+          <div class="vat-result-card" id="card-supply">
+            <div class="rc-left">
+              <div class="rc-label" id="label-supply">공급가액 (VAT 제외)</div>
+              <div class="rc-value" id="val-supply">—</div>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyValue('val-supply', this)">복사</button>
+          </div>
+
+          <div class="vat-result-card highlight" id="card-vat">
+            <div class="rc-left">
+              <div class="rc-label">부가세 (VAT 10%)</div>
+              <div class="rc-value" id="val-vat">—</div>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyValue('val-vat', this)">복사</button>
+          </div>
+
+          <div class="vat-result-card" id="card-total">
+            <div class="rc-left">
+              <div class="rc-label" id="label-total">합계금액 (VAT 포함)</div>
+              <div class="rc-value" id="val-total">—</div>
+            </div>
+            <button type="button" class="copy-btn" onclick="copyValue('val-total', this)">복사</button>
+          </div>
+
+          <!-- 전체 복사 -->
+          <button type="button" class="copy-btn" style="width:100%;padding:10px;" onclick="copyAll()">
+            <i data-lucide="clipboard-copy" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+            세 항목 모두 복사
+          </button>
+        </div>
+
+        <!-- 초기화 -->
+        <div style="margin-top:16px;">
+          <button type="button" class="btn-reset" id="resetBtn" style="width:100%;">
+            <i data-lucide="rotate-ccw" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"></i>
+            초기화
+          </button>
+        </div>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space" style="min-height:90px;text-align:center;margin:20px 0;">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 설명 섹션 -->
+      <div class="calc-card">
+        <h2><i data-lucide="book-open" class="icon"></i> 부가가치세(VAT)란?</h2>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:16px;">
+          <strong>부가가치세(VAT, Value Added Tax)</strong>는 재화나 용역을 공급할 때 부과되는 세금으로,
+          현재 한국의 일반세율은 <strong>10%</strong>입니다.
+          공급자가 소비자로부터 VAT를 수취한 뒤 국가에 납부하는 간접세입니다.
+        </p>
+
+        <h3 style="margin:20px 0 10px;color:var(--text);font-size:1rem;">계산 방법</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+          <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px 16px;">
+            <div style="font-weight:600;font-size:0.875rem;margin-bottom:6px;color:var(--text);">공급가액 → 부가세·합계 계산</div>
+            <code style="font-size:0.8125rem;color:var(--text-light);">
+              부가세 = 공급가액 × 0.1<br>
+              합계금액 = 공급가액 × 1.1
+            </code>
+          </div>
+          <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px 16px;">
+            <div style="font-weight:600;font-size:0.875rem;margin-bottom:6px;color:var(--text);">합계금액 → 역산 (부가세 포함 금액에서 분리)</div>
+            <code style="font-size:0.8125rem;color:var(--text-light);">
+              공급가액 = 합계금액 ÷ 1.1<br>
+              부가세 = 합계금액 ÷ 11 &nbsp;(= 합계금액 × 1/11)
+            </code>
+          </div>
+        </div>
+
+        <h3 style="margin:20px 0 10px;color:var(--text);font-size:1rem;">세금계산서 발행 시 주의사항</h3>
+        <ul style="margin-left:20px;line-height:1.9;color:var(--text);">
+          <li>세금계산서의 공급가액과 세액(부가세)은 <strong>각각 별도로 기재</strong>합니다.</li>
+          <li>간이과세자는 부가세 부담 방식이 다를 수 있습니다 (업종별 부가가치율 적용).</li>
+          <li>면세 사업자(의료, 교육 등)는 부가세가 부과되지 않습니다.</li>
+          <li>원 단위 이하는 <strong>절사(버림)</strong>하는 것이 일반적입니다.</li>
+        </ul>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom:20px;color:var(--text);">
+          <i data-lucide="link" class="icon"></i> 관련 계산기
+        </h3>
+        <div style="display:grid;grid-template-columns:1fr;gap:12px;">
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="banknote" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">연봉 실수령액 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">세후 월급 계산</div>
+            </div>
+          </a>
+          <a href="../finance/percent.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="percent" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">퍼센트 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">비율·증감률 계산</div>
+            </div>
+          </a>
+          <a href="../finance/loan.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="landmark" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">대출이자 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">월 상환액·이자 총액 계산</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space" style="min-height:90px;text-align:center;margin:20px 0;">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../index.html">홈</a>
+          <a href="../privacy.html">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size:0.75rem;margin-top:8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../assets/js/common.js"></script>
+
+  <script>
+    let currentMode = 'forward'; // 'forward' | 'reverse'
+
+    const FORMULA_TEXT = {
+      forward: [
+        { label: '공급가액', accent: false },
+        { label: '×', type: 'op' },
+        { label: '10%', accent: true },
+        { label: '=', type: 'op' },
+        { label: '부가세', accent: false },
+        { label: '|', type: 'sep' },
+        { label: '공급가액 + 부가세', accent: false },
+        { label: '=', type: 'op' },
+        { label: '합계금액', accent: true },
+      ],
+      reverse: [
+        { label: '합계금액', accent: false },
+        { label: '÷', type: 'op' },
+        { label: '1.1', accent: true },
+        { label: '=', type: 'op' },
+        { label: '공급가액', accent: false },
+        { label: '|', type: 'sep' },
+        { label: '합계금액', accent: false },
+        { label: '÷', type: 'op' },
+        { label: '11', accent: true },
+        { label: '=', type: 'op' },
+        { label: '부가세', accent: false },
+      ],
+    };
+
+    // ========== 모드 전환 ==========
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('tab-forward').classList.toggle('active', mode === 'forward');
+      document.getElementById('tab-reverse').classList.toggle('active', mode === 'reverse');
+
+      const isForward = mode === 'forward';
+      document.getElementById('inputLabel').textContent =
+        isForward ? '공급가액 (부가세 제외)' : '합계금액 (부가세 포함)';
+      document.getElementById('amountInput').placeholder =
+        isForward ? '예: 100,000' : '예: 110,000';
+
+      // 입력 카드: forward = 공급가액이 입력값, reverse = 합계가 입력값
+      document.getElementById('card-supply').classList.toggle('is-input',  isForward);
+      document.getElementById('card-supply').classList.toggle('highlight', !isForward);
+      document.getElementById('card-total').classList.toggle('is-input',  !isForward);
+      document.getElementById('card-total').classList.toggle('highlight',  isForward);
+
+      // 라벨
+      document.getElementById('label-supply').textContent =
+        isForward ? '공급가액 (입력값)' : '공급가액 (역산)';
+      document.getElementById('label-total').textContent =
+        !isForward ? '합계금액 (입력값)' : '합계금액 (VAT 포함)';
+
+      // 계산식 업데이트
+      renderFormula(mode);
+
+      // 재계산
+      calcVAT();
+    }
+
+    function renderFormula(mode) {
+      const row = document.getElementById('formulaRow');
+      row.innerHTML = FORMULA_TEXT[mode].map(item => {
+        if (item.type === 'op') return `<span>${item.label}</span>`;
+        if (item.type === 'sep') return `<span style="margin:0 4px;color:var(--border)">|</span>`;
+        return `<span class="formula-chip${item.accent ? ' accent' : ''}">${item.label}</span>`;
+      }).join('');
+    }
+
+    // ========== 빠른 입력 ==========
+    function setQuick(amount) {
+      document.getElementById('amountInput').value = formatNumber(amount);
+      calcVAT();
+    }
+
+    // ========== 계산 ==========
+    function calcVAT() {
+      const raw = parseNumber(document.getElementById('amountInput').value);
+      const area = document.getElementById('resultArea');
+
+      if (!raw || raw <= 0) {
+        area.style.display = 'none';
+        return;
+      }
+
+      let supply, vat, total;
+
+      if (currentMode === 'forward') {
+        supply = raw;
+        vat    = Math.floor(supply * 0.1);   // 원 단위 절사
+        total  = supply + vat;
+      } else {
+        // 역산: 공급가액 = 합계 / 1.1 (원 미만 절사)
+        total  = raw;
+        supply = Math.floor(total / 1.1);
+        vat    = total - supply;
+      }
+
+      document.getElementById('val-supply').textContent = formatNumber(supply) + '원';
+      document.getElementById('val-vat').textContent    = formatNumber(vat) + '원';
+      document.getElementById('val-total').textContent  = formatNumber(total) + '원';
+
+      area.style.display = 'flex';
+      // lucide 아이콘 재초기화 (복사 버튼 아이콘)
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // ========== 클립보드 복사 ==========
+    function copyValue(elemId, btn) {
+      const text = document.getElementById(elemId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '복사됨 ✓';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = '복사';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    function copyAll() {
+      const supply = document.getElementById('val-supply').textContent;
+      const vat    = document.getElementById('val-vat').textContent;
+      const total  = document.getElementById('val-total').textContent;
+      const text   = `공급가액: ${supply}\n부가세: ${vat}\n합계금액: ${total}`;
+      const btn    = event.currentTarget;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '복사됨 ✓';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<i data-lucide="clipboard-copy" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>세 항목 모두 복사';
+          btn.classList.remove('copied');
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }, 1500);
+      });
+    }
+
+    // ========== debounce & 이벤트 ==========
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    const dCalcVAT = debounce(calcVAT, 150);
+
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+      document.getElementById('amountInput').addEventListener('input', dCalcVAT);
+
+      // 초기 상태 설정
+      setMode('forward');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('amountInput').value = '';
+      document.getElementById('resultArea').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

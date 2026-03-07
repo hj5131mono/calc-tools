@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <title>나이 계산기 — 만나이, 세는나이, 띠, 별자리</title>
+  <meta name="description" content="생년월일을 입력하면 만나이, 세는나이, 연나이, 띠, 별자리를 한 번에 확인합니다.">
+  <meta name="keywords" content="나이 계산기, 만나이, 세는나이, 연나이, 띠 계산, 별자리 계산, 생년월일">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="나이 계산기 — 만나이, 세는나이, 띠, 별자리">
+  <meta property="og:description" content="생년월일을 입력하면 만나이, 세는나이, 연나이, 띠, 별자리를 한 번에 확인합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/daily/age.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+
+  <!-- Pretendard 폰트 -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    /* 나이 대형 표시 */
+    .age-hero {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .age-hero-card {
+      flex: 1;
+      text-align: center;
+      padding: 20px 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    .age-hero-card.primary {
+      background: linear-gradient(135deg, var(--primary-50), #eff6ff);
+      border-color: #bfdbfe;
+    }
+
+    .age-hero-card .hero-label {
+      font-size: 0.7rem;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+
+    .age-hero-card .hero-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .age-hero-card.primary .hero-value { color: var(--primary); }
+
+    .age-hero-card .hero-unit {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--text-light);
+    }
+
+    /* 상세 결과 그리드 */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .info-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .info-card .i-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .info-card .i-value {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .info-card .i-sub {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 3px;
+    }
+
+    /* 띠/별자리 카드 */
+    .symbol-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .symbol-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      text-align: center;
+      background: var(--white);
+    }
+
+    .symbol-emoji {
+      font-size: 2.5rem;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .symbol-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .symbol-desc {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* 날짜 input 커스텀 */
+    input[type="date"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      width: 100%;
+      box-sizing: border-box;
+      color: var(--text);
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    input[type="date"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    /* 기준일 배지 */
+    .today-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .age-hero { gap: 8px; }
+      .age-hero-card .hero-value { font-size: 1.5rem; }
+      .info-grid { grid-template-columns: 1fr; }
+      .symbol-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258"
+       crossorigin="anonymous"></script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KLECX1HME8');
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html">홈</a></li>
+          <li><a href="../index.html#금융">금융계산기</a></li>
+          <li><a href="../index.html#로또">로또/운세</a></li>
+          <li><a href="../index.html#유틸리티">일상유틸리티</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- 페이지 제목 -->
+      <div class="calc-card">
+        <h2><i data-lucide="cake" class="icon"></i> 나이 계산기</h2>
+        <p>생년월일을 입력하면 만나이·세는나이·연나이와 함께 띠, 별자리까지 한 번에 확인합니다.</p>
+      </div>
+
+      <!-- 계산기 -->
+      <div class="calc-card">
+        <div class="form-group">
+          <label for="birthDate">생년월일</label>
+          <input type="date" id="birthDate" max="">
+          <div class="today-badge">
+            <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+            기준일: <strong id="todayLabel">오늘</strong>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top:16px;">
+          <button type="button" class="btn-reset" id="resetBtn" style="width:100%;">
+            <i data-lucide="rotate-ccw" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"></i>
+            초기화
+          </button>
+        </div>
+      </div>
+
+      <!-- 광고 영역 -->
+      <div class="ad-space" style="min-height:90px;text-align:center;margin:20px 0;">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+      <!-- 결과 -->
+      <div class="result-box" id="resultBox">
+        <h3>
+          <i data-lucide="check-circle" style="width:20px;height:20px;vertical-align:middle;"></i>
+          계산 결과
+        </h3>
+
+        <!-- 나이 3종 대형 표시 -->
+        <div class="age-hero">
+          <div class="age-hero-card primary">
+            <div class="hero-label">만 나이 (법적)</div>
+            <div class="hero-value"><span id="ageKorean">—</span><span class="hero-unit">세</span></div>
+          </div>
+          <div class="age-hero-card">
+            <div class="hero-label">세는 나이</div>
+            <div class="hero-value"><span id="ageCounting">—</span><span class="hero-unit">세</span></div>
+          </div>
+          <div class="age-hero-card">
+            <div class="hero-label">연 나이</div>
+            <div class="hero-value"><span id="ageYear">—</span><span class="hero-unit">세</span></div>
+          </div>
+        </div>
+
+        <!-- 상세 정보 -->
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="i-label">
+              <i data-lucide="sun" style="width:12px;height:12px;"></i> 태어난 지
+            </div>
+            <div class="i-value"><span id="daysSinceBirth">—</span>일째</div>
+            <div class="i-sub" id="yearsSub">—</div>
+          </div>
+          <div class="info-card">
+            <div class="i-label">
+              <i data-lucide="gift" style="width:12px;height:12px;"></i> 다음 생일까지
+            </div>
+            <div class="i-value"><span id="daysToNext">—</span>일</div>
+            <div class="i-sub" id="nextBirthSub">—</div>
+          </div>
+          <div class="info-card">
+            <div class="i-label">
+              <i data-lucide="clock" style="width:12px;height:12px;"></i> 살아온 시간
+            </div>
+            <div class="i-value" id="hoursLived">—</div>
+            <div class="i-sub">시간 (약)</div>
+          </div>
+          <div class="info-card">
+            <div class="i-label">
+              <i data-lucide="calendar-days" style="width:12px;height:12px;"></i> 태어난 요일
+            </div>
+            <div class="i-value" id="birthDayOfWeek">—</div>
+            <div class="i-sub" id="birthDateFull">—</div>
+          </div>
+        </div>
+
+        <!-- 띠와 별자리 -->
+        <h4 style="margin-bottom:12px;color:var(--text);font-size:0.9375rem;">띠 &amp; 별자리</h4>
+        <div class="symbol-grid">
+          <div class="symbol-card">
+            <div class="symbol-emoji" id="zodiacEmoji">—</div>
+            <div class="symbol-name" id="zodiacName">—</div>
+            <div class="symbol-desc" id="zodiacDesc">—</div>
+          </div>
+          <div class="symbol-card">
+            <div class="symbol-emoji" id="starEmoji">—</div>
+            <div class="symbol-name" id="starName">—</div>
+            <div class="symbol-desc" id="starDesc">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 설명 섹션 -->
+      <div class="calc-card" style="margin-top:48px;">
+        <h2><i data-lucide="book-open" class="icon"></i> 나이 계산 방식 안내</h2>
+
+        <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--text);">만 나이 (법적 나이)</h3>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:12px;">
+          2023년 6월 28일부터 <strong>만 나이</strong>가 한국의 공식 나이 계산 기준이 되었습니다.
+          생일이 지났으면 올해 연도 − 출생 연도, 생일이 지나지 않았으면 그보다 1살 적게 계산합니다.
+        </p>
+
+        <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--text);">세는 나이 (한국 전통)</h3>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:12px;">
+          태어나는 순간을 1세로 시작하고, 매년 1월 1일에 한 살씩 더하는 방식입니다.
+          공식 기준에서는 폐지되었지만 일상에서 여전히 많이 사용됩니다.
+          계산식: <code>올해 연도 − 출생 연도 + 1</code>
+        </p>
+
+        <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--text);">연 나이</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          생일에 관계없이 올해 연도에서 출생 연도를 뺀 값입니다.
+          병역법, 청소년보호법 등 일부 법령에서 사용됩니다.
+          계산식: <code>올해 연도 − 출생 연도</code>
+        </p>
+      </div>
+
+      <!-- 관련 도구 -->
+      <div class="calc-card">
+        <h3 style="margin-bottom:20px;color:var(--text);">
+          <i data-lucide="link" class="icon"></i> 관련 계산기
+        </h3>
+        <div style="display:grid;grid-template-columns:1fr;gap:12px;">
+          <a href="../daily/dday.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="calendar-days" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">D-day 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">중요한 날까지 남은 일수</div>
+            </div>
+          </a>
+          <a href="../daily/bmi.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="scale" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">BMI 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">체질량 지수 계산</div>
+            </div>
+          </a>
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
+            <i data-lucide="banknote" class="icon"></i>
+            <div>
+              <div style="font-weight:600;">연봉 실수령액 계산기</div>
+              <div style="font-size:0.75rem;color:var(--text-light);">세후 월급 계산</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- 광고 영역 하단 -->
+      <div class="ad-space" style="min-height:90px;text-align:center;margin:20px 0;">
+        <!-- AdSense 광고 자리 -->
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../index.html">홈</a>
+          <a href="../privacy.html">개인정보처리방침</a>
+        </div>
+        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p style="font-size:0.75rem;margin-top:8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../assets/js/common.js"></script>
+
+  <script>
+    // ========== 데이터 ==========
+    const ZODIAC = [
+      { name: '쥐띠',    emoji: '🐀', desc: '영리하고 적응력이 뛰어납니다' },
+      { name: '소띠',    emoji: '🐂', desc: '성실하고 인내심이 강합니다'   },
+      { name: '호랑이띠',emoji: '🐯', desc: '용감하고 리더십이 있습니다'   },
+      { name: '토끼띠',  emoji: '🐰', desc: '온화하고 섬세합니다'           },
+      { name: '용띠',    emoji: '🐲', desc: '카리스마 있고 야망이 넘칩니다' },
+      { name: '뱀띠',    emoji: '🐍', desc: '직관력이 뛰어나고 지혜롭습니다'},
+      { name: '말띠',    emoji: '🐴', desc: '활동적이고 자유를 사랑합니다'  },
+      { name: '양띠',    emoji: '🐑', desc: '온화하고 창의적입니다'          },
+      { name: '원숭이띠',emoji: '🐵', desc: '재치 있고 호기심이 많습니다'   },
+      { name: '닭띠',    emoji: '🐔', desc: '부지런하고 관찰력이 좋습니다'  },
+      { name: '개띠',    emoji: '🐶', desc: '충실하고 정직합니다'            },
+      { name: '돼지띠',  emoji: '🐷', desc: '너그럽고 복이 많습니다'         },
+    ];
+
+    // 2020 = 쥐 (index 0 기준)
+    function getZodiac(year) {
+      const idx = ((year - 2020) % 12 + 12) % 12;
+      return ZODIAC[idx];
+    }
+
+    const STAR_SIGNS = [
+      { name: '염소자리', emoji: '♑', start: [1,  1],  end: [1,  19], desc: '1/20 ~ 1/19' },
+      { name: '물병자리', emoji: '♒', start: [1,  20], end: [2,  18], desc: '1/20 ~ 2/18' },
+      { name: '물고기자리',emoji:'♓', start: [2,  19], end: [3,  20], desc: '2/19 ~ 3/20' },
+      { name: '양자리',   emoji: '♈', start: [3,  21], end: [4,  19], desc: '3/21 ~ 4/19' },
+      { name: '황소자리', emoji: '♉', start: [4,  20], end: [5,  20], desc: '4/20 ~ 5/20' },
+      { name: '쌍둥이자리',emoji:'♊',start: [5,  21], end: [6,  20], desc: '5/21 ~ 6/20' },
+      { name: '게자리',   emoji: '♋', start: [6,  21], end: [7,  22], desc: '6/21 ~ 7/22' },
+      { name: '사자자리', emoji: '♌', start: [7,  23], end: [8,  22], desc: '7/23 ~ 8/22' },
+      { name: '처녀자리', emoji: '♍', start: [8,  23], end: [9,  22], desc: '8/23 ~ 9/22' },
+      { name: '천칭자리', emoji: '♎', start: [9,  23], end: [10, 22], desc: '9/23 ~ 10/22' },
+      { name: '전갈자리', emoji: '♏', start: [10, 23], end: [11, 21], desc: '10/23 ~ 11/21' },
+      { name: '사수자리', emoji: '♐', start: [11, 22], end: [12, 21], desc: '11/22 ~ 12/21' },
+      { name: '염소자리', emoji: '♑', start: [12, 22], end: [12, 31], desc: '12/22 ~ 1/19' },
+    ];
+
+    function getStarSign(month, day) {
+      for (const s of STAR_SIGNS) {
+        const [sm, sd] = s.start;
+        const [em, ed] = s.end;
+        if ((month === sm && day >= sd) || (month === em && day <= ed) ||
+            (sm < em && month > sm && month < em)) {
+          return s;
+        }
+        // 단순 범위 판정
+        const md = month * 100 + day;
+        if (md >= sm * 100 + sd && md <= em * 100 + ed) return s;
+      }
+      return STAR_SIGNS[0]; // fallback: 염소자리
+    }
+
+    const WEEK_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+    // ========== 메인 계산 ==========
+    function calcAge() {
+      const val = document.getElementById('birthDate').value;
+      if (!val) { hideResult('resultBox'); return; }
+
+      const birth = new Date(val + 'T00:00:00');
+      if (isNaN(birth.getTime())) { hideResult('resultBox'); return; }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (birth > today) { hideResult('resultBox'); return; }
+
+      const by = birth.getFullYear(), bm = birth.getMonth() + 1, bd = birth.getDate();
+      const ty = today.getFullYear(), tm = today.getMonth() + 1, td = today.getDate();
+
+      // 만 나이
+      let korean = ty - by;
+      if (tm < bm || (tm === bm && td < bd)) korean--;
+
+      // 세는 나이
+      const counting = ty - by + 1;
+
+      // 연 나이
+      const yearAge = ty - by;
+
+      // 태어난 지 며칠
+      const msPerDay = 86400000;
+      const daysSince = Math.floor((today - birth) / msPerDay) + 1;
+
+      // 다음 생일
+      let nextBirth = new Date(ty, bm - 1, bd);
+      if (nextBirth <= today) nextBirth = new Date(ty + 1, bm - 1, bd);
+      const daysToNext = Math.floor((nextBirth - today) / msPerDay);
+
+      // 살아온 시간 (약)
+      const hours = Math.floor((today - birth) / 3600000);
+
+      // 태어난 요일
+      const birthDay = WEEK_KO[birth.getDay()];
+
+      // 띠
+      const zodiac = getZodiac(by);
+
+      // 별자리
+      const star = getStarSign(bm, bd);
+
+      // DOM 업데이트
+      document.getElementById('ageKorean').textContent   = korean;
+      document.getElementById('ageCounting').textContent = counting;
+      document.getElementById('ageYear').textContent     = yearAge;
+      document.getElementById('daysSinceBirth').textContent = daysSince.toLocaleString('ko-KR');
+      document.getElementById('yearsSub').textContent    = `${by}년 ${bm}월 ${bd}일생`;
+      document.getElementById('daysToNext').textContent  = daysToNext === 0 ? '오늘!' : daysToNext;
+      document.getElementById('nextBirthSub').textContent =
+        daysToNext === 0 ? '오늘이 생일입니다!' :
+        `${nextBirth.getFullYear()}년 ${nextBirth.getMonth()+1}월 ${nextBirth.getDate()}일`;
+      document.getElementById('hoursLived').textContent  = hours.toLocaleString('ko-KR');
+      document.getElementById('birthDayOfWeek').textContent = birthDay + '요일';
+      document.getElementById('birthDateFull').textContent  =
+        `${by}년 ${bm}월 ${bd}일`;
+
+      document.getElementById('zodiacEmoji').textContent = zodiac.emoji;
+      document.getElementById('zodiacName').textContent  = zodiac.name;
+      document.getElementById('zodiacDesc').textContent  = zodiac.desc;
+
+      document.getElementById('starEmoji').textContent = star.emoji;
+      document.getElementById('starName').textContent  = star.name;
+      document.getElementById('starDesc').textContent  = star.desc;
+
+      showResult('resultBox');
+    }
+
+    // ========== 초기화 ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+
+      // 오늘 날짜 표시 및 max 설정
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      document.getElementById('birthDate').max = todayStr;
+      document.getElementById('todayLabel').textContent =
+        `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+
+      document.getElementById('birthDate').addEventListener('change', calcAge);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('birthDate').value = '';
+      hideResult('resultBox');
+    });
+  </script>
+</body>
+</html>
