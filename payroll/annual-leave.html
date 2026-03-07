@@ -194,50 +194,65 @@
       <div class="calc-card">
         <h2>연차 발생 기준</h2>
         <p style="line-height:1.8;color:var(--text);margin-bottom:16px;">
-          연차유급휴가는 근로기준법 제60조에 따라 발생합니다. 입사일 기준으로 계산하며 사업장 규모(5인 이상)와 근속 연수에 따라 일수가 달라집니다.
+          연차유급휴가는 근로기준법 제60조에 따라 발생합니다. 사업장마다 <strong>입사일 기준</strong>과 <strong>회계연도 기준</strong> 중 하나를 선택해 운영할 수 있습니다.
         </p>
-        <h3 style="margin:20px 0 10px;font-size:var(--type-title-md);">발생 기준표</h3>
+        <h3 style="margin:20px 0 10px;font-size:var(--type-title-md);">기준별 발생 일수 비교표</h3>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:var(--type-body-sm);">
             <thead>
               <tr style="background:var(--primary);color:white;">
-                <th style="padding:10px;text-align:left;">근속 연수</th>
-                <th style="padding:10px;text-align:center;">연차 일수</th>
-                <th style="padding:10px;text-align:left;">비고</th>
+                <th style="padding:10px;text-align:left;min-width:80px;">근속 기간</th>
+                <th style="padding:10px;text-align:center;min-width:90px;">연차 일수</th>
+                <th style="padding:10px;text-align:left;min-width:130px;">입사일 기준</th>
+                <th style="padding:10px;text-align:left;min-width:160px;">회계연도 기준 (1월 1일)</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom:1px solid var(--border);">
                 <td style="padding:10px;">1년 미만</td>
-                <td style="padding:10px;text-align:center;">월 1일 (최대 11일)</td>
-                <td style="padding:10px;color:var(--text-light);">개근 조건</td>
+                <td style="padding:10px;text-align:center;">월 1일<br><small style="color:var(--text-light);">최대 11일</small></td>
+                <td style="padding:10px;color:var(--text-light);">입사일 기준 매월 발생, 개근 조건</td>
+                <td style="padding:10px;color:var(--text-light);">입사월~12월까지 1개월 개근 시 1일씩 비례 부여 (최대 11일)</td>
               </tr>
               <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
-                <td style="padding:10px;">1년 이상</td>
+                <td style="padding:10px;">1년 이상<br><small style="color:var(--text-light);">(3년 미만)</small></td>
                 <td style="padding:10px;text-align:center;font-weight:600;">15일</td>
-                <td style="padding:10px;color:var(--text-light);">80% 출근 시</td>
+                <td style="padding:10px;color:var(--text-light);">입사 1주년 도래 시 15일 발생<br>(80% 이상 출근 조건)</td>
+                <td style="padding:10px;color:var(--text-light);">전년 12월 31일 기준 1년 이상이면 당해연도 1월 1일에 15일 일괄 부여</td>
               </tr>
               <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:10px;">3년 이상</td>
+                <td style="padding:10px;">3년 이상<br><small style="color:var(--text-light);">(5년 미만)</small></td>
                 <td style="padding:10px;text-align:center;font-weight:600;">16일</td>
-                <td style="padding:10px;color:var(--text-light);">2년마다 +1일</td>
+                <td style="padding:10px;color:var(--text-light);">3주년 도래 시 16일로 증가</td>
+                <td style="padding:10px;color:var(--text-light);">전년 12월 31일 기준 3년 이상이면 1월 1일에 16일 부여</td>
               </tr>
               <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
                 <td style="padding:10px;">5년 이상</td>
                 <td style="padding:10px;text-align:center;font-weight:600;">17일</td>
-                <td style="padding:10px;color:var(--text-light);"></td>
+                <td style="padding:10px;color:var(--text-light);">5주년 도래 시 17일 (이후 2년마다 +1일)</td>
+                <td style="padding:10px;color:var(--text-light);">전년 말 기준 5년 이상이면 1월 1일에 17일 부여</td>
               </tr>
               <tr>
                 <td style="padding:10px;">21년 이상</td>
-                <td style="padding:10px;text-align:center;font-weight:600;">25일 (최대)</td>
-                <td style="padding:10px;color:var(--text-light);">상한 25일</td>
+                <td style="padding:10px;text-align:center;font-weight:600;">25일<br><small style="color:var(--text-light);">최대</small></td>
+                <td style="padding:10px;color:var(--text-light);">상한 25일 (이후 증가 없음)</td>
+                <td style="padding:10px;color:var(--text-light);">동일하게 최대 25일 상한 적용</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p style="margin-top:16px;font-size:var(--type-body-sm);color:var(--text-light);">
-          ※ 5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 규정이 적용되지 않습니다.<br>
-          ※ 회계연도 기준으로 운영하는 사업장은 입사일 기준과 결과가 다를 수 있습니다.
+
+        <div style="margin-top:16px;background:var(--warning-50);border:1px solid var(--warning-500);border-radius:var(--radius-sm);padding:12px 16px;font-size:var(--type-body-sm);">
+          <strong>두 기준의 핵심 차이</strong><br>
+          <ul style="margin:8px 0 0 16px;line-height:1.8;">
+            <li><strong>입사일 기준:</strong> 입사일로부터 1년이 된 날에 연차가 발생. 사람마다 발생일이 다름.</li>
+            <li><strong>회계연도 기준:</strong> 매년 1월 1일에 전원 일괄 부여. 연말 입사자는 첫 해 연차가 적을 수 있음.</li>
+            <li>어느 기준이든 <strong>근로자에게 불리하지 않아야</strong> 합니다 (대법원 2017다212081).</li>
+          </ul>
+        </div>
+
+        <p style="margin-top:12px;font-size:var(--type-body-sm);color:var(--text-light);">
+          ※ 5인 미만 사업장은 근로기준법 제11조에 따라 연차유급휴가 적용 제외입니다.
         </p>
       </div>
 
