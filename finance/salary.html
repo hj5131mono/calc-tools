@@ -21,6 +21,8 @@
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
   <link rel="stylesheet" href="../assets/css/style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <style>
     /* 월 실수령액 하이라이트 */
     .monthly-net-display {
@@ -191,6 +193,64 @@
       .monthly-net-amount { font-size: 2rem; }
       .summary-grid { grid-template-columns: 1fr; }
     }
+
+    /* 직군별 연봉 위치 */
+    .job-selects { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .job-selects select { flex: 1; min-width: 120px; }
+    .job-band-wrap { position: relative; height: 44px; margin: 24px 12px 8px; }
+    .job-band-rail {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      left: 0; right: 0; height: 6px;
+      background: var(--gray-200); border-radius: 3px;
+    }
+    .job-band-range {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      height: 6px; background: var(--primary-200);
+      border-radius: 3px; transition: all 0.4s;
+    }
+    .job-band-iqr {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      height: 12px; background: var(--primary-400);
+      border-radius: 4px; margin-top: -3px; transition: all 0.4s;
+    }
+    .job-band-median {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 4px; height: 20px;
+      background: var(--primary-700); border-radius: 2px; transition: left 0.4s;
+    }
+    .job-band-user {
+      position: absolute; top: -2px; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 13px solid var(--warning-500);
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+      transition: left 0.4s;
+    }
+    .job-band-labels {
+      display: flex; justify-content: space-between;
+      font-size: var(--type-caption); color: var(--text-light); margin-top: 6px;
+    }
+    .job-band-result {
+      text-align: center; margin-top: 12px; padding: 10px;
+      background: var(--primary-50); border-radius: var(--radius-sm);
+      font-size: var(--type-body-sm);
+    }
+
+    /* 그래프 토글 */
+    .view-toggle {
+      display: inline-flex; gap: 0; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden; margin-left: auto;
+    }
+    .view-toggle-btn {
+      padding: 5px 12px; font-size: var(--type-caption); font-family: inherit;
+      font-weight: 500; cursor: pointer; border: none;
+      background: var(--white); color: var(--text-light);
+      transition: all 0.15s; border-right: 1px solid var(--border);
+    }
+    .view-toggle-btn:last-child { border-right: none; }
+    .view-toggle-btn.active { background: var(--primary); color: var(--white); font-weight: 600; }
+    .chart-container { position: relative; height: 260px; margin-top: 12px; }
   </style>
 
   <!-- Google AdSense -->
@@ -276,6 +336,38 @@
             </button>
           </div>
         </form>
+      </div>
+
+      <!-- 직군별 연봉 위치 -->
+      <div id="jobBandBox" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:var(--spacing-md);margin-bottom:var(--spacing-md);box-shadow:var(--shadow);">
+        <h3 style="font-size:var(--type-title-md);margin-bottom:4px;">직군별 연봉 위치</h3>
+        <p style="font-size:var(--type-body-sm);color:var(--text-light);margin-bottom:14px;">직군과 직업을 선택해 내 연봉이 어느 위치인지 확인하세요.</p>
+        <div class="job-selects">
+          <select id="jobCatSel" onchange="onJobCatChange()">
+            <option value="">직군 선택</option>
+          </select>
+          <select id="jobRoleSel" onchange="onJobRoleChange()">
+            <option value="">직업 선택</option>
+          </select>
+        </div>
+        <div id="jobBandViz" style="display:none;">
+          <div class="job-band-wrap">
+            <div class="job-band-rail"></div>
+            <div class="job-band-range" id="jbRange"></div>
+            <div class="job-band-iqr" id="jbIqr"></div>
+            <div class="job-band-median" id="jbMedian"></div>
+            <div class="job-band-user" id="jbUser" title="내 연봉"></div>
+          </div>
+          <div class="job-band-labels">
+            <span id="jbQ10Label"></span>
+            <span id="jbMedianLabel" style="font-weight:600;color:var(--primary);">중위</span>
+            <span id="jbQ90Label"></span>
+          </div>
+          <div class="job-band-result">
+            <span id="jobBandSummary"></span>
+          </div>
+          <p style="margin-top:8px;font-size:var(--type-caption);color:var(--gray-400);">출처: 원티드·잡코리아·잡플래닛·크레딧잡·고용노동부 통계 종합 추정 모델 — 참고용이며 실제와 다를 수 있습니다.</p>
+        </div>
       </div>
 
       <!-- 소득 분위 시각화 -->
@@ -378,11 +470,17 @@
         </div>
       </div>
 
-      <!-- 연봉 구간별 비교 표 -->
+      <!-- 연봉 구간별 비교 표 + 그래프 -->
       <div class="calc-card">
-        <h3 style="margin-bottom:8px;">
-          <i data-lucide="table" class="icon"></i> 연봉별 실수령액 비교표
-        </h3>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <h3 style="margin:0;flex:1;">
+            <i data-lucide="table" class="icon"></i> 연봉별 실수령액 비교
+          </h3>
+          <div class="view-toggle">
+            <button class="view-toggle-btn active" id="viewTable" onclick="setView('table')">표</button>
+            <button class="view-toggle-btn" id="viewChart" onclick="setView('chart')">그래프</button>
+          </div>
+        </div>
         <p style="font-size:0.8125rem; color:var(--text-light); margin-bottom:16px;">
           현재 입력한 부양가족·자녀·비과세 기준 적용.
           <span style="background:#dbeafe; color:var(--primary); font-size:0.7rem; padding:1px 8px; border-radius:10px; font-weight:600;">현재</span>
@@ -403,6 +501,13 @@
               <!-- JS로 생성 -->
             </tbody>
           </table>
+        </div>
+        <!-- 그래프 뷰 -->
+        <div id="chartWrap" style="display:none;">
+          <div class="chart-container">
+            <canvas id="salaryChart"></canvas>
+          </div>
+          <p style="text-align:center;font-size:var(--type-caption);color:var(--gray-400);margin-top:6px;">세로축: 월 실수령액 / 가로축: 세전 연봉 — 현재 입력 연봉 구간 강조 표시</p>
         </div>
       </div>
 
@@ -716,6 +821,9 @@
 
       showResult('resultBox');
       renderPercentile(salaryMan * 10000);
+      renderSalaryChart(salaryMan, dependents, children, nonTaxable);
+      document.getElementById('jobBandBox').style.display = 'block';
+      onJobRoleChange(); // 직군 선택돼 있으면 재계산
     }
 
     // ── 소득 분위 시각화 ─────────────────────────────────────────
@@ -760,8 +868,241 @@
     }
 
 
+    // ── 그래프 토글 ───────────────────────────────────────────────
+    let salaryChartInstance = null;
+
+    function setView(mode) {
+      const tableWrap = document.querySelector('#comparisonBody').closest('div');
+      const chartWrap = document.getElementById('chartWrap');
+      document.getElementById('viewTable').classList.toggle('active', mode === 'table');
+      document.getElementById('viewChart').classList.toggle('active', mode === 'chart');
+      tableWrap.style.display = mode === 'table' ? '' : 'none';
+      chartWrap.style.display = mode === 'chart' ? 'block' : 'none';
+    }
+
+    function renderSalaryChart(currentMan, dependents, children, nonTaxable) {
+      const labels   = SALARY_RANGE.map(s => s >= 10000 ? (s / 10000) + '억' : (s / 10000).toFixed(1).replace('.0', '') + '억');
+      // 실제 레이블 개선
+      const fmtLabel = s => {
+        if (s >= 10000) return (s / 10000) + '억';
+        return s >= 1000 ? (s / 1000).toFixed(1).replace('.0','') + '억' : s + '만';
+      };
+      const xLabels  = SALARY_RANGE.map(fmtLabel);
+      const netData  = SALARY_RANGE.map(s => calcMonthlyDetail(s * 10000, dependents, children, nonTaxable).net);
+      const colors   = SALARY_RANGE.map(s => Math.abs(s - currentMan) < 1 ? '#3182F6' : '#BFDBFE');
+
+      const ctx = document.getElementById('salaryChart').getContext('2d');
+      if (salaryChartInstance) salaryChartInstance.destroy();
+
+      salaryChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: xLabels,
+          datasets: [{
+            label: '월 실수령액',
+            data: netData,
+            backgroundColor: colors,
+            borderRadius: 5,
+            borderSkipped: false,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: (items) => `연봉 ${SALARY_RANGE[items[0].dataIndex].toLocaleString()}만원`,
+                label: (item) => `월 실수령: ${item.raw.toLocaleString('ko-KR')}원`
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              ticks: {
+                callback: v => (v / 10000).toFixed(0) + '만원'
+              },
+              grid: { color: '#F3F4F6' }
+            }
+          }
+        }
+      });
+    }
+
+    // ── 직군별 연봉 데이터 (원티드·잡코리아·잡플래닛·크레딧잡·고용노동부 종합 추정, 2023-2024년 기준) ──
+    // 형식: [직업명, Q10, Q25, Q50(중위), Q75, Q90] 단위: 만원
+    const JOB_BANDS = {
+      'it':        { name: 'IT/개발', jobs: [
+        ['백엔드 개발자',          2800, 3800,  5500,  8500, 13000],
+        ['프론트엔드 개발자',       2800, 3500,  5000,  7500, 12000],
+        ['풀스택 개발자',           3000, 4000,  5800,  8500, 13000],
+        ['AI/ML 엔지니어',          3500, 5000,  7500, 12000, 18000],
+        ['DevOps/SRE 엔지니어',     3500, 4500,  6500, 10000, 15000],
+        ['PM/PO',                   3500, 5000,  7000, 11000, 16000],
+        ['데이터 엔지니어/분석가',   3200, 4000,  5800,  9000, 14000],
+        ['iOS/Android 개발자',      3000, 4000,  6000,  9000, 13000],
+        ['보안 엔지니어',           3000, 4000,  6000,  9000, 13000],
+        ['QA 엔지니어',             2800, 3500,  5000,  7500, 11000],
+      ]},
+      'finance':   { name: '금융/투자', jobs: [
+        ['은행원',                  3000, 4000,  5500,  8000, 12000],
+        ['증권사/투자직',            3500, 5000,  8000, 15000, 30000],
+        ['펀드매니저/애널리스트',    4000, 6000,  9000, 15000, 25000],
+        ['보험설계사/언더라이터',    2500, 3500,  5000,  7500, 12000],
+        ['핀테크 직원',             3500, 4500,  6500, 10000, 16000],
+        ['회계사(CPA)/세무사',       3500, 5000,  7000, 11000, 18000],
+      ]},
+      'medical':   { name: '의료/제약', jobs: [
+        ['의사 (전문의)',            8000,11000, 16000, 28000, 50000],
+        ['치과의사',                 6000, 8000, 12000, 20000, 35000],
+        ['한의사',                   4000, 5500,  8000, 14000, 25000],
+        ['약사',                     4000, 5000,  6500,  9000, 13000],
+        ['간호사',                   3000, 3500,  4500,  6000,  8500],
+        ['물리치료사/작업치료사',    3000, 3400,  4200,  5500,  7500],
+        ['제약 영업/R&D',            3000, 3800,  5500,  8000, 13000],
+      ]},
+      'legal':     { name: '법률/법무', jobs: [
+        ['변호사 (로펌)',             4500, 6000, 10000, 18000, 40000],
+        ['사내 법무팀',              4000, 5500,  8000, 13000, 22000],
+        ['판사/검사',                6000, 8000, 12000, 18000, 30000],
+        ['법무사/행정사',            2800, 3500,  5000,  7500, 12000],
+      ]},
+      'consulting':{ name: '컨설팅/회계법인', jobs: [
+        ['4대 회계법인 (Big4)',       4000, 6000,  9000, 15000, 25000],
+        ['MBB 전략컨설팅',           6000, 9000, 14000, 22000, 40000],
+        ['중소 컨설팅',              3500, 5000,  7000, 11000, 18000],
+      ]},
+      'marketing': { name: '마케팅/기획', jobs: [
+        ['마케터 (종합)',             2800, 3500,  4800,  7000, 11000],
+        ['브랜드 매니저',            3200, 4200,  6000,  9000, 14000],
+        ['퍼포먼스 마케터',          3000, 4000,  5500,  8000, 12000],
+        ['경영기획/전략기획',        3500, 4500,  6500, 10000, 16000],
+        ['MD/바이어',                2800, 3500,  5000,  7500, 12000],
+        ['PR/홍보',                  2800, 3500,  4500,  7000, 11000],
+      ]},
+      'design':    { name: '디자인', jobs: [
+        ['UX/UI 디자이너',           3000, 3800,  5500,  8000, 13000],
+        ['그래픽 디자이너',          2800, 3300,  4500,  6500, 10000],
+        ['영상/모션 디자이너',       2800, 3200,  4500,  6500, 10000],
+        ['제품/산업 디자이너',       3000, 3800,  5500,  8000, 12000],
+      ]},
+      'engineer':  { name: '엔지니어링/제조', jobs: [
+        ['반도체 엔지니어',          3500, 5000,  7500, 12000, 20000],
+        ['기계 엔지니어',            3000, 3800,  5200,  7500, 11000],
+        ['전기/전자 엔지니어',       3000, 3800,  5500,  8000, 12000],
+        ['화학/소재 엔지니어',       3000, 3800,  5500,  8000, 12000],
+        ['토목/건축 엔지니어',       2800, 3500,  5000,  7500, 11000],
+        ['생산직 (대기업)',           2800, 3200,  4500,  6500,  9500],
+      ]},
+      'public':    { name: '공공/공기업', jobs: [
+        ['공무원 (9~5급)',            2800, 3200,  4500,  6500,  9000],
+        ['공기업 직원',              3500, 4500,  6000,  8500, 12000],
+        ['교사 (국공립)',             2800, 3500,  4800,  6500,  8500],
+        ['대학교수',                  5000, 7000, 10000, 16000, 25000],
+        ['직업군인',                  3000, 4000,  5500,  8000, 12000],
+      ]},
+      'sales':     { name: '영업/세일즈', jobs: [
+        ['B2B 영업',                 2800, 3500,  5000,  8000, 14000],
+        ['IT/테크 세일즈',           3200, 4500,  7000, 11000, 18000],
+        ['리테일/소비재 영업',       2600, 3200,  4500,  7000, 11000],
+        ['부동산 중개/분양',         2500, 3500,  6000, 12000, 25000],
+      ]},
+      'media':     { name: '미디어/콘텐츠', jobs: [
+        ['기자 (신문/방송)',          3000, 3800,  5500,  8500, 14000],
+        ['PD/감독',                   3200, 4000,  6000,  9500, 16000],
+        ['게임 개발/기획',            3000, 4000,  6000,  9000, 14000],
+        ['콘텐츠 크리에이터',        2500, 3000,  5000, 10000, 25000],
+      ]},
+      'hr':        { name: 'HR/경영지원', jobs: [
+        ['HR 제너럴리스트',          3000, 3800,  5200,  7500, 11000],
+        ['리크루터',                  2800, 3500,  5000,  7500, 12000],
+        ['재무/회계 담당',           3000, 3800,  5500,  8000, 12000],
+        ['총무/경영지원',            2800, 3200,  4200,  6000,  9000],
+      ]},
+    };
+
+    // ── 직군 셀렉트 초기화 ───────────────────────────────────────
+    function initJobSelects() {
+      const catSel = document.getElementById('jobCatSel');
+      Object.entries(JOB_BANDS).forEach(([id, cat]) => {
+        catSel.add(new Option(cat.name, id));
+      });
+    }
+
+    function onJobCatChange() {
+      const catId   = document.getElementById('jobCatSel').value;
+      const roleSel = document.getElementById('jobRoleSel');
+      roleSel.innerHTML = '<option value="">직업 선택</option>';
+      if (catId && JOB_BANDS[catId]) {
+        JOB_BANDS[catId].jobs.forEach(([name]) => roleSel.add(new Option(name, name)));
+      }
+      document.getElementById('jobBandViz').style.display = 'none';
+    }
+
+    function onJobRoleChange() {
+      const catId   = document.getElementById('jobCatSel').value;
+      const roleName= document.getElementById('jobRoleSel').value;
+      if (!catId || !roleName) { document.getElementById('jobBandViz').style.display = 'none'; return; }
+
+      const cat     = JOB_BANDS[catId];
+      const job     = cat?.jobs.find(j => j[0] === roleName);
+      if (!job) return;
+
+      const salaryMan = parseNumber(document.getElementById('annualSalary').value);
+      if (!salaryMan) return;
+
+      const [, q10, q25, q50, q75, q90] = job;
+      const userSalary = salaryMan; // 만원 단위
+      const rangeMin = q10, rangeMax = q90;
+
+      // 퍼센타일 보간
+      const points = [[q10,10],[q25,25],[q50,50],[q75,75],[q90,90]];
+      let pct = 10;
+      if (userSalary >= q90) pct = 90;
+      else if (userSalary <= q10) pct = 10;
+      else {
+        for (let i = 0; i < points.length - 1; i++) {
+          const [s1,p1] = points[i], [s2,p2] = points[i+1];
+          if (userSalary >= s1 && userSalary <= s2) {
+            pct = p1 + (p2 - p1) * (userSalary - s1) / (s2 - s1);
+            break;
+          }
+        }
+      }
+      const topPct = Math.round(100 - pct);
+
+      // 바 좌표 계산 (0~100%)
+      const toPos = v => Math.max(0, Math.min(100, (v - rangeMin) / (rangeMax - rangeMin) * 100));
+      const q10p  = 0, q90p = 100;
+      const q25p  = toPos(q25), q75p = toPos(q75), q50p = toPos(q50);
+      const userP = Math.max(0, Math.min(100, toPos(userSalary)));
+
+      document.getElementById('jbRange').style.left  = '0%';
+      document.getElementById('jbRange').style.width = '100%';
+      document.getElementById('jbIqr').style.left    = q25p + '%';
+      document.getElementById('jbIqr').style.width   = (q75p - q25p) + '%';
+      document.getElementById('jbMedian').style.left = q50p + '%';
+      document.getElementById('jbUser').style.left   = userP + '%';
+
+      document.getElementById('jbQ10Label').textContent    = q10.toLocaleString() + '만원';
+      document.getElementById('jbMedianLabel').textContent = `중위 ${q50.toLocaleString()}만원`;
+      document.getElementById('jbQ90Label').textContent    = q90.toLocaleString() + '만원';
+
+      const fmtBand = v => v >= 10000 ? (v/10000).toFixed(1).replace('.0','') + '억' : v.toLocaleString() + '만';
+      const topStr = topPct <= 5 ? '상위 5% 이내' : `상위 ${topPct}%`;
+      document.getElementById('jobBandSummary').innerHTML =
+        `<strong style="color:var(--primary);">${roleName}</strong>에서 ` +
+        `<strong style="color:var(--primary);">${topStr}</strong> 수준입니다. ` +
+        `(중위연봉 ${fmtBand(q50)} · 하위25% ${fmtBand(q25)} · 상위25% ${fmtBand(q75)})`;
+
+      document.getElementById('jobBandViz').style.display = 'block';
+    }
+
     document.addEventListener('DOMContentLoaded', async function() {
       lucide.createIcons();
+      initJobSelects();
 
       // rates.json에서 최신 세율 로드
       const rates = await loadRates();
