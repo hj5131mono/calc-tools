@@ -597,17 +597,6 @@
       });
     }
 
-    // ========== debounce & 이벤트 ==========
-    function debounce(fn, delay) {
-      let timer;
-      return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
-
-    const dCalcVAT = debounce(calcVAT, 150);
-
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
       // 초기 상태 설정

@@ -453,14 +453,7 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
-    // debounce 유틸리티
-    function debounce(fn, delay) {
-      let timer;
-      return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
+
 
     // 수익률 계산 함수
     function calcReturn() {
@@ -527,8 +520,6 @@
 
       showResult('resultBox');
     }
-
-    const dCalcReturn = debounce(calcReturn, 200);
 
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
