@@ -462,15 +462,6 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
-    // 디바운스 유틸리티
-    function debounce(fn, delay) {
-      let timer;
-      return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
-
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
@@ -516,12 +507,6 @@
       document.getElementById('healthAdvice').textContent = gradeInfo.advice;
       showResult('resultBox');
     }
-
-    const dCalcBMI = debounce(calcBMI, 200);
-
-    // 실시간 입력 이벤트
-    document.getElementById('height').addEventListener('input', dCalcBMI);
-    document.getElementById('weight').addEventListener('input', dCalcBMI);
 
     // 폼 submit (버튼 클릭)
     document.getElementById('bmiForm').addEventListener('submit', function(e) {

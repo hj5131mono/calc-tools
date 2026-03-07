@@ -654,11 +654,6 @@
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
 
-      document.getElementById('annualSalary').addEventListener('input', dCalcSalary);
-      document.getElementById('dependents').addEventListener('input', dCalcSalary);
-      document.getElementById('children').addEventListener('input', dCalcSalary);
-      document.getElementById('nonTaxable').addEventListener('input', dCalcSalary);
-
       // 초기 비교 표 렌더링
       renderComparisonTable(0, 1, 0, 200000);
     });

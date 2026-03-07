@@ -517,21 +517,11 @@
 
       includeFeeCheckbox.addEventListener('change', function() {
         feeInputGroup.classList.toggle('active', this.checked);
-        dCalcReturn();
       });
 
       if (includeFeeCheckbox.checked) {
         feeInputGroup.classList.add('active');
       }
-
-      // 실시간 자동 계산
-      document.getElementById('buyPrice').addEventListener('input', dCalcReturn);
-      document.getElementById('sellPrice').addEventListener('input', dCalcReturn);
-      document.getElementById('quantity').addEventListener('input', dCalcReturn);
-      document.getElementById('feeRate').addEventListener('input', dCalcReturn);
-      document.querySelectorAll('input[name="taxType"]').forEach(radio => {
-        radio.addEventListener('change', dCalcReturn);
-      });
     });
 
     // 계산하기

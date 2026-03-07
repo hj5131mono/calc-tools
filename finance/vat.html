@@ -335,9 +335,13 @@
           </button>
         </div>
 
-        <!-- 초기화 -->
-        <div style="margin-top:16px;">
-          <button type="button" class="btn-reset" id="resetBtn" style="width:100%;">
+        <!-- 계산/초기화 버튼 -->
+        <div class="btn-group" style="margin-top:16px;">
+          <button type="button" class="btn-primary" onclick="calcVAT()">
+            <i data-lucide="calculator" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"></i>
+            계산하기
+          </button>
+          <button type="button" class="btn-reset" id="resetBtn">
             <i data-lucide="rotate-ccw" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"></i>
             초기화
           </button>
@@ -594,8 +598,6 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
-      document.getElementById('amountInput').addEventListener('input', dCalcVAT);
-
       // 초기 상태 설정
       setMode('forward');
     });

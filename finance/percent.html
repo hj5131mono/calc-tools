@@ -521,15 +521,6 @@
   <script src="../assets/js/common.js"></script>
 
   <script>
-    // 디바운스 유틸리티
-    function debounce(fn, delay) {
-      let timer;
-      return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
-
     // 페이지 로드 시 초기화
     document.addEventListener('DOMContentLoaded', function() {
       lucide.createIcons();
@@ -609,19 +600,6 @@
         changeType === 'increase' ? 'var(--success-500)' : 'var(--danger-500)';
       document.getElementById('result3').style.display = 'block';
     }
-
-    const dCalc1 = debounce(calc1, 200);
-    const dCalc2 = debounce(calc2, 200);
-    const dCalc3 = debounce(calc3, 200);
-
-    // 실시간 입력 이벤트
-    document.getElementById('mode1_a').addEventListener('input', dCalc1);
-    document.getElementById('mode1_b').addEventListener('input', dCalc1);
-    document.getElementById('mode2_a').addEventListener('input', dCalc2);
-    document.getElementById('mode2_b').addEventListener('input', dCalc2);
-    document.getElementById('mode3_a').addEventListener('input', dCalc3);
-    document.getElementById('mode3_b').addEventListener('input', dCalc3);
-    document.querySelectorAll('input[name="changeType"]').forEach(r => r.addEventListener('change', calc3));
 
     // 폼 submit (버튼 클릭)
     document.getElementById('form1').addEventListener('submit', function(e) { e.preventDefault(); calc1(); });
