@@ -338,6 +338,79 @@
         </form>
       </div>
 
+      <!-- 계산 결과 -->
+      <div class="result-box" id="resultBox">
+        <h3>
+          <i data-lucide="check-circle" style="width:20px;height:20px;vertical-align:middle;"></i>
+          계산 결과
+        </h3>
+
+        <!-- 월 실수령액 대형 표시 -->
+        <div class="monthly-net-display">
+          <div class="monthly-net-label">월 실수령액</div>
+          <div class="monthly-net-amount" id="monthlyNet">—</div>
+        </div>
+
+        <!-- 연간 / 공제 요약 -->
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="s-label">연간 실수령액</div>
+            <div class="s-amount" id="annualNet">—</div>
+          </div>
+          <div class="summary-card">
+            <div class="s-label">월 공제 합계</div>
+            <div class="s-amount" id="totalDeductions">—</div>
+          </div>
+        </div>
+
+        <!-- 공제 내역 테이블 -->
+        <h4 style="margin-bottom:12px; color:var(--text); font-size:0.9375rem;">공제 내역 (월)</h4>
+        <table class="deduction-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th style="text-align:right;">금액</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>국민연금 (4.75%)</td>
+              <td id="pensionAmt">—</td>
+            </tr>
+            <tr>
+              <td>건강보험 (3.595%)</td>
+              <td id="healthAmt">—</td>
+            </tr>
+            <tr>
+              <td>장기요양보험 (건강보험료 × 13.14%)</td>
+              <td id="ltcAmt">—</td>
+            </tr>
+            <tr>
+              <td>고용보험 (0.9%)</td>
+              <td id="employmentAmt">—</td>
+            </tr>
+            <tr>
+              <td>소득세 (간이세액표 기준)</td>
+              <td id="incomeTaxAmt">—</td>
+            </tr>
+            <tr>
+              <td>지방소득세 (소득세 × 10%)</td>
+              <td id="localTaxAmt">—</td>
+            </tr>
+            <tr class="total-row">
+              <td>합계</td>
+              <td id="totalDeductionsTable">—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warning-box">
+          <strong>참고사항:</strong> 국민연금 보험료율이 2026년부터 4.75%로 인상됩니다(연금개혁 단계 인상).
+          건강보험 3.595%, 장기요양보험 13.14% 기준이며, 최신 요율은 각 공단에서 확인하세요.
+          소득세는 간이세액표 근사치로, 실제 연말정산 결과와 다를 수 있습니다.
+        </div>
+      </div>
+
       <!-- 직군별 연봉 위치 -->
       <div id="jobBandBox" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:var(--spacing-md);margin-bottom:var(--spacing-md);box-shadow:var(--shadow);">
         <h3 style="font-size:var(--type-title-md);margin-bottom:4px;">직군별 연봉 위치</h3>
@@ -447,79 +520,6 @@
         data-ad-format="auto"
         data-full-width-responsive="true"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
-
-      <!-- 계산 결과 -->
-      <div class="result-box" id="resultBox">
-        <h3>
-          <i data-lucide="check-circle" style="width:20px;height:20px;vertical-align:middle;"></i>
-          계산 결과
-        </h3>
-
-        <!-- 월 실수령액 대형 표시 -->
-        <div class="monthly-net-display">
-          <div class="monthly-net-label">월 실수령액</div>
-          <div class="monthly-net-amount" id="monthlyNet">—</div>
-        </div>
-
-        <!-- 연간 / 공제 요약 -->
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="s-label">연간 실수령액</div>
-            <div class="s-amount" id="annualNet">—</div>
-          </div>
-          <div class="summary-card">
-            <div class="s-label">월 공제 합계</div>
-            <div class="s-amount" id="totalDeductions">—</div>
-          </div>
-        </div>
-
-        <!-- 공제 내역 테이블 -->
-        <h4 style="margin-bottom:12px; color:var(--text); font-size:0.9375rem;">공제 내역 (월)</h4>
-        <table class="deduction-table">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th style="text-align:right;">금액</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>국민연금 (4.75%)</td>
-              <td id="pensionAmt">—</td>
-            </tr>
-            <tr>
-              <td>건강보험 (3.595%)</td>
-              <td id="healthAmt">—</td>
-            </tr>
-            <tr>
-              <td>장기요양보험 (건강보험료 × 13.14%)</td>
-              <td id="ltcAmt">—</td>
-            </tr>
-            <tr>
-              <td>고용보험 (0.9%)</td>
-              <td id="employmentAmt">—</td>
-            </tr>
-            <tr>
-              <td>소득세 (간이세액표 기준)</td>
-              <td id="incomeTaxAmt">—</td>
-            </tr>
-            <tr>
-              <td>지방소득세 (소득세 × 10%)</td>
-              <td id="localTaxAmt">—</td>
-            </tr>
-            <tr class="total-row">
-              <td>합계</td>
-              <td id="totalDeductionsTable">—</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="warning-box">
-          <strong>참고사항:</strong> 국민연금 보험료율이 2026년부터 4.75%로 인상됩니다(연금개혁 단계 인상).
-          건강보험 3.595%, 장기요양보험 13.14% 기준이며, 최신 요율은 각 공단에서 확인하세요.
-          소득세는 간이세액표 근사치로, 실제 연말정산 결과와 다를 수 있습니다.
-        </div>
       </div>
 
       <!-- 연봉 구간별 비교 표 + 그래프 -->
