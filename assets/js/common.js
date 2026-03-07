@@ -48,18 +48,37 @@ function initAutoComma() {
   });
 }
 
-// 공통 네비게이션 HTML 생성
+// 공통 네비게이션 HTML 생성 (서브 페이지용 - active 상태 자동 감지)
 function createNavigation() {
+  const path = window.location.pathname;
+  let activeCategory = '';
+  if (path.includes('/finance/') || path.includes('/stock/')) activeCategory = '금융';
+  else if (path.includes('/lotto/')) activeCategory = '로또';
+  else if (path.includes('/daily/')) activeCategory = '유틸리티';
+
+  const navItems = [
+    { href: '/index.html', label: '홈', key: 'home' },
+    { href: '/index.html#금융', label: '금융/투자', key: '금융' },
+    { href: '/index.html#로또', label: '로또/운세', key: '로또' },
+    { href: '/index.html#유틸리티', label: '일상 유틸리티', key: '유틸리티' },
+  ];
+
+  const navHTML = navItems.map(item => {
+    const isActive = item.key === activeCategory ||
+      (item.key === 'home' && (path === '/' || path.endsWith('/index.html')));
+    return `<li><a href="${item.href}"${isActive ? ' class="active"' : ''}>${item.label}</a></li>`;
+  }).join('');
+
   return `
     <header class="site-header">
-      <div class="container">
-        <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
+      <div class="container header-inner">
+        <a href="/index.html" class="site-logo">
+          <i data-lucide="calculator" class="icon"></i>
+          <span>계산기 도구 모음</span>
+        </a>
         <nav>
           <ul class="nav-links">
-            <li><a href="/index.html">홈</a></li>
-            <li><a href="/index.html#금융">금융계산기</a></li>
-            <li><a href="/index.html#로또">로또/운세</a></li>
-            <li><a href="/index.html#유틸리티">일상유틸리티</a></li>
+            ${navHTML}
           </ul>
         </nav>
       </div>
@@ -144,12 +163,73 @@ function initKeyboardHint() {
   if (footer) footer.insertAdjacentElement('beforebegin', hint);
 }
 
+// index.html 도구 검색 + 카테고리 탭 필터
+function initToolFilter() {
+  const searchInput = document.getElementById('toolSearch');
+  if (!searchInput) return;
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const sections = document.querySelectorAll('.category-section[data-tab]');
+  const noResults = document.getElementById('noResults');
+  let activeTab = 'all';
+
+  function filterTools() {
+    const query = searchInput.value.trim().toLowerCase();
+    let totalVisible = 0;
+
+    sections.forEach(section => {
+      const tabMatch = activeTab === 'all' || section.dataset.tab === activeTab;
+      if (!tabMatch) {
+        section.style.display = 'none';
+        return;
+      }
+
+      const cards = section.querySelectorAll('.tool-card');
+      let sectionVisible = 0;
+      cards.forEach(card => {
+        // 검색 중 disabled(준비중) 카드 숨기기
+        if (query && card.classList.contains('disabled')) {
+          card.style.display = 'none';
+          return;
+        }
+        const matches = !query || card.textContent.toLowerCase().includes(query);
+        card.style.display = matches ? '' : 'none';
+        if (matches) sectionVisible++;
+      });
+
+      section.style.display = sectionVisible > 0 ? '' : 'none';
+      totalVisible += sectionVisible;
+    });
+
+    if (noResults) {
+      noResults.classList.toggle('show', totalVisible === 0 && !!(query || activeTab !== 'all'));
+    }
+  }
+
+  searchInput.addEventListener('input', filterTools);
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      filterTools();
+      // 검색어 없을 때 탭 클릭 → 해당 섹션으로 스크롤
+      if (!searchInput.value.trim() && activeTab !== 'all') {
+        const target = document.querySelector(`.category-section[data-tab="${activeTab}"]`);
+        if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      }
+    });
+  });
+}
+
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
   initLayout();
   initAutoComma();
   initKeyboardShortcuts();
   initKeyboardHint();
+  initToolFilter();
 
   // Lucide Icons 초기화 (동적으로 추가된 아이콘도 포함)
   if (typeof lucide !== 'undefined') {

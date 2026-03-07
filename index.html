@@ -61,9 +61,18 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="container">
-      <h1><i data-lucide="calculator" class="icon"></i> 계산기 도구 모음</h1>
-      <p style="color: var(--text-light); font-size: 0.875rem; margin-top: 4px;">일상에 필요한 모든 계산기를 한 곳에서</p>
+    <div class="container header-inner">
+      <a href="./index.html" class="site-logo">
+        <i data-lucide="calculator" class="icon"></i>
+        <span>계산기 도구 모음</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#금융">금융/투자</a></li>
+          <li><a href="#로또">로또/운세</a></li>
+          <li><a href="#유틸리티">일상 유틸리티</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
@@ -74,8 +83,25 @@
         <!-- AdSense 광고 자리 -->
       </div>
 
+      <!-- 검색 + 카테고리 탭 필터 -->
+      <div class="tool-filter">
+        <div class="search-wrap">
+          <svg class="search-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="toolSearch" class="search-input" placeholder="도구 검색... (예: 복리, BMI, 부가세)">
+        </div>
+        <div class="tab-list" role="tablist">
+          <button class="tab-btn active" data-tab="all">전체</button>
+          <button class="tab-btn" data-tab="금융">금융/투자</button>
+          <button class="tab-btn" data-tab="로또">로또/운세</button>
+          <button class="tab-btn" data-tab="유틸리티">일상 유틸리티</button>
+        </div>
+      </div>
+      <p id="noResults" class="no-results">검색 결과가 없습니다.</p>
+
       <!-- 금융/투자 계산기 -->
-      <section class="category-section" id="금융">
+      <section class="category-section" id="금융" data-tab="금융">
         <h2><i data-lucide="wallet" class="icon"></i> 금융/투자 계산기</h2>
         <div class="tool-grid">
           <a href="./finance/compound.html" class="tool-card">
@@ -145,7 +171,7 @@
       </section>
 
       <!-- 로또/운세 -->
-      <section class="category-section" id="로또">
+      <section class="category-section" id="로또" data-tab="로또">
         <h2><i data-lucide="clover" class="icon"></i> 로또/운세</h2>
         <div class="tool-grid">
           <a href="./lotto/saju-pick.html" class="tool-card">
@@ -172,11 +198,11 @@
             </div>
           </a>
 
-          <a href="#" class="tool-card disabled">
+          <a href="./lotto/saju-pick.html" class="tool-card">
             <div class="tool-card-icon"><i data-lucide="moon-star"></i></div>
             <div class="tool-card-content">
-              <h3>오늘의 운세 <span class="coming-soon-badge">준비중</span></h3>
-              <p>오늘 하루 운세를 간단히 확인해보세요</p>
+              <h3>오늘의 운세</h3>
+              <p>사주 기반 일진 운세·행운번호·번호 해제</p>
             </div>
           </a>
 
@@ -191,7 +217,7 @@
       </section>
 
       <!-- 일상 유틸리티 -->
-      <section class="category-section" id="유틸리티">
+      <section class="category-section" id="유틸리티" data-tab="유틸리티">
         <h2><i data-lucide="wrench" class="icon"></i> 일상 유틸리티</h2>
         <div class="tool-grid">
           <a href="./daily/character-count.html" class="tool-card">

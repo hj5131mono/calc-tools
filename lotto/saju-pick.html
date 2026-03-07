@@ -360,6 +360,158 @@
         font-size: 2.5rem;
       }
     }
+
+    /* 오늘의 운세 */
+    .today-jinji {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+    }
+
+    .jinji-chars {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .jinji-char-box {
+      width: 48px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      border: 2px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .jinji-char-big {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .jinji-char-small {
+      font-size: 0.625rem;
+      font-weight: 600;
+    }
+
+    .fortune-summary {
+      flex: 1;
+    }
+
+    .fortune-grade {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .fortune-desc {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .fortune-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .fortune-item {
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+    }
+
+    .fortune-item-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .fortune-item-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .fortune-msg {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    /* 번호 선정 이유 */
+    .number-explanation {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .number-explanation-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .num-explain-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .num-explain-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .num-ball-mini {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .num-explain-text {
+      flex: 1;
+      padding-top: 2px;
+    }
+
+    .num-explain-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .num-explain-reason {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
   </style>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258"
@@ -531,6 +683,15 @@
           </div>
         </div>
 
+        <!-- 오늘의 운세 -->
+        <div class="calc-card">
+          <h2><i data-lucide="sun" class="icon"></i> 오늘의 운세</h2>
+          <p id="fortuneDate" style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 16px;"></p>
+          <div class="today-jinji" id="todayJinji"></div>
+          <div class="fortune-grid" id="fortuneGrid"></div>
+          <div class="fortune-msg" id="fortuneMsg"></div>
+        </div>
+
         <!-- 광고 영역 -->
         <div class="ad-space">
           <!-- AdSense 광고 자리 -->
@@ -545,6 +706,12 @@
             당신의 사주와 MBTI를 분석하여 추천된 번호입니다
           </p>
           <div class="lotto-balls" id="lottoBalls"></div>
+
+          <!-- 번호 선정 이유 -->
+          <div class="number-explanation">
+            <div class="number-explanation-title">번호 선정 이유</div>
+            <div class="num-explain-list" id="numExplainList"></div>
+          </div>
 
           <div style="text-align: center; margin-top: 32px;">
             <button class="btn-primary" id="regenerateBtn" style="min-width: 200px;">
@@ -818,11 +985,11 @@
       const 약한오행 = sorted[sorted.length - 1][0];
 
       // 강한 오행에서 각 2개씩
-      오행번호대[강한오행1].forEach(n => 번호풀.push({n, 오행: 강한오행1}));
-      오행번호대[강한오행2].forEach(n => 번호풀.push({n, 오행: 강한오행2}));
+      오행번호대[강한오행1].forEach(n => 번호풀.push({n, 오행: 강한오행1, 이유: '강한기운'}));
+      오행번호대[강한오행2].forEach(n => 번호풀.push({n, 오행: 강한오행2, 이유: '강한기운'}));
 
       // 약한 오행에서 2개 (보완)
-      오행번호대[약한오행].forEach(n => 번호풀.push({n, 오행: 약한오행}));
+      오행번호대[약한오행].forEach(n => 번호풀.push({n, 오행: 약한오행, 이유: '보완기운'}));
 
       // 성별 시드 조정
       const genderSeed = gender === 'male' ? 1 : 2;
@@ -876,6 +1043,95 @@
       금: '결단과 수확의 기운이 강합니다. 단단하고 명확한 판단력을 가지고 있습니다.',
       수: '지혜와 유연의 기운이 강합니다. 흐르는 물처럼 적응력이 뛰어납니다.'
     };
+
+    // 오행 상생/상극
+    const 상생 = {목:'화', 화:'토', 토:'금', 금:'수', 수:'목'};
+    const 상극 = {목:'토', 화:'금', 토:'수', 금:'목', 수:'화'};
+
+    function 오행관계(나, 오늘) {
+      if (나 === 오늘) return '비화';
+      if (상생[오늘] === 나) return '피생';
+      if (상생[나] === 오늘) return '생';
+      if (상극[오늘] === 나) return '피극';
+      if (상극[나] === 오늘) return '극';
+      return '중립';
+    }
+
+    const 운세등급 = {
+      피생: { 별: '⭐⭐⭐⭐⭐', 제목: '최고운', msg: '오늘의 기운이 당신의 사주를 크게 돕는 날입니다. 오늘은 중요한 일을 시작하거나 결단을 내리기에 가장 좋은 날입니다. 적극적으로 움직이면 기대 이상의 성과를 얻을 수 있습니다.' },
+      비화: { 별: '⭐⭐⭐⭐', 제목: '안정운', msg: '오늘 기운이 당신과 같아 안정적인 하루입니다. 익숙한 일을 꾸준히 처리하면 좋은 결과가 쌓입니다. 새로운 시도보다는 완성도를 높이는 데 집중하세요.' },
+      생: { 별: '⭐⭐⭐⭐', 제목: '활동운', msg: '당신의 기운이 오늘을 생하여 자신감이 높아지는 날입니다. 목표를 향해 적극적으로 행동하면 원하는 결과를 얻을 수 있습니다. 주변 사람들에게도 좋은 영향을 줄 수 있습니다.' },
+      중립: { 별: '⭐⭐⭐', 제목: '평온운', msg: '무난하고 평온한 하루입니다. 무리한 새 시도보다는 진행 중인 일에 집중하는 것이 좋습니다. 차분히 내실을 다지는 날로 활용하세요.' },
+      극: { 별: '⭐⭐⭐', 제목: '도전운', msg: '당신의 기운이 오늘을 억누르는 긴장감이 있는 날입니다. 신중하게 판단하고 무리하지 않으면 어려움을 넘길 수 있습니다. 끈기 있게 임하면 후반에 좋아집니다.' },
+      피극: { 별: '⭐⭐', 제목: '주의운', msg: '오늘의 기운이 당신의 사주를 억제하는 날입니다. 중요한 결정이나 새 시작은 내일로 미루세요. 평소 하던 일을 마무리하고 몸과 마음을 충전하는 하루로 보내는 것이 좋습니다.' }
+    };
+
+    const 행운색상맵 = {목:'초록색', 화:'빨간색', 토:'황토색', 금:'흰색·금색', 수:'파란색'};
+    const 행운방향맵 = {목:'동쪽(東)', 화:'남쪽(南)', 토:'중앙(中)', 금:'서쪽(西)', 수:'북쪽(北)'};
+
+    function displayFortune(사주, 오행분포) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      const weekDay = ['일','월','화','수','목','금','토'][today.getDay()];
+
+      const 오늘일주 = 일주계산(year, month, day);
+      const 오늘천간오행 = 천간오행[오늘일주.천간];
+      const 오늘지지오행 = 지지오행[오늘일주.지지];
+
+      document.getElementById('fortuneDate').textContent =
+        `${year}년 ${month}월 ${day}일 (${weekDay}요일) — 오늘 일진: ${오늘일주.천간}${오늘일주.지지}일`;
+
+      const 내일간 = 사주[1]?.천간;
+      const 내오행 = 천간오행[내일간] || '목';
+      const 관계 = 오행관계(내오행, 오늘천간오행);
+      const 등급 = 운세등급[관계];
+
+      const 천간색 = 오행색상[오늘천간오행];
+      const 지지색 = 오행색상[오늘지지오행];
+
+      document.getElementById('todayJinji').innerHTML = `
+        <div class="jinji-chars">
+          <div class="jinji-char-box" style="border-color: ${천간색}; background: ${천간색}22;">
+            <div class="jinji-char-big" style="color: ${천간색};">${오늘일주.천간}</div>
+            <div class="jinji-char-small" style="color: ${천간색};">${오늘천간오행}</div>
+          </div>
+          <div class="jinji-char-box" style="border-color: ${지지색}; background: ${지지색}22;">
+            <div class="jinji-char-big" style="color: ${지지색};">${오늘일주.지지}</div>
+            <div class="jinji-char-small" style="color: ${지지색};">${오늘지지오행}</div>
+          </div>
+        </div>
+        <div class="fortune-summary">
+          <div class="fortune-grade">${등급.별} ${등급.제목}</div>
+          <div class="fortune-desc">오늘 일간(${오늘일주.천간}): ${오늘천간오행}기운 &nbsp;·&nbsp; 내 일간(${내일간 || '?'}): ${내오행}기운</div>
+        </div>
+      `;
+
+      const sorted = Object.entries(오행분포).sort((a, b) => b[1] - a[1]);
+      const 약한오행 = sorted[sorted.length - 1][0];
+
+      document.getElementById('fortuneGrid').innerHTML = `
+        <div class="fortune-item">
+          <div class="fortune-item-label">오늘의 기운 조화</div>
+          <div class="fortune-item-value">${관계 === '피생' ? '크게 도움' : 관계 === '비화' ? '안정·일치' : 관계 === '생' ? '나를 강화' : 관계 === '극' ? '다소 긴장' : 관계 === '피극' ? '억제됨' : '평온'}</div>
+        </div>
+        <div class="fortune-item">
+          <div class="fortune-item-label">오늘 행운 색상</div>
+          <div class="fortune-item-value">${행운색상맵[약한오행]}</div>
+        </div>
+        <div class="fortune-item">
+          <div class="fortune-item-label">오늘 행운 방향</div>
+          <div class="fortune-item-value">${행운방향맵[약한오행]}</div>
+        </div>
+        <div class="fortune-item">
+          <div class="fortune-item-label">채워야 할 기운</div>
+          <div class="fortune-item-value" style="color: ${오행색상[약한오행]};">${약한오행}(${약한오행 === '목' ? '木' : 약한오행 === '화' ? '火' : 약한오행 === '토' ? '土' : 약한오행 === '금' ? '金' : '水'}) 기운</div>
+        </div>
+      `;
+
+      document.getElementById('fortuneMsg').textContent = 등급.msg;
+    }
 
     // 폼 제출
     document.getElementById('sajuForm').addEventListener('submit', function(e) {
@@ -991,6 +1247,9 @@
       document.getElementById('weakElement').textContent =
         `${오행이름[약한오행]}(${sorted[sorted.length-1][1]}개): 이 기운을 보완하면 균형을 맞출 수 있습니다.`;
 
+      // 오행 분포 복사본으로 운세 표시 (생성함수가 분포를 수정하므로 미리 처리)
+      displayFortune(사주, {...오행분포});
+
       // 행운번호 생성
       const 행운번호 = 행운번호생성({...오행분포}, mbti, gender, randomSeed);
 
@@ -1009,6 +1268,36 @@
           `;
           lucide.createIcons();
         }, idx * 100);
+      });
+
+      // 번호 선정 이유 표시
+      const ballColorHex = {
+        'ball-yellow': '#f59e0b',
+        'ball-blue': '#2563eb',
+        'ball-red': '#dc2626',
+        'ball-gray': '#64748b',
+        'ball-green': '#16a34a'
+      };
+      const 오행한자 = {목:'木', 화:'火', 토:'土', 금:'金', 수:'水'};
+      const 번호대범위 = (n) => n <= 9 ? '1~9' : n <= 18 ? '10~18' : n <= 27 ? '19~27' : n <= 36 ? '28~36' : '37~45';
+      const 이유설명 = {
+        강한기운: (오행) => `당신의 사주에서 강한 ${오행이름[오행]}(${오행한자[오행]}) 기운이 깃든 번호 — 이미 가진 강한 에너지를 활용합니다`,
+        보완기운: (오행) => `부족한 ${오행이름[오행]}(${오행한자[오행]}) 기운을 채우는 보완 번호 — 균형을 맞춰 행운의 흐름을 완성합니다`
+      };
+
+      const numExplainList = document.getElementById('numExplainList');
+      numExplainList.innerHTML = '';
+      행운번호.forEach(item => {
+        const hex = ballColorHex[getBallColor(item.n)];
+        numExplainList.innerHTML += `
+          <div class="num-explain-item">
+            <div class="num-ball-mini" style="background: ${hex};">${item.n}</div>
+            <div class="num-explain-text">
+              <div class="num-explain-name">${item.n}번 &nbsp;·&nbsp; ${오행이름[item.오행]}(${오행한자[item.오행]})행 구간 (${번호대범위(item.n)}번대)</div>
+              <div class="num-explain-reason">${이유설명[item.이유]?.(item.오행) || ''}</div>
+            </div>
+          </div>
+        `;
       });
 
       // 공유 텍스트 준비
