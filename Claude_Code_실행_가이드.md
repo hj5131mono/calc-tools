@@ -1354,7 +1354,7 @@ git push
 
 ## 현재 사이트 완성 현황 (2026-03-07 기준)
 
-### 완료된 도구 (12개)
+### 완료된 도구 (16개)
 
 > **계산 방식:** 모든 계산기는 버튼 클릭 방식. 실시간 자동계산은 적용하지 않음.
 > 예외: 글자수 세기(입력 자체가 결과)
@@ -1363,7 +1363,7 @@ git push
 |---|------|--------|------|
 | 1 | `finance/compound.html` | 복리 계산기 | |
 | 2 | `finance/percent.html` | 퍼센트 계산기 | |
-| 3 | `finance/salary.html` | 연봉 실수령액 계산기 | 구간비교 표 포함 |
+| 3 | `finance/salary.html` | 연봉 실수령액 계산기 | 구간비교 표 포함, rates.json 연동 |
 | 4 | `finance/loan.html` | 대출이자 계산기 | 3방식·월별 스케줄 |
 | 5 | `finance/vat.html` | 부가세 계산기 | 역산·클립보드 복사 |
 | 6 | `stock/averaging.html` | 물타기 계산기 | |
@@ -1373,6 +1373,10 @@ git push
 | 10 | `daily/dday.html` | D-day 계산기 | 연/월/일 select |
 | 11 | `daily/bmi.html` | BMI 계산기 | |
 | 12 | `daily/age.html` | 나이 계산기 | 만나이·띠·별자리, 연/월/일 select |
+| 13 | `payroll/weekly-holiday.html` | 주휴수당 계산기 | |
+| 14 | `payroll/severance.html` | 퇴직금 계산기 | |
+| 15 | `payroll/ordinary-wage.html` | 통상임금 시급 계산기 | |
+| 16 | `payroll/annual-leave.html` | 연차 계산기 | |
 
 ### 공통 인프라 상태
 - 도메인: `calc-tools.kr` (hosting.kr, DNS A레코드 연결 완료)
