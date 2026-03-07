@@ -1334,10 +1334,12 @@ git push
 - [x] 커밋 & 푸시
 
 ### Phase 11: UX 개선
-- [x] 실시간 자동 계산 적용 (퍼센트, BMI, 수익률)
+- [x] ~~실시간 자동 계산 적용~~ → **롤백됨** (버튼 클릭 방식으로 회귀, 이유: 입력 중 중간값 노출 UX 불량)
 - [x] 키보드 단축키 (Enter, Esc, 화살표) — `common.js`에 공통 구현
-- [x] 메인 페이지 검색 기능
+- [x] 메인 페이지 검색 기능 (아이콘 없는 심플 input — 아이콘 겹침 이슈로 제거)
 - [x] 관련 도구 추천 강화
+- [x] 날짜 입력 → 연/월/일 select 드롭다운으로 교체 (age.html, dday.html, saju-pick.html)
+- [x] 카카오 공유 → Web Share API 방식으로 교체 (saju-pick.html)
 - [x] 커밋 & 푸시
 
 ### Phase 12: 트래픽 킬러 도구 추가
@@ -1352,22 +1354,25 @@ git push
 
 ## 현재 사이트 완성 현황 (2026-03-07 기준)
 
-### 완료된 도구 (13개)
+### 완료된 도구 (12개)
 
-| # | 파일 | 도구명 | 실시간 계산 |
-|---|------|--------|:-----------:|
+> **계산 방식:** 모든 계산기는 버튼 클릭 방식. 실시간 자동계산은 적용하지 않음.
+> 예외: 글자수 세기(입력 자체가 결과)
+
+| # | 파일 | 도구명 | 비고 |
+|---|------|--------|------|
 | 1 | `finance/compound.html` | 복리 계산기 | |
-| 2 | `finance/percent.html` | 퍼센트 계산기 | ✅ |
-| 3 | `finance/salary.html` | 연봉 실수령액 계산기 | ✅ |
-| 4 | `finance/loan.html` | 대출이자 계산기 | ✅ |
-| 5 | `finance/vat.html` | 부가세 계산기 | ✅ |
+| 2 | `finance/percent.html` | 퍼센트 계산기 | |
+| 3 | `finance/salary.html` | 연봉 실수령액 계산기 | 구간비교 표 포함 |
+| 4 | `finance/loan.html` | 대출이자 계산기 | 3방식·월별 스케줄 |
+| 5 | `finance/vat.html` | 부가세 계산기 | 역산·클립보드 복사 |
 | 6 | `stock/averaging.html` | 물타기 계산기 | |
-| 7 | `stock/return-rate.html` | 수익률 계산기 | ✅ |
-| 8 | `lotto/saju-pick.html` | 사주 행운번호 | |
-| 9 | `daily/character-count.html` | 글자수 세기 | ✅ |
-| 10 | `daily/dday.html` | D-day 계산기 | |
-| 11 | `daily/bmi.html` | BMI 계산기 | ✅ |
-| 12 | `daily/age.html` | 나이 계산기 | ✅ |
+| 7 | `stock/return-rate.html` | 수익률 계산기 | |
+| 8 | `lotto/saju-pick.html` | 사주 행운번호 | 오늘의 운세 통합, Web Share API 공유 |
+| 9 | `daily/character-count.html` | 글자수 세기 | 실시간 (입력=결과) |
+| 10 | `daily/dday.html` | D-day 계산기 | 연/월/일 select |
+| 11 | `daily/bmi.html` | BMI 계산기 | |
+| 12 | `daily/age.html` | 나이 계산기 | 만나이·띠·별자리, 연/월/일 select |
 
 ### 공통 인프라 상태
 - 도메인: `calc-tools.kr` (hosting.kr, DNS A레코드 연결 완료)
@@ -1385,6 +1390,7 @@ git push
 |---------|------|
 | 높음 | 다음(Daum) 검색 등록, Bing 웹마스터 등록 |
 | 높음 | 예적금 이자 계산기 (`/finance/deposit.html`) |
+| 높음 | 수익성 개선 (애드센스 광고 최적화, 트래픽 분석) |
 | 중간 | 단위 변환기 (`/daily/unit-converter.html`) |
 | 중간 | 로또 번호 생성기 (`/lotto/generator.html`) |
 | 낮음 | QR코드 생성기, 비밀번호 생성기 |
