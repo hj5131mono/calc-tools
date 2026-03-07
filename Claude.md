@@ -39,32 +39,38 @@ git push
 ### 현재 구현된 페이지 목록
 | 카테고리 | 파일 | 도구 |
 |----------|------|------|
-| 루트 | `index.html` | 도구 모음 홈 (검색 기능 포함) |
+| 루트 | `index.html` | 도구 모음 홈 (검색+탭 필터 포함) |
 | finance | `compound.html` | 복리 계산기 |
-| finance | `percent.html` | 퍼센트 계산기 (실시간) |
-| finance | `salary.html` | 연봉 실수령액 계산기 (실시간·구간비교) |
+| finance | `percent.html` | 퍼센트 계산기 |
+| finance | `salary.html` | 연봉 실수령액 계산기 (구간비교 포함) |
 | finance | `loan.html` | 대출이자 계산기 (3방식·월별 스케줄) |
 | finance | `vat.html` | 부가세 계산기 (역산·클립보드 복사) |
 | stock | `averaging.html` | 물타기(평균단가) 계산기 |
-| stock | `return-rate.html` | 수익률 계산기 (실시간) |
-| lotto | `saju-pick.html` | 사주 행운번호 |
-| daily | `character-count.html` | 글자수 세기 |
+| stock | `return-rate.html` | 수익률 계산기 |
+| lotto | `saju-pick.html` | 사주 행운번호 (오늘의 운세 포함, Web Share API 공유) |
+| daily | `character-count.html` | 글자수 세기 (입력 즉시 카운트 — 입력 자체가 결과인 도구) |
 | daily | `dday.html` | D-day 계산기 |
-| daily | `bmi.html` | BMI 계산기 (실시간) |
+| daily | `bmi.html` | BMI 계산기 |
 | daily | `age.html` | 나이 계산기 (만나이·띠·별자리) |
 
-### 실시간 자동 계산 패턴 (신규 페이지에 적용)
-```javascript
-function debounce(fn, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-// 계산 로직을 별도 함수로 분리 → input 이벤트에 debounce(fn, 200) 연결
-// 입력값 비어있으면 hideResult(), 유효하면 계산 후 showResult()
+### 계산 방식 원칙
+**계산은 반드시 버튼 클릭으로만 작동한다.** `input` 이벤트로 실시간 자동계산을 하지 않는다.
+- 이유: 입력 중간에 나오는 결과가 사용자에게 혼란을 줌 (예: 1000을 입력하는 중에 "1"의 결과가 표시)
+- 예외: 글자수 세기(`character-count.html`)처럼 입력 자체가 결과인 도구는 실시간 OK
+- 모든 계산기 페이지에는 "계산하기"와 "초기화" 버튼 모두 제공
+
+### 날짜 입력 패턴
+`<input type="date">` 대신 연/월/일 세 개의 `<select>`를 사용한다 (네이버/구글 스타일, 모바일 UX 일관성):
+```html
+<div class="date-selects">
+  <select id="targetYear" class="date-select"><option value="">연도</option></select>
+  <select id="targetMonth" class="date-select"><option value="">월</option></select>
+  <select id="targetDay" class="date-select"><option value="">일</option></select>
+</div>
 ```
+- 공통 CSS: `.date-selects { display: flex; gap: 8px; }` / `.date-select { flex: 1; ... }`
+- 연도 선택 시 해당 월의 일수를 동적으로 업데이트: `new Date(year, month, 0).getDate()`
+- 대상 파일: `age.html`, `dday.html`, `saju-pick.html`
 
 ### 페이지 구조
 각 HTML 파일은 완전히 독립적으로 동작한다. 공통 레이어는 상대경로로 참조:
