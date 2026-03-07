@@ -372,6 +372,91 @@ select.input-error {
   cursor: not-allowed;
 }
 
+/* 실시간 환율 위젯 */
+.exchange-widget {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 14px var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.exchange-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.exchange-title {
+  font-size: var(--type-body-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.exchange-updated {
+  font-size: var(--type-caption);
+  color: var(--gray-400);
+}
+
+.exchange-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 540px) {
+  .exchange-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.exchange-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-100);
+}
+
+.exchange-currency {
+  font-size: var(--type-caption);
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+.exchange-rate {
+  font-size: var(--type-body-lg);
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.exchange-change {
+  font-size: var(--type-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+.exchange-change.up   { color: var(--danger-500); }
+.exchange-change.down { color: #2563EB; }
+.exchange-change.flat { color: var(--gray-400); }
+
+.exchange-skeleton .exchange-rate {
+  background: var(--gray-200);
+  color: transparent;
+  border-radius: 4px;
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
 /* 결과 박스 */
 .result-box {
   background-color: var(--primary-50);

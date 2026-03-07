@@ -52,6 +52,95 @@ function applyRatesYear(rates) {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// 실시간 환율 로더 — 홈페이지 환율 위젯 및 금융 계산기용
+// API: open.exchangerate-api.com (무료, 키 불필요, 일 1회 갱신)
+// ─────────────────────────────────────────────────────────────────
+
+const FX_CACHE_KEY = 'calc_fx_v1';
+const FX_CACHE_TTL = 30 * 60 * 1000; // 30분
+
+// 폴백 환율 (API 실패 시 표시)
+const FX_FALLBACK = {
+  USD: { krw: 1370, label: 'USD', unit: 1,   flag: '🇺🇸' },
+  JPY: { krw: 915,  label: 'JPY', unit: 100, flag: '🇯🇵' },
+  EUR: { krw: 1490, label: 'EUR', unit: 1,   flag: '🇪🇺' },
+  CNY: { krw: 189,  label: 'CNY', unit: 1,   flag: '🇨🇳' },
+};
+
+async function loadExchangeRates() {
+  // 캐시 확인 (TTL 내에는 재요청 안 함)
+  try {
+    const cached = localStorage.getItem(FX_CACHE_KEY);
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < FX_CACHE_TTL) return data;
+    }
+  } catch (_) {}
+
+  try {
+    const res = await fetch('https://open.exchangerate-api.com/v6/latest/USD', { timeout: 8000 });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (json.result !== 'success') throw new Error('API 오류');
+
+    const r = json.rates;
+    const krwPerUsd = r.KRW;
+
+    const data = {
+      USD: { krw: krwPerUsd,                        label: 'USD',     unit: 1,   flag: '🇺🇸', isFallback: false },
+      JPY: { krw: (krwPerUsd / r.JPY) * 100,        label: 'JPY 100', unit: 100, flag: '🇯🇵', isFallback: false },
+      EUR: { krw: krwPerUsd / r.EUR,                label: 'EUR',     unit: 1,   flag: '🇪🇺', isFallback: false },
+      CNY: { krw: krwPerUsd / r.CNY,                label: 'CNY',     unit: 1,   flag: '🇨🇳', isFallback: false },
+      _updatedAt: json.time_last_update_utc,
+      _fetchedAt: new Date().toISOString(),
+    };
+
+    try { localStorage.setItem(FX_CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() })); } catch (_) {}
+    return data;
+  } catch (e) {
+    console.warn('[calc-tools] 환율 로드 실패, 기본값 사용:', e.message);
+    return { ...FX_FALLBACK, _updatedAt: null, _fetchedAt: null };
+  }
+}
+
+// 환율 위젯 렌더링 (id="exchangeWidget" 요소에 삽입)
+async function initExchangeWidget() {
+  const widget = document.getElementById('exchangeWidget');
+  if (!widget) return;
+
+  const fx = await loadExchangeRates();
+
+  const formatKrw = v => Math.round(v).toLocaleString('ko-KR');
+
+  // 업데이트 시간 표시
+  let updatedText = '환율 정보 없음';
+  if (fx._updatedAt) {
+    const d = new Date(fx._updatedAt);
+    updatedText = `기준 ${d.getMonth() + 1}/${d.getDate()} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')} (UTC)`;
+  } else {
+    updatedText = '참고용 기본값';
+  }
+
+  const currencies = ['USD', 'JPY', 'EUR', 'CNY'];
+  const itemsHtml = currencies.map(code => {
+    const item = fx[code];
+    if (!item) return '';
+    return `
+      <div class="exchange-item">
+        <span class="exchange-currency">${item.flag} ${item.label}</span>
+        <span class="exchange-rate">${formatKrw(item.krw)}원</span>
+      </div>`;
+  }).join('');
+
+  widget.innerHTML = `
+    <div class="exchange-header">
+      <span class="exchange-title">실시간 환율</span>
+      <span class="exchange-updated">${updatedText}</span>
+    </div>
+    <div class="exchange-grid">${itemsHtml}</div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────
 
 // 숫자를 천단위 콤마 포맷으로 변환
 function formatNumber(num) {
@@ -294,6 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initLayout();
   initAutoComma();
   initAmountHint();
+  initExchangeWidget();
   initKeyboardShortcuts();
   initKeyboardHint();
   initToolFilter();
