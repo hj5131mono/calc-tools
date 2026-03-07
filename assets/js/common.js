@@ -274,7 +274,10 @@ function initAmountHint() {
   document.querySelectorAll('[data-amount-hint]').forEach(input => {
     const hint = document.createElement('span');
     hint.className = 'amount-hint-text';
-    input.insertAdjacentElement('afterend', hint);
+
+    // input-with-unit 래퍼가 있으면 래퍼 뒤에 삽입 (레터박스 밖으로)
+    const wrapper = input.closest('.input-with-unit');
+    (wrapper || input).insertAdjacentElement('afterend', hint);
 
     const unit = input.dataset.amountHint || '원';
     input.addEventListener('input', () => {
