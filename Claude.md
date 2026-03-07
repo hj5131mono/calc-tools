@@ -1,4 +1,55 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # 프로젝트: calc-tools (자동사냥 유틸리티 사이트)
+
+## 개발 명령어
+
+로컬 서버 실행 (빌드 없음, 파일을 그대로 서빙):
+```bash
+npx serve .
+# 또는
+python -m http.server 8000
+```
+
+배포 (GitHub Pages 자동 배포):
+```bash
+git add .
+git commit -m "변경 내용"
+git push
+```
+
+> 테스트 프레임워크 없음. 브라우저에서 직접 확인.
+
+---
+
+## 아키텍처
+
+### 공유 레이어
+- `assets/css/style.css` — 모든 페이지가 참조하는 공통 스타일. CSS 변수(`--primary`, `--bg`, `--text`, `--border`)로 색상 관리.
+- `assets/js/common.js` — `formatNumber()`, `parseNumber()`, 자동 콤마 포맷팅, 공통 네비게이션 동적 삽입 함수 포함.
+
+### 페이지 구조
+각 HTML 파일은 완전히 독립적으로 동작한다. 공통 레이어는 상대경로로 참조:
+- 루트 페이지(`index.html`, `privacy.html`): `assets/css/style.css`
+- 하위 폴더 페이지(`stock/`, `finance/`, `lotto/`, `daily/`): `../assets/css/style.css`
+
+### `<head>` 삽입 순서 (모든 페이지 공통)
+1. 메타태그 + OG 태그
+2. 공통 CSS 링크
+3. 페이지별 인라인 `<style>`
+4. Google AdSense 스크립트 (`ca-pub-9632606296515258`)
+5. Google Analytics 스크립트 (`G-KLECX1HME8`)
+
+### 새 도구 페이지 추가 시 체크리스트
+- 카테고리 폴더 아래 배치 (예: `/daily/new-tool.html`)
+- 상대경로로 `../assets/css/style.css`, `../assets/js/common.js` 연결
+- AdSense + GA 코드 `</head>` 직전에 삽입 (위 순서 준수)
+- `sitemap.xml`에 URL 추가
+- `index.html` 도구 카드 목록 업데이트
+
+---
 
 ## 프로젝트 목적
 검색 유입 → 도구 사용 → 애드센스 광고 수익을 자동으로 발생시키는 정적 유틸리티 사이트.
