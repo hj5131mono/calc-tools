@@ -1322,28 +1322,69 @@ git push
 완료할 때마다 체크하면서 진행한다.
 
 ### Phase 9: 긴급 수정
-- [ ] OG URL 전체 수정 (yourdomain.com → calc-tools.kr)
-- [ ] 파비콘 추가
-- [ ] OG 이미지 추가
-- [ ] 커밋 & 푸시
+- [x] OG URL 전체 수정 (yourdomain.com → calc-tools.kr)
+- [x] 파비콘 추가 (`/assets/favicon.svg`)
+- [x] OG 이미지 추가 (`/assets/og-image.svg`)
+- [x] 커밋 & 푸시
 
 ### Phase 10: 검색 엔진 등록
-- [ ] 네이버 서치어드바이저 등록 + 메타태그 삽입 + 사이트맵 제출
+- [x] 네이버 서치어드바이저 등록 + 메타태그 삽입 + 사이트맵 제출
 - [ ] 다음(Daum) 검색 등록
 - [ ] Bing 웹마스터 도구 등록 (구글 연동)
-- [ ] 커밋 & 푸시
+- [x] 커밋 & 푸시
 
 ### Phase 11: UX 개선
-- [ ] 실시간 자동 계산 적용 (퍼센트, BMI, 수익률)
-- [ ] 키보드 단축키 (Enter, Esc, 화살표)
-- [ ] 메인 페이지 검색 기능
-- [ ] 관련 도구 추천 강화
-- [ ] 커밋 & 푸시
+- [x] 실시간 자동 계산 적용 (퍼센트, BMI, 수익률)
+- [x] 키보드 단축키 (Enter, Esc, 화살표) — `common.js`에 공통 구현
+- [x] 메인 페이지 검색 기능
+- [x] 관련 도구 추천 강화
+- [x] 커밋 & 푸시
 
 ### Phase 12: 트래픽 킬러 도구 추가
-- [ ] 연봉 실수령액 계산기
-- [ ] 대출이자 계산기
-- [ ] 부가세 계산기
-- [ ] 나이 계산기
-- [ ] 각 도구 추가 시 index.html + sitemap.xml 업데이트
-- [ ] 커밋 & 푸시
+- [x] 연봉 실수령액 계산기 (`/finance/salary.html`)
+- [x] 대출이자 계산기 (`/finance/loan.html`)
+- [x] 부가세 계산기 (`/finance/vat.html`)
+- [x] 나이 계산기 (`/daily/age.html`)
+- [x] 각 도구 추가 시 index.html + sitemap.xml 업데이트
+- [x] 커밋 & 푸시
+
+---
+
+## 현재 사이트 완성 현황 (2026-03-07 기준)
+
+### 완료된 도구 (13개)
+
+| # | 파일 | 도구명 | 실시간 계산 |
+|---|------|--------|:-----------:|
+| 1 | `finance/compound.html` | 복리 계산기 | |
+| 2 | `finance/percent.html` | 퍼센트 계산기 | ✅ |
+| 3 | `finance/salary.html` | 연봉 실수령액 계산기 | ✅ |
+| 4 | `finance/loan.html` | 대출이자 계산기 | ✅ |
+| 5 | `finance/vat.html` | 부가세 계산기 | ✅ |
+| 6 | `stock/averaging.html` | 물타기 계산기 | |
+| 7 | `stock/return-rate.html` | 수익률 계산기 | ✅ |
+| 8 | `lotto/saju-pick.html` | 사주 행운번호 | |
+| 9 | `daily/character-count.html` | 글자수 세기 | ✅ |
+| 10 | `daily/dday.html` | D-day 계산기 | |
+| 11 | `daily/bmi.html` | BMI 계산기 | ✅ |
+| 12 | `daily/age.html` | 나이 계산기 | ✅ |
+
+### 공통 인프라 상태
+- 도메인: `calc-tools.kr` (hosting.kr, DNS A레코드 연결 완료)
+- HTTPS: Let's Encrypt 자동 발급 (GitHub Pages)
+- Google Analytics: `G-KLECX1HME8` (모든 페이지)
+- Google AdSense: `ca-pub-9632606296515258` (모든 페이지, 승인 완료)
+- Google Search Console: 소유 확인 + sitemap 제출 완료
+- 네이버 서치어드바이저: 소유 확인 + sitemap 제출 완료
+- 키보드 단축키: `common.js`에서 전 페이지 공통 적용
+- 파비콘: `/assets/favicon.svg`
+- OG 이미지: `/assets/og-image.svg`
+
+### 다음 단계 후보
+| 우선순위 | 작업 |
+|---------|------|
+| 높음 | 다음(Daum) 검색 등록, Bing 웹마스터 등록 |
+| 높음 | 예적금 이자 계산기 (`/finance/deposit.html`) |
+| 중간 | 단위 변환기 (`/daily/unit-converter.html`) |
+| 중간 | 로또 번호 생성기 (`/lotto/generator.html`) |
+| 낮음 | QR코드 생성기, 비밀번호 생성기 |
