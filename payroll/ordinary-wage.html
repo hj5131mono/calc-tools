@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <title>통상임금 시급 계산기 2025 — 월급에서 통상시급 자동 환산</title>
+  <meta name="description" content="2025년 기준 통상임금 시급을 자동 계산합니다. 기본급과 정기·고정수당을 입력하면 통상시급, 연장·야간·휴일근로 수당까지 한 번에 확인하세요.">
+  <meta name="keywords" content="통상임금 계산기, 통상시급, 시급 계산, 연장근로 수당, 야간근로 수당, 휴일근로 수당, 2025 통상임금">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="통상임금 시급 계산기 2025 — 월급에서 통상시급 자동 환산">
+  <meta property="og:description" content="기본급과 정기고정수당을 입력하면 통상시급과 연장·야간·휴일근로 수당을 자동 계산합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/payroll/ordinary-wage.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .law-badge {
+      display: inline-block;
+      font-size: var(--type-caption);
+      color: var(--primary);
+      background: var(--primary-50);
+      border: 1px solid var(--primary-100);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* 수당 항목 행 */
+    .allowance-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .allowance-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .allowance-name {
+      flex: 1.2;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: var(--type-body-sm);
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      min-height: 44px;
+    }
+
+    .allowance-amount {
+      flex: 1.5;
+    }
+
+    .allowance-include-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      font-size: var(--type-caption);
+      color: var(--text-light);
+    }
+
+    .allowance-include-wrap input[type="checkbox"] {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+    }
+
+    .allowance-del-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--gray-500);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .allowance-del-btn:hover {
+      background: #FFF1F0;
+      border-color: var(--danger-500);
+      color: var(--danger-500);
+    }
+
+    .add-allowance-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--text-light);
+      font-size: var(--type-body-sm);
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+    }
+
+    .add-allowance-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-50);
+    }
+
+    /* 결과 강조 박스 */
+    .hourly-hero {
+      text-align: center;
+      padding: 24px 16px;
+      background: linear-gradient(135deg, var(--primary-50), #eff6ff);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      border: 1px solid var(--primary-100);
+    }
+
+    .hourly-hero-label {
+      font-size: var(--type-body-sm);
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+
+    .hourly-hero-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+    }
+
+    .hourly-hero-sub {
+      font-size: var(--type-body-sm);
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    /* 가산 수당 그리드 */
+    .premium-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .premium-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .premium-label {
+      font-size: var(--type-caption);
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .premium-rate {
+      font-size: var(--type-caption);
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .premium-amount {
+      font-size: var(--type-title-md);
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .min-wage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: var(--type-body-sm);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .min-wage-ok  { background: var(--success-50); color: var(--success-600); border: 1px solid var(--success-500); }
+    .min-wage-low { background: #FFF1F0; color: var(--danger-500); border: 1px solid var(--danger-500); }
+
+    .copy-btn {
+      padding: 4px 10px;
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      background: var(--white);
+      color: var(--primary);
+      font-size: var(--type-caption);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: var(--primary); color: var(--white); }
+
+    .section-divider {
+      font-size: var(--type-body-sm);
+      font-weight: 600;
+      color: var(--text-light);
+      margin: 24px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .info-row .form-group {
+      flex: 1;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <div class="calc-card">
+        <h2><i data-lucide="clock" class="icon"></i> 통상임금 시급 계산기
+          <span class="law-badge">근로기준법 시행령 제6조</span>
+        </h2>
+        <p><span data-rates-year>2025년 기준</span> · 기본급과 정기·고정수당을 입력하면 통상시급과 각종 가산 수당을 자동 계산합니다.</p>
+
+        <form id="owForm">
+          <p class="section-divider">근무 조건</p>
+          <div class="info-row">
+            <div class="form-group">
+              <label for="weeklyHours">주 소정근로시간 (시간)</label>
+              <input type="number" id="weeklyHours" value="40" min="1" max="52" step="0.5" inputmode="decimal" required>
+              <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">일반 주5일: 40시간 / 단시간: 실제 시간 입력</small>
+            </div>
+            <div class="form-group">
+              <label for="dailyHours">1일 소정근로시간 (시간)</label>
+              <input type="number" id="dailyHours" value="8" min="1" max="12" step="0.5" inputmode="decimal" required>
+            </div>
+          </div>
+
+          <p class="section-divider">월 임금 구성</p>
+          <div class="form-group">
+            <label for="basePay">월 기본급 (원) <span style="color:var(--danger-500);">*</span></label>
+            <input type="text" id="basePay" class="auto-comma" placeholder="예: 2,500,000" data-amount-hint="원" inputmode="numeric" required>
+          </div>
+
+          <!-- 정기·고정 수당 동적 목록 -->
+          <div class="form-group">
+            <label>정기·고정 수당
+              <span style="font-weight:400;color:var(--text-light);font-size:var(--type-caption);"> — 매달 고정 지급되는 수당만 포함 (성과급·연장수당 제외)</span>
+            </label>
+            <div class="allowance-list" id="allowanceList"></div>
+            <button type="button" class="add-allowance-btn" id="addAllowanceBtn">
+              <i data-lucide="plus" style="width:16px;height:16px;"></i> 수당 항목 추가
+            </button>
+          </div>
+
+          <div class="btn-group">
+            <button type="submit" class="btn-primary">계산하기</button>
+            <button type="button" class="btn-reset" id="resetBtn">다시 입력</button>
+          </div>
+        </form>
+
+        <div id="resultBox" class="result-box">
+          <!-- 통상시급 히어로 -->
+          <div class="hourly-hero">
+            <div class="hourly-hero-label">통상임금 시급</div>
+            <div class="hourly-hero-amount" id="hourlyOrdinary">—</div>
+            <div class="hourly-hero-sub" id="monthlyHoursInfo">월 소정근로 — 시간 기준</div>
+          </div>
+
+          <!-- 최저임금 충족 여부 -->
+          <div style="text-align:center;margin-bottom:16px;">
+            <span id="minWageBadge" class="min-wage-badge"></span>
+          </div>
+
+          <!-- 기본 항목 -->
+          <div class="result-item">
+            <span class="result-label">월 통상임금</span>
+            <span class="result-value" id="monthlyOrdinary">—</span>
+            <button class="copy-btn" onclick="copyResult('monthlyOrdinary')">복사</button>
+          </div>
+          <div class="result-item">
+            <span class="result-label">월 소정근로시간</span>
+            <span class="result-value" id="monthlyHours">—</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">주휴수당 (1주)</span>
+            <span class="result-value" id="weeklyHolidayPay">—</span>
+            <button class="copy-btn" onclick="copyResult('weeklyHolidayPay')">복사</button>
+          </div>
+
+          <!-- 가산 수당 그리드 -->
+          <p style="font-size:var(--type-body-sm);font-weight:600;color:var(--text-light);margin:16px 0 10px;">가산 수당 (5인 이상 사업장 기준)</p>
+          <div class="premium-grid">
+            <div class="premium-card">
+              <div class="premium-label">연장근로 시급</div>
+              <div class="premium-rate">× 1.5배</div>
+              <div class="premium-amount" id="overtimePay">—</div>
+            </div>
+            <div class="premium-card">
+              <div class="premium-label">야간근로 추가분</div>
+              <div class="premium-rate">+ 0.5배 (22:00~06:00)</div>
+              <div class="premium-amount" id="nightPay">—</div>
+            </div>
+            <div class="premium-card">
+              <div class="premium-label">휴일근로 시급</div>
+              <div class="premium-rate">× 1.5배 (8h 이내)</div>
+              <div class="premium-amount" id="holidayPay">—</div>
+            </div>
+            <div class="premium-card">
+              <div class="premium-label">휴일+연장 시급</div>
+              <div class="premium-rate">× 2.0배 (8h 초과)</div>
+              <div class="premium-amount" id="holidayOTPay">—</div>
+            </div>
+          </div>
+
+          <p style="font-size:var(--type-caption);color:var(--text-light);margin-top:8px;">
+            ※ 5인 미만 사업장은 연장·야간·휴일 가산(0.5배)이 적용되지 않습니다.<br>
+            ※ 이 계산은 참고용입니다. 임금 산정 분쟁 시 노무사 상담을 권장합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="ad-space">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <!-- 통상임금 설명 -->
+      <div class="calc-card">
+        <h2>통상임금이란?</h2>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:16px;">
+          <strong>통상임금</strong>은 소정근로에 대해 정기적·일률적·고정적으로 지급되는 임금입니다.
+          연장·야간·휴일 가산수당과 퇴직금의 기준이 되므로 정확한 계산이 중요합니다.
+        </p>
+
+        <h3 style="margin:16px 0 10px;font-size:var(--type-title-md);">포함 vs 제외 기준</h3>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:var(--type-body-sm);">
+            <thead>
+              <tr style="background:var(--primary);color:white;">
+                <th style="padding:10px;text-align:left;">통상임금 포함 (O)</th>
+                <th style="padding:10px;text-align:left;">통상임금 제외 (X)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px;color:var(--success-600);">기본급</td>
+                <td style="padding:10px;color:var(--danger-500);">성과급·인센티브 (비정기)</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
+                <td style="padding:10px;color:var(--success-600);">직책수당·자격수당 (고정)</td>
+                <td style="padding:10px;color:var(--danger-500);">초과근무수당·당직비</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px;color:var(--success-600);">고정 식대 (매월 동일액)</td>
+                <td style="padding:10px;color:var(--danger-500);">실비 식대·교통비 정산액</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray-50);">
+                <td style="padding:10px;color:var(--success-600);">기술수당·면허수당 (고정)</td>
+                <td style="padding:10px;color:var(--danger-500);">경영성과급·명절상여 (조건부)</td>
+              </tr>
+              <tr>
+                <td style="padding:10px;color:var(--success-600);">정기상여금 (통상임금 해당 판례 확립)</td>
+                <td style="padding:10px;color:var(--danger-500);">복리후생비·경조사비</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:20px 0 10px;font-size:var(--type-title-md);">시급 환산 공식</h3>
+        <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:16px;font-size:var(--type-body-sm);line-height:1.9;">
+          <strong>월 통상임금</strong> = 기본급 + 정기·고정수당 합계<br>
+          <strong>월 소정근로시간</strong> = (주 소정근로시간 + 주휴시간) × 52 ÷ 12<br>
+          <strong>주휴시간</strong> = 주 소정근로시간 ÷ 40 × 8시간 (주 15시간 이상 근무 시)<br>
+          <strong>통상임금 시급</strong> = 월 통상임금 ÷ 월 소정근로시간<br>
+          <br>
+          <em style="color:var(--text-light);">예) 월급 300만원, 주 40시간 → 시급 = 3,000,000 ÷ 209h = 14,354원</em>
+        </div>
+
+        <div style="margin-top:16px;background:var(--warning-50);border:1px solid var(--warning-500);border-radius:var(--radius-sm);padding:12px 16px;font-size:var(--type-body-sm);">
+          <strong>통상임금 판례 핵심 (대법원 2012다89399 전원합의체)</strong><br>
+          정기상여금도 고정적·일률적으로 지급된다면 통상임금에 포함됩니다. 지급일에 재직 중인 자에게만 지급하는 조건이 붙어 있더라도 포함 가능합니다.
+        </div>
+      </div>
+
+      <div class="ad-space">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <div class="calc-card">
+        <h2>이런 계산도 해보세요</h2>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <a href="../payroll/weekly-holiday.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="sun" class="icon"></i> 주휴수당 계산기
+          </a>
+          <a href="../payroll/severance.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="hand-coins" class="icon"></i> 퇴직금 계산기
+          </a>
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="banknote" class="icon"></i> 연봉 실수령액 계산기
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../assets/js/common.js"></script>
+  <script>
+    let MIN_WAGE = 10030; // rates.json에서 로드
+
+    // ── 초기 수당 항목 ────────────────────────────────────────────
+    const PRESET_ALLOWANCES = [
+      { name: '식대',   amount: '', include: true },
+      { name: '교통비', amount: '', include: true },
+    ];
+
+    function createAllowanceRow(name = '', amount = '', include = true) {
+      const row = document.createElement('div');
+      row.className = 'allowance-row';
+      row.innerHTML = `
+        <input type="text" class="allowance-name" placeholder="항목명 (예: 직책수당)" value="${name}">
+        <input type="text" class="allowance-amount auto-comma" placeholder="금액 (원)" value="${amount}" inputmode="numeric" style="flex:1.5;">
+        <label class="allowance-include-wrap" title="통상임금 포함 여부">
+          <input type="checkbox" class="allowance-include" ${include ? 'checked' : ''}>
+          포함
+        </label>
+        <button type="button" class="allowance-del-btn" title="삭제">×</button>`;
+
+      row.querySelector('.allowance-del-btn').addEventListener('click', () => row.remove());
+      applyAutoComma(row.querySelector('.allowance-amount'));
+      return row;
+    }
+
+    function initAllowances() {
+      const list = document.getElementById('allowanceList');
+      list.innerHTML = '';
+      PRESET_ALLOWANCES.forEach(p => list.appendChild(createAllowanceRow(p.name, p.amount, p.include)));
+    }
+
+    document.getElementById('addAllowanceBtn').addEventListener('click', () => {
+      document.getElementById('allowanceList').appendChild(createAllowanceRow());
+      lucide.createIcons();
+    });
+
+    // ── 계산 ─────────────────────────────────────────────────────
+    function calc() {
+      const weeklyHours = parseFloat(document.getElementById('weeklyHours').value) || 40;
+      const dailyHours  = parseFloat(document.getElementById('dailyHours').value)  || 8;
+      const basePay     = parseNumber(document.getElementById('basePay').value);
+
+      if (!basePay) return;
+
+      // 포함 체크된 수당 합산
+      let totalAllowance = 0;
+      document.querySelectorAll('.allowance-row').forEach(row => {
+        if (row.querySelector('.allowance-include')?.checked) {
+          totalAllowance += parseNumber(row.querySelector('.allowance-amount').value) || 0;
+        }
+      });
+
+      // 월 통상임금
+      const monthlyOrdinary = basePay + totalAllowance;
+
+      // 월 소정근로시간 = (주 소정근로시간 + 주휴시간) × 52 / 12
+      const weeklyHoliday  = weeklyHours >= 15 ? (weeklyHours / 40) * 8 : 0;
+      const monthlyHours   = (weeklyHours + weeklyHoliday) * 52 / 12;
+
+      // 통상임금 시급
+      const hourlyOrdinary = monthlyOrdinary / monthlyHours;
+
+      // 가산 수당
+      const overtimePay   = hourlyOrdinary * 1.5;   // 연장근로 시급
+      const nightPay      = hourlyOrdinary * 0.5;   // 야간 추가분 (기본+0.5)
+      const holidayPay    = hourlyOrdinary * 1.5;   // 휴일근로 시급 (8h 이내)
+      const holidayOTPay  = hourlyOrdinary * 2.0;   // 휴일+연장 시급 (8h 초과)
+
+      // 주휴수당 (1주)
+      const weeklyHolidayPay = hourlyOrdinary * weeklyHoliday;
+
+      // DOM 업데이트
+      const fmt = v => formatNumber(Math.round(v)) + '원';
+
+      document.getElementById('hourlyOrdinary').textContent  = fmt(hourlyOrdinary);
+      document.getElementById('monthlyHoursInfo').textContent = `월 소정근로 ${Math.round(monthlyHours * 10) / 10}시간 기준`;
+      document.getElementById('monthlyOrdinary').textContent  = fmt(monthlyOrdinary);
+      document.getElementById('monthlyHours').textContent     = `${Math.round(monthlyHours * 10) / 10}시간`;
+      document.getElementById('weeklyHolidayPay').textContent = fmt(weeklyHolidayPay);
+      document.getElementById('overtimePay').textContent      = fmt(overtimePay);
+      document.getElementById('nightPay').textContent         = fmt(nightPay);
+      document.getElementById('holidayPay').textContent       = fmt(holidayPay);
+      document.getElementById('holidayOTPay').textContent     = fmt(holidayOTPay);
+
+      // 최저임금 비교
+      const badge = document.getElementById('minWageBadge');
+      const diff = Math.round(hourlyOrdinary) - MIN_WAGE;
+      if (diff >= 0) {
+        badge.className = 'min-wage-badge min-wage-ok';
+        badge.textContent = `최저임금(${formatNumber(MIN_WAGE)}원) 충족 ✓ (+${formatNumber(diff)}원)`;
+      } else {
+        badge.className = 'min-wage-badge min-wage-low';
+        badge.textContent = `최저임금(${formatNumber(MIN_WAGE)}원) 미달 ⚠ (${formatNumber(diff)}원)`;
+      }
+
+      showResult('resultBox');
+    }
+
+    function copyResult(id) {
+      const el = document.getElementById(id);
+      const text = el.textContent.replace(/[^0-9]/g, '');
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = el.nextElementSibling;
+        if (btn) { btn.textContent = '복사됨 ✓'; setTimeout(() => btn.textContent = '복사', 1200); }
+      });
+    }
+
+    // ── 초기화 ───────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', async function () {
+      lucide.createIcons();
+      initAllowances();
+
+      const rates = await loadRates();
+      MIN_WAGE = rates.minimumWage?.hourly ?? MIN_WAGE;
+      applyRatesYear(rates);
+    });
+
+    document.getElementById('owForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      calc();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      document.getElementById('owForm').reset();
+      initAllowances();
+      hideResult('resultBox');
+    });
+  </script>
+</body>
+</html>
