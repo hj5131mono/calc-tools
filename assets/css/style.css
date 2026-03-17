@@ -890,10 +890,23 @@ select.input-error {
     font-size: 1rem;
   }
 
+  /* flex child가 content 이하로 수축 가능하도록 → 스크롤 컨텍스트 형성 */
+  .header-inner nav {
+    min-width: 0;
+    overflow: hidden;
+  }
+
   .nav-links {
     gap: 10px;
     overflow-x: auto;
     flex-wrap: nowrap;
+    /* 스크롤바 숨김 (UX) */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-links a {
