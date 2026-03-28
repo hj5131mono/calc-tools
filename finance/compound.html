@@ -15,6 +15,7 @@
   <meta property="og:description" content="초기 투자금과 월 적립금을 입력하면 복리 수익을 자동 계산합니다. 연도별 자산 변화를 한눈에 확인하세요.">
   <meta property="og:url" content="https://calc-tools.kr/finance/compound.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/finance/compound.html">
 
   <!-- Pretendard 폰트 -->
   <link rel="stylesheet" as="style" crossorigin
@@ -201,6 +202,62 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "복리와 단리의 차이는 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "단리는 원금에만 이자가 붙고, 복리는 원금에 이자를 더한 금액에 이자가 붙습니다. 예를 들어 100만 원을 연 10% 금리로 3년 투자하면, 단리는 130만 원, 복리는 133만 1,000원입니다. 기간이 길수록 복리 효과가 급격히 커져, 30년 투자 시 단리는 400만 원, 복리는 약 1,745만 원입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "복리 계산 공식은 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "복리 계산 공식은 A = P × (1 + r/n)^(n×t)입니다. 여기서 A=최종 금액, P=원금, r=연 이자율(소수), n=연간 복리 횟수, t=투자 기간(년)입니다. 월 복리라면 n=12, 일 복리라면 n=365입니다. 복리 횟수가 많을수록 더 많은 이자가 발생합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "72의 법칙이란 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "72의 법칙은 원금이 2배가 되는 기간을 빠르게 추산하는 방법입니다. 72 ÷ 연 수익률(%) = 원금이 2배가 되는 연수입니다. 예를 들어 연 8% 수익률이면 72÷8=9년, 연 6%이면 72÷6=12년입니다. 실제 복리 계산과 약간의 차이가 있지만, 빠른 추산에 매우 유용합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "인플레이션을 고려한 실질 복리 수익률은 어떻게 계산하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "실질 수익률 = (1 + 명목 수익률) ÷ (1 + 물가상승률) - 1입니다. 예를 들어 명목 수익률 8%, 물가상승률 3%라면 실질 수익률 ≈ 4.85%입니다. 장기 투자에서 실질 구매력을 유지하려면 최소한 물가상승률을 넘는 수익률을 목표로 해야 합니다. 대한민국 역대 평균 물가상승률은 약 3~4% 수준입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "적립식 복리와 거치식 복리의 차이는?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "거치식은 처음에 목돈을 한 번에 넣고 기다리는 방식입니다. 적립식은 매월 일정 금액을 추가로 불입하는 방식으로, 각 납입금이 서로 다른 기간 동안 복리 운용됩니다. 적립식은 초기 목돈이 없어도 시작할 수 있고, 시장 평균 매입 효과(코스트 에버리징)로 리스크를 분산할 수 있습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "S&P500 지수의 역사적 연평균 수익률은 얼마인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "미국 S&P500 지수는 1926년부터 현재까지 배당 재투자 포함 연평균 약 10~11%의 수익률을 기록했습니다. 인플레이션 조정 후 실질 수익률은 약 7~8%입니다. 국내 코스피는 장기적으로 약 7~8% 수준입니다. 다만 특정 기간에는 큰 손실이 발생할 수 있어 장기 분산 투자가 중요합니다."
+        }
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -405,16 +462,6 @@
         </p>
       </div>
 
-      <!-- 광고 영역 (결과-관련도구 사이) -->
-      <div class="ad-space">
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-9632606296515258"
-          data-ad-slot="1446574188"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
 
       <!-- FAQ -->
       <div class="calc-card">
@@ -519,6 +566,8 @@
       <div class="footer-content">
         <div class="footer-links">
           <a href="../index.html">홈</a>
+          <a href="../about.html">소개</a>
+          <a href="../contact.html">문의하기</a>
           <a href="../privacy.html">개인정보처리방침</a>
         </div>
         <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>

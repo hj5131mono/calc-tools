@@ -316,6 +316,8 @@ function createFooter() {
         <div class="footer-content">
           <div class="footer-links">
             <a href="/index.html">홈</a>
+            <a href="/about.html">소개</a>
+            <a href="/contact.html">문의하기</a>
             <a href="/privacy.html">개인정보처리방침</a>
           </div>
           <p>&copy; ${new Date().getFullYear()} 계산기 도구 모음. All rights reserved.</p>

@@ -15,6 +15,7 @@
   <meta property="og:description" content="글자수를 실시간으로 세어줍니다. 공백 포함/제외, 바이트 수, 단어 수까지 한 번에 확인하세요.">
   <meta property="og:url" content="https://calc-tools.kr/daily/character-count.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/daily/character-count.html">
 
   <!-- Pretendard 폰트 -->
   <link rel="stylesheet" as="style" crossorigin
@@ -243,6 +244,62 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "한글과 영문의 바이트 수는 왜 다른가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "컴퓨터는 문자를 인코딩(부호화) 방식에 따라 다른 크기로 저장합니다. 가장 널리 쓰이는 UTF-8 인코딩에서 영문·숫자는 1바이트, 한글은 3바이트를 차지합니다. 과거 한국에서 사용하던 EUC-KR(CP949) 인코딩에서는 한글이 2바이트였지만, 현재 대부분의 웹 서비스는 UTF-8을 사용합니다. 본 도구의 바이트 수 계산도 UTF-8 기준입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "SMS(문자메시지) 글자수 제한은 어떻게 되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "통신사 기준으로 단문(SMS)은 한글 기준 약 45자(영문 90자, 90바이트), 장문(LMS)은 한글 기준 약 1,000자(2,000바이트)까지 전송 가능합니다. MMS는 텍스트 외에 이미지·동영상 첨부가 가능하며 용량 제한은 통신사마다 다릅니다. 카카오톡 등 메신저에는 별도 글자수 제한이 없거나 매우 높습니다(카카오톡 약 1만 자)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "공백은 글자수에 포함되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "대부분의 플랫폼에서 공백(스페이스)은 글자수에 포함됩니다. 자기소개서, 에세이 등 채용·입시 사이트에서도 공백을 포함해서 카운트하는 경우가 많습니다. 다만 일부 사이트는 \"공백 제외 글자수\"를 별도로 표시하기도 합니다. 본 도구에서는 공백 포함/제외 글자수를 모두 확인할 수 있습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "이모지(이모티콘)는 몇 글자로 카운트되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "이모지는 유니코드 문자로, 종류에 따라 2~8바이트(UTF-8 기준)를 차지합니다. JavaScript의 .length로 측정하면 이모지 한 개가 2글자로 카운트되는 경우가 많습니다 (서로게이트 페어 사용). 합성 이모지(👨‍👩‍👧‍👦 등)는 여러 문자가 결합되어 있어 10자 이상으로 계산되기도 합니다. 플랫폼마다 이모지 글자수 계산 방식이 다르므로, 정확한 제한을 확인하려면 해당 서비스의 기준을 따르세요."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "블로그·SNS 글의 최적 글자수는?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "플랫폼별 권장 글자수는 다음과 같습니다: 네이버 블로그는 SEO 관점에서 1,500~3,000자가 적절합니다. 인스타그램 캡션은 최대 2,200자이며, 핵심 내용은 첫 125자 안에 넣는 것이 좋습니다. 트위터(X)는 280자(한글은 140자 상당)이며, 짧고 임팩트 있는 문장이 효과적입니다. 유튜브 설명란은 최대 5,000자이나, 핵심은 처음 150자에 담는 것을 권장합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "자기소개서에서 글자수와 바이트 수 중 어떤 걸 봐야 하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "채용 사이트마다 기준이 다릅니다. 사람인·잡코리아 등 대부분의 국내 취업 사이트는 글자수(공백 포함) 기준으로 제한합니다. 일반적으로 자기소개서 항목당 500~1,000자를 요구하며, 초과 시 저장이나 제출이 불가능합니다. 공공기관 채용의 경우 바이트 수 기준을 사용하는 경우도 있으므로 반드시 해당 공고의 안내를 확인하세요."
+        }
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -476,6 +533,65 @@
         </div>
       </div>
 
+      <div class="calc-card">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">한글과 영문의 바이트 수는 왜 다른가요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              컴퓨터는 문자를 인코딩(부호화) 방식에 따라 다른 크기로 저장합니다.
+              가장 널리 쓰이는 <strong>UTF-8</strong> 인코딩에서 영문·숫자는 1바이트, 한글은 <strong>3바이트</strong>를 차지합니다.
+              과거 한국에서 사용하던 EUC-KR(CP949) 인코딩에서는 한글이 2바이트였지만, 현재 대부분의 웹 서비스는 UTF-8을 사용합니다.
+              본 도구의 바이트 수 계산도 UTF-8 기준입니다.
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">SMS(문자메시지) 글자수 제한은 어떻게 되나요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              통신사 기준으로 <strong>단문(SMS)</strong>은 한글 기준 약 45자(영문 90자, 90바이트), <strong>장문(LMS)</strong>은 한글 기준 약 1,000자(2,000바이트)까지 전송 가능합니다.
+              MMS는 텍스트 외에 이미지·동영상 첨부가 가능하며 용량 제한은 통신사마다 다릅니다.
+              카카오톡 등 메신저에는 별도 글자수 제한이 없거나 매우 높습니다(카카오톡 약 1만 자).
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">공백은 글자수에 포함되나요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              대부분의 플랫폼에서 <strong>공백(스페이스)은 글자수에 포함</strong>됩니다.
+              자기소개서, 에세이 등 채용·입시 사이트에서도 공백을 포함해서 카운트하는 경우가 많습니다.
+              다만 일부 사이트는 "공백 제외 글자수"를 별도로 표시하기도 합니다.
+              본 도구에서는 공백 포함/제외 글자수를 모두 확인할 수 있습니다.
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">이모지(이모티콘)는 몇 글자로 카운트되나요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              이모지는 유니코드 문자로, 종류에 따라 <strong>2~8바이트</strong>(UTF-8 기준)를 차지합니다.
+              JavaScript의 <code>.length</code>로 측정하면 이모지 한 개가 2글자로 카운트되는 경우가 많습니다 (서로게이트 페어 사용).
+              합성 이모지(👨‍👩‍👧‍👦 등)는 여러 문자가 결합되어 있어 10자 이상으로 계산되기도 합니다.
+              플랫폼마다 이모지 글자수 계산 방식이 다르므로, 정확한 제한을 확인하려면 해당 서비스의 기준을 따르세요.
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">블로그·SNS 글의 최적 글자수는?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              플랫폼별 권장 글자수는 다음과 같습니다:
+              <strong>네이버 블로그</strong>는 SEO 관점에서 1,500~3,000자가 적절합니다.
+              <strong>인스타그램</strong> 캡션은 최대 2,200자이며, 핵심 내용은 첫 125자 안에 넣는 것이 좋습니다.
+              <strong>트위터(X)</strong>는 280자(한글은 140자 상당)이며, 짧고 임팩트 있는 문장이 효과적입니다.
+              <strong>유튜브 설명란</strong>은 최대 5,000자이나, 핵심은 처음 150자에 담는 것을 권장합니다.
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">자기소개서에서 글자수와 바이트 수 중 어떤 걸 봐야 하나요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              채용 사이트마다 기준이 다릅니다. <strong>사람인·잡코리아</strong> 등 대부분의 국내 취업 사이트는 <strong>글자수(공백 포함)</strong> 기준으로 제한합니다.
+              일반적으로 자기소개서 항목당 500~1,000자를 요구하며, 초과 시 저장이나 제출이 불가능합니다.
+              공공기관 채용의 경우 바이트 수 기준을 사용하는 경우도 있으므로 반드시 해당 공고의 안내를 확인하세요.
+            </div>
+          </details>
+        </div>
+      </div>
+
       <!-- 광고 영역 하단 -->
       <div class="ad-space">
       <ins class="adsbygoogle"
@@ -494,6 +610,8 @@
       <div class="footer-content">
         <div class="footer-links">
           <a href="../index.html">홈</a>
+          <a href="../about.html">소개</a>
+          <a href="../contact.html">문의하기</a>
           <a href="../privacy.html">개인정보처리방침</a>
         </div>
         <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>

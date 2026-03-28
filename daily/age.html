@@ -15,6 +15,7 @@
   <meta property="og:description" content="생년월일을 입력하면 만나이, 세는나이, 연나이, 띠, 별자리를 한 번에 확인합니다.">
   <meta property="og:url" content="https://calc-tools.kr/daily/age.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/daily/age.html">
 
   <!-- Pretendard 폰트 -->
   <link rel="stylesheet" as="style" crossorigin
@@ -185,6 +186,62 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "만나이와 세는나이는 어떻게 다른가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "만나이는 태어난 날을 0세로 시작해 생일이 지날 때마다 1살씩 더하는 국제 표준 방식입니다. 세는나이(한국 전통)는 태어난 해를 1세로 시작해 매년 1월 1일에 1살씩 더합니다. 2023년 6월부터 대한민국 법령상 공식 나이는 만나이로 통일되었습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "연나이는 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "연나이(연 계산 나이)는 현재 연도에서 태어난 연도를 뺀 값입니다. 생일과 무관하게 1월 1일에 모두 같이 나이가 바뀝니다. 주로 학교 학년 배정이나 일부 행정 처리에 사용됩니다. 예를 들어 2000년생은 2025년 기준 연나이 25세입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "군 입대 나이 기준은 만나이인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "병역법은 연나이(연령) 기준을 사용합니다. 현역병 입영 대상은 만 18세가 되는 해(입영 연도 기준)부터이며, 병역 의무는 만 37세 이전까지입니다. 구체적인 입영 시기는 병무청 홈페이지(mma.go.kr)에서 확인하세요."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "보험 나이 계산 기준은 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "보험 나이는 만나이 기준에서 6개월을 기준으로 반올림합니다. 생일 후 6개월이 지나지 않았으면 현재 만나이, 6개월이 지났으면 만나이+1로 계산합니다. 예를 들어 만 30세 생일 후 7개월이 지났다면 보험 나이는 31세입니다. 보험료는 보험 나이가 증가할 때 오르는 경우가 많습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "12간지 띠는 어떻게 결정되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "12간지 띠는 태어난 해의 간지(干支)에 따라 결정됩니다. 쥐·소·호랑이·토끼·용·뱀·말·양·원숭이·닭·개·돼지 순서로 12년을 주기로 반복됩니다. 단, 음력 설날(춘절) 이전에 태어난 경우 전년도 띠가 되는 경우도 있어, 정확한 확인은 음력 생년월일로 하는 것이 좋습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "2023년 만나이 통일 이후 달라진 점은?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "2023년 6월 28일부터 민법·행정기본법이 개정되어 법령상 나이는 만나이로 통일되었습니다. 이제 병원, 행정 서류, 계약서 등에서 별도 명시 없이 \"나이\"라고 하면 만나이를 의미합니다. 다만 청소년보호법, 병역법 등 일부 법령은 기존 방식을 유지하므로 개별 확인이 필요합니다."
+        }
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -381,16 +438,6 @@
         </div>
       </div>
 
-      <!-- 광고 영역 (결과-관련도구 사이) -->
-      <div class="ad-space">
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-9632606296515258"
-          data-ad-slot="1446574188"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
 
       <!-- FAQ -->
       <div class="calc-card">
@@ -488,6 +535,8 @@
       <div class="footer-content">
         <div class="footer-links">
           <a href="../index.html">홈</a>
+          <a href="../about.html">소개</a>
+          <a href="../contact.html">문의하기</a>
           <a href="../privacy.html">개인정보처리방침</a>
         </div>
         <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>

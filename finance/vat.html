@@ -15,6 +15,7 @@
   <meta property="og:description" content="공급가액에서 부가세를 계산하거나, 합계금액에서 부가세를 역산합니다. 간편한 VAT 계산기.">
   <meta property="og:url" content="https://calc-tools.kr/finance/vat.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/finance/vat.html">
 
   <!-- Pretendard 폰트 -->
   <link rel="stylesheet" as="style" crossorigin
@@ -228,6 +229,62 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "부가세는 왜 10%인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "부가가치세율 10%는 부가가치세법 제30조에 규정된 기본 세율입니다. 1977년 부가세 도입 당시부터 10% 단일 세율을 유지하고 있으며, 이는 OECD 국가 평균(19%)보다 낮은 편입니다. 세율이 단일하고 낮아 세금 계산이 간단하고 세 부담이 상대적으로 적다는 장점이 있습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "부가세 역산 방법은?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "부가세가 포함된 금액(공급대가)에서 공급가액과 부가세를 분리하려면 역산 공식을 씁니다. 공급가액 = 공급대가 ÷ 1.1, 부가세 = 공급대가 - 공급가액 = 공급대가 × 10/110입니다. 예를 들어 11만 원(부가세 포함)이면 공급가액 = 11만 ÷ 1.1 = 10만 원, 부가세 = 1만 원입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "간이과세자와 일반과세자의 부가세 차이는?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "일반과세자는 매출 부가세 10%에서 매입 부가세를 공제한 차액을 납부합니다. 간이과세자(연 매출 1억 400만 원 미만)는 업종별 부가가치율(15~40%)을 적용한 낮은 세율을 납부하고, 세금계산서 발행이 제한됩니다. 연 매출 4,800만 원 미만 간이과세자는 부가세 납부 자체가 면제됩니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "부가세 신고는 언제 하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "일반과세자는 1년에 2번(1기: 1~6월분 → 7월 25일까지, 2기: 7~12월분 → 다음해 1월 25일까지) 확정신고를 합니다. 4월과 10월에 예정신고(또는 고지 납부)도 있습니다. 간이과세자는 1년에 1번(1~12월분 → 다음해 1월 25일까지) 신고합니다. 홈택스(hometax.go.kr)에서 전자신고 가능합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "부가세 면세 품목은 어떤 것이 있나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "가공되지 않은 농·축·수·임산물, 수돗물, 연탄·무연탄, 여성 생리용품, 교육용역(학원 중 일부 제외), 의료보건용역(병원, 약국), 금융·보험용역, 주택 임대용역 등이 부가세 면세 대상입니다. 면세 사업자는 부가세를 받지 않고 매입 세액도 공제받지 못합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "세금계산서를 발행해야 부가세 공제가 되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "일반과세자 간 거래에서 매입 부가세를 공제받으려면 세금계산서(또는 전자세금계산서)를 수취해야 합니다. 신용카드 매출전표·현금영수증도 일반과세자로부터 받은 경우 매입세액 공제가 가능합니다. 간이과세자로부터의 매입은 공제가 제한됩니다."
+        }
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -491,6 +548,8 @@
       <div class="footer-content">
         <div class="footer-links">
           <a href="../index.html">홈</a>
+          <a href="../about.html">소개</a>
+          <a href="../contact.html">문의하기</a>
           <a href="../privacy.html">개인정보처리방침</a>
         </div>
         <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>

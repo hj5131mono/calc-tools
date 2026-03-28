@@ -3,39 +3,53 @@
   <!-- 메인 페이지 -->
   <url>
     <loc>https://calc-tools.kr/</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <!-- 사이트 소개·문의 -->
+  <url>
+    <loc>https://calc-tools.kr/about.html</loc>
+    <lastmod>2026-03-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/contact.html</loc>
+    <lastmod>2026-03-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 
   <!-- 금융/투자 계산기 -->
   <url>
     <loc>https://calc-tools.kr/finance/compound.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/finance/percent.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/finance/salary.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/finance/loan.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/finance/vat.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -43,13 +57,13 @@
   <!-- 주식 계산기 -->
   <url>
     <loc>https://calc-tools.kr/stock/averaging.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/stock/return-rate.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -57,25 +71,25 @@
   <!-- 노무/급여 계산기 -->
   <url>
     <loc>https://calc-tools.kr/payroll/weekly-holiday.html</loc>
-    <lastmod>2025-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/payroll/severance.html</loc>
-    <lastmod>2025-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/payroll/ordinary-wage.html</loc>
-    <lastmod>2025-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/payroll/annual-leave.html</loc>
-    <lastmod>2025-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -83,7 +97,7 @@
   <!-- 로또/운세 -->
   <url>
     <loc>https://calc-tools.kr/lotto/saju-pick.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -91,25 +105,25 @@
   <!-- 일상 도구 -->
   <url>
     <loc>https://calc-tools.kr/daily/character-count.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/daily/dday.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/daily/bmi.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calc-tools.kr/daily/age.html</loc>
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

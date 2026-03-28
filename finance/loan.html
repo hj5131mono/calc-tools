@@ -15,6 +15,7 @@
   <meta property="og:description" content="대출 원리금균등, 원금균등, 만기일시 상환 시 월 상환액과 총 이자를 자동 계산합니다.">
   <meta property="og:url" content="https://calc-tools.kr/finance/loan.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/finance/loan.html">
 
   <!-- Pretendard 폰트 -->
   <link rel="stylesheet" as="style" crossorigin
@@ -290,6 +291,38 @@
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "어떤 상환방식이 가장 유리한가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "이자 총액만 보면 원금균등이 가장 유리합니다. 하지만 초기 납부 부담이 크므로, 여유 자금이 충분하다면 원금균등, 월 납부 부담을 일정하게 유지하고 싶다면 원리금균등을 선택하는 것이 일반적입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "중도상환 수수료는 계산에 포함되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "이 계산기는 순수 이자와 원금 상환만 계산합니다. 중도상환 시에는 은행별로 중도상환수수료(통상 0.5~2%)가 발생할 수 있으니 해당 금융기관에 별도 확인이 필요합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "변동금리 대출은 어떻게 계산하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "변동금리는 기준금리(KOFI·CD금리) 변동에 따라 이자율이 바뀝니다. 현재 적용 금리를 입력하면 현시점 기준 예상 납부액을 확인할 수 있습니다. 금리 인상·인하 시나리오별로 다른 금리값을 입력해 비교해 보세요."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -551,16 +584,6 @@
         </div>
       </div>
 
-      <!-- 광고 영역 (결과-관련도구 사이) -->
-      <div class="ad-space">
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-9632606296515258"
-          data-ad-slot="1446574188"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
 
       <!-- 관련 도구 -->
       <div class="calc-card">
@@ -611,6 +634,8 @@
       <div class="footer-content">
         <div class="footer-links">
           <a href="../index.html">홈</a>
+          <a href="../about.html">소개</a>
+          <a href="../contact.html">문의하기</a>
           <a href="../privacy.html">개인정보처리방침</a>
         </div>
         <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
