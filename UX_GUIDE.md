@@ -1,5 +1,7 @@
 # UX 라이팅 & UI 가이드 — calc-tools.kr
 
+> 참조: `@CLAUDE.md` (핵심 규칙), `@docs/ARCHITECTURE.md` (디자인 토큰·공유 레이어)
+
 레퍼런스: 토스, 카카오뱅크, 네이버 파이낸셜, Apple HIG, Google Material Design
 
 ---
