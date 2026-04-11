@@ -1,4 +1,4 @@
-# robots.txt for 계산기 도구 모음
+# robots.txt for calc-tools.kr (한국 노동법·세법 가이드 + 계산 도구)
 
 User-agent: *
 Allow: /

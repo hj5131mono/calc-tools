@@ -4,14 +4,9 @@
 
 ## P0 (즉시·이번 주)
 
-### 1. 옛 컨셉 잔재 회귀 방지 시스템 + 잔여 hardcoded 헤더 본질 정리 ⭐ (셋업 후 첫 미션 후보)
-- **배경**: 본 세션에서 사용자가 직접 발견한 결정적 결함 — 도구 페이지 13개의 hardcoded 헤더가 옛 카테고리 5개 (홈/금융투자/노무급여/로또운세/일상 유틸리티). common.js initLayout() 강제 교체로 1차 해결됐지만 SEO·코드 일관성 측면에서 본질 정리 필요.
-- **범위**:
-  - 도구 페이지 13개 (`finance/loan, compound, salary, vat, percent` / `daily/age, dday, bmi, character-count` / `stock/return-rate, averaging` / `lotto/saju-pick` / `privacy.html`)의 hardcoded 헤더/푸터 제거
-  - `robots.txt` 옛 카피 교체
-  - `assets/og-image.svg` 새 디자인 (별도 작업)
-  - 회귀 방지 자동화 검사 (pre-commit 또는 GHA)
-- **분배 권고**: DevOps(주도) + QA(자동화 설계) + Brand(검수) + PM(종합)
+### 1. ✅ ~~옛 컨셉 잔재 회귀 방지 시스템 + hardcoded 헤더 13개 본질 정리~~
+- **상태**: **완료** (2026-04-12) — `archive/2026-04-12-옛컨셉-회귀방지.md`
+- **결과**: 13개 도구 페이지 hardcoded 헤더/푸터 제거, robots.txt 갱신, scripts/check-stale.sh + GHA workflow 자동화 적용
 
 ## P1 (이번 달)
 
@@ -31,6 +26,13 @@
 - **분배**: Brand 단독
 
 ## P2 (분기 내)
+
+### 5-NEW. 가이드 12편 + payroll 5개 + 루트 4개 = 21개의 hardcoded 헤더 본질 제거
+- **배경**: 본 세션 첫 미션에서 도구 페이지 13개만 정리. 가이드 글 12편(노동법) + payroll 핵심 도구 5개(severance/weekly-holiday/annual-leave/ordinary-wage/year-end-tax) + 루트 페이지 4개(index/about/contact/disclaimer)는 여전히 hardcoded 헤더 보유.
+- **현재 상태**: common.js initLayout() 강제 교체로 사용자 경험은 OK이지만 SEO·코드 일관성 측면에서 본질 정리 필요.
+- **주의**: 루트 페이지 4개(특히 index.html)는 새 컨셉으로 hand-crafted 헤더이므로 sed 일괄 처리하면 안 됨. 각각 검토 후 결정.
+- **분배**: DevOps(주도) + QA(회귀 검사 패턴 확장) + Brand(검수) + PM(종합)
+- **회귀 검사 확장**: scripts/check-stale.sh의 hardcoded 검사 대상을 13개 → 34개(13+21)로 확장 또는 전체로 확장
 
 ### 5. 호스팅 결정
 - **옵션**: GitHub Pages 유지 vs Cloudflare Pages 이전 vs Vercel

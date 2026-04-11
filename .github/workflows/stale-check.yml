@@ -1,0 +1,21 @@
+name: Stale Concept Check
+
+# 옛 컨셉 잔재 회귀 방지
+# - 옛 최저임금 / 옛 카피 / 옛 카테고리 / 옛 보험료율 / hardcoded 헤더 등을 모든 push·PR에서 자동 검사
+# - 발견 시 워크플로우 실패 → 머지 차단
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  stale-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run stale check
+        run: bash scripts/check-stale.sh
