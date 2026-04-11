@@ -510,42 +510,110 @@
         </details>
       </div>
 
-      <!-- 관련 도구 -->
+      <!-- 섹션 3: 이 계산이 왜 필요한가 -->
       <div class="calc-card">
-        <h3 style="margin-bottom: 20px; color: var(--text);">
-          <i data-lucide="link" class="icon"></i>
-          관련 계산기
-        </h3>
-        <div class="related-tools">
-          <a href="../stock/return-rate.html" class="related-tool-link">
-            <i data-lucide="percent" class="icon"></i>
-            <div>
-              <div style="font-weight: 600; color: var(--text);">수익률 계산기</div>
-              <div style="font-size: 0.75rem; color: var(--text-light);">투자 수익률 계산</div>
-            </div>
+        <h2>복리 계산이 왜 중요한가</h2>
+        <p style="line-height:1.8;color:var(--text);">
+          아인슈타인이 "세상의 8번째 불가사의"라고 부른 복리는, 시간이 흐를수록 자산이 기하급수적으로 성장하는 효과입니다.
+          단리는 원금에만 이자가 붙지만, 복리는 <strong>이자가 다시 원금에 더해져 그 합계에 또 이자가 붙는</strong> 방식입니다.
+        </p>
+        <p style="line-height:1.8;color:var(--text);margin-top:14px;">
+          연 5% 수익률로 1,000만 원을 30년 운용하면 단리는 2,500만 원이지만, 복리는 약 4,322만 원이 됩니다.
+          그 차이가 1,822만 원이며 시간이 길어질수록 격차는 더 커집니다.
+          본 계산기는 단리·복리·월 적립식까지 모두 시뮬레이션하여 장기 자산 형성 계획을 세울 수 있도록 합니다.
+        </p>
+      </div>
+
+      <!-- 섹션 4: 계산 공식 -->
+      <div class="calc-card">
+        <h2>계산 공식</h2>
+        <div style="background:var(--gray-50);border-left:4px solid var(--primary);padding:16px 20px;border-radius:var(--radius-sm);margin-bottom:16px;">
+          <p style="margin:0 0 8px;font-family:var(--font-mono,monospace);color:var(--text);">
+            <strong>단리:</strong> 미래 가치 = 원금 × (1 + 이율 × 기간)
+          </p>
+          <p style="margin:0 0 8px;font-family:var(--font-mono,monospace);color:var(--text);">
+            <strong>복리:</strong> 미래 가치 = 원금 × (1 + 이율)^기간
+          </p>
+          <p style="margin:0;font-family:var(--font-mono,monospace);color:var(--text);font-size:0.85rem;">
+            <strong>월 적립식 복리:</strong> 미래가치 = 월 납입 × ((1+r)^n - 1) / r × (1+r)
+          </p>
+        </div>
+        <h3 style="margin:18px 0 8px;color:var(--text);font-size:1.05rem;">72의 법칙</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          원금이 두 배가 되는 데 걸리는 햇수를 빠르게 계산하는 공식입니다.
+          <strong>72 ÷ 연 수익률(%) = 두 배 도달 햇수</strong>입니다.
+          예를 들어 연 6% 수익률이면 72 ÷ 6 = 12년이면 원금이 두 배가 됩니다.
+          연 9%면 8년, 연 12%면 6년입니다.
+        </p>
+      </div>
+
+      <!-- 섹션 5: 실전 시나리오 3가지 -->
+      <div class="calc-card">
+        <h2>실전 시나리오 3가지</h2>
+
+        <h3 style="margin:18px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 1. 신혼부부 적립식 (월 50만, 5%, 30년)</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          매월 50만 원을 연 5% 수익률로 30년간 적립하면, 원금 1억 8,000만 + 이자 약 2억 3천만 = <strong>약 4.16억 원</strong>이 됩니다.
+          노후 준비의 가장 강력한 도구입니다.
+        </p>
+
+        <h3 style="margin:24px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 2. 일시 투자 (1억, 7%, 20년)</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          1억 원을 연 7%로 20년 장기 운용하는 경우입니다. 단리로는 약 2.4억 원, 복리로는 <strong>약 3.87억 원</strong>이 됩니다.
+          복리의 마법으로 1.47억 원을 추가로 얻는 셈입니다.
+        </p>
+
+        <h3 style="margin:24px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 3. 단기 적금 (월 30만, 3%, 3년)</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          단기 자금 마련용 적금입니다. 3년 후 원금 1,080만 원에 이자 약 50만 원이 더해져 <strong>약 1,130만 원</strong>이 됩니다.
+          단기에는 복리 효과가 크지 않으므로 안정성이 더 중요합니다.
+        </p>
+      </div>
+
+      <!-- 섹션 6: 자주 하는 실수 5가지 -->
+      <div class="calc-card">
+        <h2>복리 계산 시 자주 하는 실수 5가지</h2>
+        <ol style="margin-left:24px;line-height:1.85;color:var(--text);">
+          <li style="margin-bottom:12px;"><strong>세금 미고려</strong> — 이자소득세 15.4%(소득세 14% + 지방세 1.4%)가 차감됩니다. 실효 수익률은 표시 수익률 × 0.846입니다.</li>
+          <li style="margin-bottom:12px;"><strong>인플레이션 미반영</strong> — 명목 수익률에서 물가상승률(약 2~3%)을 빼야 실질 수익률입니다.</li>
+          <li style="margin-bottom:12px;"><strong>연이율 vs 월이율 혼동</strong> — 연이율 6%는 월이율 0.5%입니다. 월 단위 계산 시 12로 나눠야 합니다.</li>
+          <li style="margin-bottom:12px;"><strong>적립식과 일시금 혼동</strong> — 적립식은 매월 새 원금이 들어오므로 평균적인 운용 기간이 짧아집니다.</li>
+          <li style="margin-bottom:12px;"><strong>높은 수익률 가정</strong> — 연 10% 이상 장기 가정은 비현실적입니다. 보통 연 4~7% 정도로 보수적 가정이 안전합니다.</li>
+        </ol>
+      </div>
+
+      <!-- 섹션 8: 관련 도구 -->
+      <div class="calc-card">
+        <h2>이런 계산도 해보세요</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="banknote" class="icon"></i><div><strong>연봉 실수령액 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">월 가용 자금</div></div>
           </a>
-          <a href="../finance/salary.html" class="related-tool-link">
-            <i data-lucide="banknote" class="icon"></i>
-            <div>
-              <div style="font-weight: 600; color: var(--text);">연봉 실수령액 계산기</div>
-              <div style="font-size: 0.75rem; color: var(--text-light);">세후 월급 계산</div>
-            </div>
+          <a href="../finance/loan.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="landmark" class="icon"></i><div><strong>대출이자 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">3가지 상환 비교</div></div>
           </a>
-          <a href="../stock/averaging.html" class="related-tool-link">
-            <i data-lucide="trending-up" class="icon"></i>
-            <div>
-              <div style="font-weight: 600; color: var(--text);">물타기 계산기</div>
-              <div style="font-size: 0.75rem; color: var(--text-light);">평균 매입단가 계산</div>
-            </div>
+          <a href="../payroll/severance.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="hand-coins" class="icon"></i><div><strong>퇴직금 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">노후 자금 기반</div></div>
           </a>
-          <a href="../finance/loan.html" class="related-tool-link">
-            <i data-lucide="landmark" class="icon"></i>
-            <div>
-              <div style="font-weight: 600; color: var(--text);">대출이자 계산기</div>
-              <div style="font-size: 0.75rem; color: var(--text-light);">월 상환액·이자 총액 계산</div>
-            </div>
+          <a href="../payroll/annual-leave.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="calendar-check" class="icon"></i><div><strong>연차 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">근로기준법 60조</div></div>
           </a>
         </div>
+      </div>
+
+      <!-- 섹션 9: 출처 + 갱신 -->
+      <div class="calc-card" style="background:var(--gray-50);">
+        <h2>출처 및 갱신 정보</h2>
+        <ul style="margin-left:24px;line-height:1.8;color:var(--text);font-size:0.9rem;">
+          <li><strong>금융 자료:</strong> 금융감독원(fss.or.kr), 한국은행(bok.or.kr)</li>
+          <li><strong>세제 자료:</strong> 국세청(nts.go.kr) — 이자소득세율 15.4%</li>
+          <li><strong>계산 방식:</strong> 표준 복리 공식 (FV = PV × (1+r)^n)</li>
+        </ul>
+        <p style="margin-top:16px;padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);">
+          <strong>마지막 갱신:</strong> 2026-04-11 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-11<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">이 페이지의 모든 계산은 사용자 브라우저에서 처리되며, 입력값이 외부 서버로 전송되지 않습니다.</span>
+        </p>
       </div>
 
       <!-- 광고 영역 하단 -->

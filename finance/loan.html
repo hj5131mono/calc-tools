@@ -585,34 +585,108 @@
       </div>
 
 
-      <!-- 관련 도구 -->
+      <!-- 섹션 3: 이 계산이 왜 필요한가 -->
       <div class="calc-card">
-        <h3 style="margin-bottom:20px;color:var(--text);">
-          <i data-lucide="link" class="icon"></i> 관련 계산기
-        </h3>
-        <div style="display:grid;grid-template-columns:1fr;gap:12px;">
-          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
-            <i data-lucide="banknote" class="icon"></i>
-            <div>
-              <div style="font-weight:600;">연봉 실수령액 계산기</div>
-              <div style="font-size:0.75rem;color:var(--text-light);">세후 월급 계산</div>
-            </div>
+        <h2>대출 계산이 왜 중요한가</h2>
+        <p style="line-height:1.8;color:var(--text);">
+          같은 금액을 같은 금리로 빌려도 <strong>상환 방식에 따라 총 이자가 수백만 원에서 수천만 원까지 차이</strong>가 납니다.
+          원리금균등은 매월 같은 금액을 내는 안정적 방식이지만 초반 이자 비중이 높고, 원금균등은 초반 부담이 크지만 총 이자가 적습니다.
+          만기일시는 매월 이자만 내고 만기에 원금을 갚는 방식으로 단기 자금 운용에 유리합니다.
+        </p>
+        <p style="line-height:1.8;color:var(--text);margin-top:14px;">
+          본 계산기는 세 가지 방식을 동시에 계산해 비교할 수 있어, 대출 신청 전 어떤 방식이 자신에게 유리한지 한눈에 확인할 수 있습니다.
+        </p>
+      </div>
+
+      <!-- 섹션 4: 계산 공식과 법적 근거 -->
+      <div class="calc-card">
+        <h2>계산 공식</h2>
+        <div style="background:var(--gray-50);border-left:4px solid var(--primary);padding:16px 20px;border-radius:var(--radius-sm);margin-bottom:16px;">
+          <p style="margin:0 0 10px;font-family:var(--font-mono,monospace);color:var(--text);font-size:0.85rem;">
+            <strong>원리금균등:</strong> 월 상환액 = 원금 × (월이율 × (1+월이율)^n) / ((1+월이율)^n - 1)
+          </p>
+          <p style="margin:0 0 10px;font-family:var(--font-mono,monospace);color:var(--text);font-size:0.85rem;">
+            <strong>원금균등:</strong> 월 원금 = 원금 ÷ n, 월 이자 = 잔액 × 월이율
+          </p>
+          <p style="margin:0;font-family:var(--font-mono,monospace);color:var(--text);font-size:0.85rem;">
+            <strong>만기일시:</strong> 매월 이자만, 만기에 원금 + 마지막 이자
+          </p>
+        </div>
+        <h3 style="margin:18px 0 8px;color:var(--text);font-size:1.05rem;">상환 방식 선택 가이드</h3>
+        <ul style="margin-left:24px;line-height:1.8;color:var(--text);">
+          <li><strong>원리금균등:</strong> 장기 주택담보대출, 안정적 월 지출 관리</li>
+          <li><strong>원금균등:</strong> 초기 자금 여유, 총 이자 최소화 원할 때</li>
+          <li><strong>만기일시:</strong> 단기 자금, 중도 상환 가능성 높을 때</li>
+        </ul>
+      </div>
+
+      <!-- 섹션 5: 실전 시나리오 3가지 -->
+      <div class="calc-card">
+        <h2>실전 시나리오 3가지</h2>
+
+        <h3 style="margin:18px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 1. 주택담보대출 3억, 30년, 4%</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          신혼부부의 첫 집 구입 케이스입니다. 원리금균등으로 30년 상환 시 월 약 <strong>143만 원</strong>, 총 이자 약 <strong>2.16억 원</strong>입니다.
+          원금균등을 선택하면 첫 달 약 183만 원으로 시작해 매월 줄어들고, 총 이자는 약 1.81억 원으로 약 3,500만 원 절약됩니다.
+        </p>
+
+        <h3 style="margin:24px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 2. 신용대출 5,000만, 5년, 5.5%</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          전세 보증금 부족 분을 신용대출로 메우는 경우입니다.
+          원리금균등으로 5년 상환 시 월 약 <strong>95만 5천 원</strong>, 총 이자 약 <strong>730만 원</strong>입니다.
+        </p>
+
+        <h3 style="margin:24px 0 10px;color:var(--primary);font-size:1.05rem;">시나리오 3. 사업자대출 1억, 3년, 6% 만기일시</h3>
+        <p style="line-height:1.8;color:var(--text);">
+          단기 사업자금 운용 케이스입니다. 매월 이자만 <strong>50만 원</strong>씩 내고, 3년 후 원금 1억 + 마지막 이자를 한 번에 상환합니다.
+          현금흐름이 자유로운 대신 만기 시점에 원금 마련 부담이 큽니다.
+        </p>
+      </div>
+
+      <!-- 섹션 6: 자주 하는 실수 5가지 -->
+      <div class="calc-card">
+        <h2>대출 계산 시 자주 하는 실수 5가지</h2>
+        <ol style="margin-left:24px;line-height:1.85;color:var(--text);">
+          <li style="margin-bottom:12px;"><strong>금리 표시 혼동</strong> — 대출 상품의 "연 4%"는 명목금리이며, 월 환산 시 4% ÷ 12로 계산합니다.</li>
+          <li style="margin-bottom:12px;"><strong>중도상환수수료 무시</strong> — 대부분의 대출은 3년 이내 중도 상환 시 수수료(잔액의 0.5~2%)가 발생합니다.</li>
+          <li style="margin-bottom:12px;"><strong>변동금리 vs 고정금리 미고려</strong> — 변동금리는 시장금리 변동 위험이 있습니다. 본 계산기는 고정금리 가정입니다.</li>
+          <li style="margin-bottom:12px;"><strong>DSR/LTV 한도 미확인</strong> — 본인 소득과 담보 가치 대비 한도가 있어 신청해도 거절될 수 있습니다.</li>
+          <li style="margin-bottom:12px;"><strong>총 이자만 보고 결정</strong> — 원금균등이 총 이자가 적지만 초기 부담이 큽니다. 가계 현금흐름과 함께 검토하세요.</li>
+        </ol>
+      </div>
+
+      <!-- 섹션 8: 관련 도구 -->
+      <div class="calc-card">
+        <h2>이런 계산도 해보세요</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          <a href="../finance/salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="banknote" class="icon"></i><div><strong>연봉 실수령액 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">월 가용 자금 확인</div></div>
           </a>
-          <a href="../finance/compound.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
-            <i data-lucide="trending-up" class="icon"></i>
-            <div>
-              <div style="font-weight:600;">복리 계산기</div>
-              <div style="font-size:0.75rem;color:var(--text-light);">장기 투자 수익 계산</div>
-            </div>
+          <a href="../finance/compound.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="trending-up" class="icon"></i><div><strong>복리 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">단리 vs 복리 비교</div></div>
           </a>
-          <a href="../finance/percent.html" style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);transition:all 0.2s;">
-            <i data-lucide="percent" class="icon"></i>
-            <div>
-              <div style="font-weight:600;">퍼센트 계산기</div>
-              <div style="font-size:0.75rem;color:var(--text-light);">비율·증감률 계산</div>
-            </div>
+          <a href="../payroll/severance.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="hand-coins" class="icon"></i><div><strong>퇴직금 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">퇴직급여보장법</div></div>
+          </a>
+          <a href="../payroll/weekly-holiday.html" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);text-decoration:none;color:var(--text);">
+            <i data-lucide="sun" class="icon"></i><div><strong>주휴수당 계산기</strong><div style="font-size:0.8rem;color:var(--text-light);">근로기준법 55조</div></div>
           </a>
         </div>
+      </div>
+
+      <!-- 섹션 9: 출처 + 갱신 -->
+      <div class="calc-card" style="background:var(--gray-50);">
+        <h2>출처 및 갱신 정보</h2>
+        <ul style="margin-left:24px;line-height:1.8;color:var(--text);font-size:0.9rem;">
+          <li><strong>금융 자료:</strong> 금융감독원(fss.or.kr), 금융위원회(fsc.go.kr)</li>
+          <li><strong>법령:</strong> 대부업법, 이자제한법 (법제처 law.go.kr)</li>
+          <li><strong>계산 방식:</strong> 금융감독원 표준 대출 계산 공식</li>
+        </ul>
+        <p style="margin-top:16px;padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);">
+          <strong>마지막 갱신:</strong> 2026-04-11 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-11<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">이 페이지의 모든 계산은 사용자 브라우저에서 처리되며, 입력값이 외부 서버로 전송되지 않습니다.</span>
+        </p>
       </div>
 
       <!-- 광고 영역 하단 -->

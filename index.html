@@ -5,14 +5,14 @@
   <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
-  <title>계산기 도구 모음 — 일상에 필요한 모든 계산기</title>
-  <meta name="description" content="무료 온라인 계산기 모음. 금융 계산기, 로또 번호 생성기, 일상 유틸리티 등 다양한 도구를 간편하게 사용하세요.">
-  <meta name="keywords" content="계산기, 금융계산기, 로또번호생성기, 온라인계산기, 유틸리티">
+  <title>한국 노동법·세법 가이드 + 계산 도구 — calc-tools.kr</title>
+  <meta name="description" content="퇴직금·주휴수당·연차·통상임금·연봉 실수령액·대출 상환을 정부 공식 자료(국세청·고용노동부·국민건강보험공단) 기반으로 정확하게 계산하고, 적용 법령과 시나리오까지 함께 설명합니다.">
+  <meta name="keywords" content="퇴직금 계산기, 주휴수당 계산기, 연차 계산기, 통상임금 계산기, 연봉 실수령액, 대출 계산기, 복리 계산기, 한국 노동법, 한국 세법, calc-tools">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="계산기 도구 모음 — 일상에 필요한 모든 계산기">
-  <meta property="og:description" content="무료 온라인 계산기 모음. 금융 계산기, 로또 번호 생성기, 일상 유틸리티 등 다양한 도구를 간편하게 사용하세요.">
+  <meta property="og:title" content="한국 노동법·세법 가이드 + 계산 도구 — calc-tools.kr">
+  <meta property="og:description" content="정부 공식 자료 기반의 정확한 한국 노동법·세법 계산. 결과뿐 아니라 적용 법령과 실전 시나리오까지 함께 설명합니다.">
   <meta property="og:url" content="https://calc-tools.kr">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
   <link rel="canonical" href="https://calc-tools.kr/">
@@ -23,29 +23,122 @@
 
   <link rel="stylesheet" href="./assets/css/style.css">
   <style>
-    /* 준비중 배지 */
-    .coming-soon-badge {
-      display: inline-block;
-      background-color: var(--gray-200);
+    /* 운영 원칙 카드 */
+    .principle-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin: 24px 0 36px;
+    }
+    .principle-strip .pcard {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+    }
+    .principle-strip .pcard strong {
+      display: block;
+      color: var(--primary);
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .principle-strip .pcard p {
+      margin: 0;
+      font-size: 0.85rem;
       color: var(--text-light);
-      font-size: 0.625rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-left: 6px;
-      vertical-align: middle;
+      line-height: 1.55;
     }
 
-    .tool-card.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: none;
+    /* 핵심 도구 강조 그리드 */
+    .core-tools-section h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .core-tools-intro {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
     }
 
-    .tool-card.disabled:hover {
-      transform: none;
-      box-shadow: none;
-      border-color: var(--border);
+    /* 기타 도구 — 작은 텍스트 링크 */
+    .extras-section {
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .extras-section h2 {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .extras-section p {
+      color: var(--text-light);
+      font-size: 0.875rem;
+      margin-bottom: 14px;
+    }
+    .extras-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .extras-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .extras-list a:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* 갱신 이력 */
+    .changelog {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+    }
+    .changelog h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+    .changelog ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .changelog li {
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.875rem;
+      color: var(--text);
+      display: flex;
+      gap: 12px;
+    }
+    .changelog li:last-child {
+      border-bottom: none;
+    }
+    .changelog .cl-date {
+      color: var(--text-light);
+      font-family: var(--font-mono, monospace);
+      flex-shrink: 0;
+      font-size: 0.8rem;
     }
   </style>
   <!-- Google AdSense -->
@@ -63,9 +156,14 @@
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "계산기 도구 모음",
+    "name": "calc-tools.kr",
     "url": "https://calc-tools.kr",
-    "description": "일상에 필요한 모든 계산기 — 금융, 노무, 일상 유틸리티"
+    "description": "한국 노동법·세법 계산을 정부 공식 자료 기반으로 제공하는 정적 웹사이트",
+    "publisher": {
+      "@type": "Organization",
+      "name": "calc-tools.kr",
+      "email": "ahnhj5131@gmail.com"
+    }
   }
   </script>
   <script type="application/ld+json">
@@ -78,7 +176,7 @@
         "name": "정말 무료인가요?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "네, 모든 계산기를 무료로 이용할 수 있습니다. 회원가입, 앱 설치, 결제가 필요 없습니다. 광고가 표시될 수 있으나, 계산 기능 이용에는 어떤 제한도 없습니다."
+          "text": "네, 모든 계산기와 가이드 글을 무료로 이용할 수 있습니다. 회원가입, 앱 설치, 결제가 필요 없습니다. 페이지당 광고가 1개 표시될 수 있으나, 콘텐츠 이용에는 어떤 제한도 없습니다."
         }
       },
       {
@@ -86,15 +184,7 @@
         "name": "입력한 개인정보는 안전한가요?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "모든 계산은 사용자의 브라우저(기기)에서만 처리되며, 입력한 연봉·대출 금액·생년월일 등 어떤 데이터도 외부 서버로 전송되지 않습니다. 페이지를 닫으면 입력 내용은 즉시 사라집니다."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "모바일에서도 사용할 수 있나요?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "네, 모든 계산기는 모바일, 태블릿, PC 등 어떤 기기에서도 편리하게 사용할 수 있도록 반응형으로 설계되어 있습니다. 별도 앱 설치 없이 브라우저에서 바로 이용하실 수 있습니다."
+          "text": "모든 계산은 사용자의 브라우저(기기)에서 자바스크립트로 직접 처리되며, 입력한 연봉·대출 금액·생년월일 등 어떤 데이터도 외부 서버로 전송되지 않습니다. 페이지를 닫으면 입력 내용은 즉시 사라집니다."
         }
       },
       {
@@ -102,7 +192,15 @@
         "name": "계산 결과를 신뢰해도 되나요?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "계산기 도구 모음은 정부 공식 자료(국세청, 고용노동부, 국민건강보험공단 등)를 기반으로 분기별 업데이트합니다. 다만 개인별 상황(비과세 수당, 특수 고용 조건 등)에 따라 실제 결과와 차이가 있을 수 있으므로, 중요한 재무·법적 결정 시에는 반드시 전문가와 상담하시기 바랍니다."
+          "text": "calc-tools.kr은 국세청, 고용노동부, 국민건강보험공단, 국민연금공단, 법제처 등 정부 공식 1차 자료만을 출처로 사용하며, 분기마다 핵심 수치를 검토·갱신합니다. 각 도구 페이지 하단에 적용 법령과 출처 URL, 마지막 갱신일을 모두 공개합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "운영팀에 어떻게 연락하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "모든 문의는 ahnhj5131@gmail.com으로 받습니다. 오류 신고, 정정 요청, 새 도구 제안 등 어떤 의견이든 영업일 기준 3일 이내에 답변드립니다."
         }
       }
     ]
@@ -114,14 +212,14 @@
     <div class="container header-inner">
       <a href="./index.html" class="site-logo">
         <i data-lucide="calculator" class="icon"></i>
-        <span>계산기 도구 모음</span>
+        <span>calc-tools.kr</span>
       </a>
       <nav>
         <ul class="nav-links">
-          <li><a href="#금융">금융/투자</a></li>
-          <li><a href="#노무">노무/급여</a></li>
-          <li><a href="#로또">로또/운세</a></li>
-          <li><a href="#유틸리티">일상 유틸리티</a></li>
+          <li><a href="#core">핵심 도구</a></li>
+          <li><a href="#extras">기타 유틸</a></li>
+          <li><a href="./about.html">소개</a></li>
+          <li><a href="./contact.html">문의</a></li>
         </ul>
       </nav>
     </div>
@@ -129,15 +227,32 @@
 
   <main>
     <div class="container">
-      <!-- 광고 영역 상단 -->
-      <div class="ad-space">
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-9632606296515258"
-        data-ad-slot="1446574188"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <!-- 헤드 카피 -->
+      <section style="padding: 32px 0 8px;">
+        <h1 style="font-size: 1.75rem; line-height: 1.35; margin-bottom: 12px; color: var(--text);">
+          한국 노동법·세법 계산을<br>정부 공식 자료로 정확하게.
+        </h1>
+        <p style="color: var(--text-light); font-size: 1rem; line-height: 1.7; max-width: 720px;">
+          퇴직금, 주휴수당, 연차, 통상임금, 연봉 실수령액, 대출 상환, 복리 계산을
+          국세청·고용노동부·국민건강보험공단·법제처 1차 자료 기준으로 제공합니다.
+          결과 숫자뿐 아니라 적용 공식, 관련 법령, 실전 시나리오까지 함께 설명합니다.
+        </p>
+      </section>
+
+      <!-- 운영 원칙 3카드 -->
+      <div class="principle-strip">
+        <div class="pcard">
+          <strong>① 정부 공식 자료만 사용</strong>
+          <p>국세청·고용노동부·건강보험공단·법제처의 1차 자료만 출처로 사용합니다. 블로그·뉴스·2차 가공 자료는 인용하지 않습니다.</p>
+        </div>
+        <div class="pcard">
+          <strong>② 클라이언트 사이드 계산</strong>
+          <p>모든 계산은 사용자 브라우저에서 자바스크립트로 직접 수행됩니다. 입력한 값은 외부 서버로 전송되지 않습니다.</p>
+        </div>
+        <div class="pcard">
+          <strong>③ 분기별 자동 갱신</strong>
+          <p>세율·요율·최저임금 등 핵심 수치는 분기마다 검토합니다. 각 페이지에 마지막 갱신일을 명시합니다.</p>
+        </div>
       </div>
 
       <!-- 실시간 환율 위젯 -->
@@ -154,173 +269,80 @@
         </div>
       </div>
 
-      <!-- 검색 + 카테고리 탭 필터 -->
+      <!-- 검색 -->
       <div class="tool-filter">
         <div class="search-wrap">
-          <input type="text" id="toolSearch" class="search-input" placeholder="도구 검색... (예: 복리, BMI, 부가세)">
-        </div>
-        <div class="tab-list" role="tablist">
-          <button class="tab-btn active" data-tab="all">전체</button>
-          <button class="tab-btn" data-tab="금융">금융/투자</button>
-          <button class="tab-btn" data-tab="노무">노무/급여</button>
-          <button class="tab-btn" data-tab="로또">로또/운세</button>
-          <button class="tab-btn" data-tab="유틸리티">일상 유틸리티</button>
+          <input type="text" id="toolSearch" class="search-input" placeholder="도구 검색... (예: 퇴직금, 주휴수당, 연봉)">
         </div>
       </div>
       <p id="noResults" class="no-results" style="display:none;">검색 결과가 없습니다.</p>
 
-      <!-- 금융/투자 계산기 -->
-      <section class="category-section" id="금융" data-tab="금융">
-        <h2><i data-lucide="wallet" class="icon"></i> 금융/투자 계산기</h2>
+      <!-- 핵심 도구: 노무·급여 -->
+      <section id="core" class="category-section core-tools-section">
+        <h2><i data-lucide="briefcase" class="icon"></i> 노무·급여 핵심 도구</h2>
+        <p class="core-tools-intro">근로기준법·퇴직급여보장법 등 한국 노동법에 기반한 정확한 계산. 각 페이지에 적용 법령과 실전 시나리오를 함께 설명합니다.</p>
         <div class="tool-grid">
-          <a href="./finance/compound.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="trending-up"></i></div>
+          <a href="./payroll/severance.html" class="tool-card">
+            <div class="tool-card-icon"><i data-lucide="hand-coins"></i></div>
             <div class="tool-card-content">
-              <h3>복리 계산기</h3>
-              <p>장기 투자 수익을 시뮬레이션합니다</p>
-            </div>
-          </a>
-
-          <a href="./finance/percent.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="percent"></i></div>
-            <div class="tool-card-content">
-              <h3>퍼센트 계산기</h3>
-              <p>% 계산, 비율 계산을 빠르게</p>
-            </div>
-          </a>
-
-          <a href="./stock/averaging.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="activity"></i></div>
-            <div class="tool-card-content">
-              <h3>물타기 계산기</h3>
-              <p>주식 평균 매입단가를 계산합니다</p>
-            </div>
-          </a>
-
-          <a href="./stock/return-rate.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="dollar-sign"></i></div>
-            <div class="tool-card-content">
-              <h3>수익률 계산기</h3>
-              <p>매수/매도 수익률과 수익금 계산</p>
-            </div>
-          </a>
-
-          <a href="./finance/loan.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="landmark"></i></div>
-            <div class="tool-card-content">
-              <h3>대출이자 계산기</h3>
-              <p>원리금균등·원금균등·만기일시 상환 비교</p>
-            </div>
-          </a>
-
-          <a href="./finance/vat.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="receipt"></i></div>
-            <div class="tool-card-content">
-              <h3>부가세 계산기</h3>
-              <p>공급가액↔합계금액 VAT 자동 계산·역산</p>
-            </div>
-          </a>
-
-        </div>
-      </section>
-
-      <!-- 노무/급여 계산기 -->
-      <section class="category-section" id="노무" data-tab="노무">
-        <h2><i data-lucide="briefcase" class="icon"></i> 노무/급여 계산기</h2>
-        <div class="tool-grid">
-          <a href="./finance/salary.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="banknote"></i></div>
-            <div class="tool-card-content">
-              <h3>연봉 실수령액 계산기</h3>
-              <p>4대보험·소득세 공제 후 세후 월급 계산</p>
+              <h3>퇴직금 계산기</h3>
+              <p>퇴직급여보장법 기준 / 평균임금 vs 통상임금 자동 비교</p>
             </div>
           </a>
           <a href="./payroll/weekly-holiday.html" class="tool-card">
             <div class="tool-card-icon"><i data-lucide="sun"></i></div>
             <div class="tool-card-content">
               <h3>주휴수당 계산기</h3>
-              <p>시급·소정근로시간으로 주휴수당 자동 계산</p>
-            </div>
-          </a>
-          <a href="./payroll/severance.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="hand-coins"></i></div>
-            <div class="tool-card-content">
-              <h3>퇴직금 계산기</h3>
-              <p>입사일·퇴직일·평균임금으로 퇴직금 계산</p>
-            </div>
-          </a>
-          <a href="./payroll/ordinary-wage.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="clock"></i></div>
-            <div class="tool-card-content">
-              <h3>통상임금 시급 계산기</h3>
-              <p>월급에서 통상시급·연장·야간·휴일수당 자동 환산</p>
+              <p>근로기준법 55조 기준 / 시급·소정근로시간으로 자동 산정</p>
             </div>
           </a>
           <a href="./payroll/annual-leave.html" class="tool-card">
             <div class="tool-card-icon"><i data-lucide="calendar-check"></i></div>
             <div class="tool-card-content">
               <h3>연차 계산기</h3>
-              <p>입사일 기준 발생 연차·잔여 연차 계산</p>
+              <p>근로기준법 60조 기준 / 입사일 기준 발생·잔여 연차 산정</p>
+            </div>
+          </a>
+          <a href="./payroll/ordinary-wage.html" class="tool-card">
+            <div class="tool-card-icon"><i data-lucide="clock"></i></div>
+            <div class="tool-card-content">
+              <h3>통상임금 시급 계산기</h3>
+              <p>대법원 판례 반영 / 연장·야간·휴일수당 자동 환산</p>
             </div>
           </a>
         </div>
       </section>
 
-      <!-- 로또/운세 -->
-      <section class="category-section" id="로또" data-tab="로또">
-        <h2><i data-lucide="clover" class="icon"></i> 로또/운세</h2>
+      <!-- 핵심 도구: 세금·금융 -->
+      <section class="category-section core-tools-section">
+        <h2><i data-lucide="wallet" class="icon"></i> 세금·금융 핵심 도구</h2>
+        <p class="core-tools-intro">국세청·국민건강보험공단 공식 요율 기준. 결과뿐 아니라 적용 공식과 분기별 변경 이력을 함께 제공합니다.</p>
         <div class="tool-grid">
-          <a href="./lotto/saju-pick.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="sparkles"></i></div>
+          <a href="./finance/salary.html" class="tool-card">
+            <div class="tool-card-icon"><i data-lucide="banknote"></i></div>
             <div class="tool-card-content">
-              <h3>사주 행운번호 🔮</h3>
-              <p>사주팔자와 MBTI로 나만의 행운번호 추천</p>
+              <h3>연봉 실수령액 계산기</h3>
+              <p>4대보험 + 소득세 공제 / 연봉 구간별 분포 비교</p>
             </div>
           </a>
-
+          <a href="./finance/loan.html" class="tool-card">
+            <div class="tool-card-icon"><i data-lucide="landmark"></i></div>
+            <div class="tool-card-content">
+              <h3>대출이자 계산기</h3>
+              <p>원리금균등 / 원금균등 / 만기일시 3가지 방식 비교</p>
+            </div>
+          </a>
+          <a href="./finance/compound.html" class="tool-card">
+            <div class="tool-card-icon"><i data-lucide="trending-up"></i></div>
+            <div class="tool-card-content">
+              <h3>복리 계산기</h3>
+              <p>단리 vs 복리 / 장기 자산형성 시뮬레이션</p>
+            </div>
+          </a>
         </div>
       </section>
 
-      <!-- 일상 유틸리티 -->
-      <section class="category-section" id="유틸리티" data-tab="유틸리티">
-        <h2><i data-lucide="wrench" class="icon"></i> 일상 유틸리티</h2>
-        <div class="tool-grid">
-          <a href="./daily/character-count.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="type"></i></div>
-            <div class="tool-card-content">
-              <h3>글자수 세기</h3>
-              <p>공백 포함/제외, 바이트 수를 실시간 계산</p>
-            </div>
-          </a>
-
-          <a href="./daily/dday.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="calendar-days"></i></div>
-            <div class="tool-card-content">
-              <h3>D-day 계산기</h3>
-              <p>중요한 날까지 남은 일수를 계산하세요</p>
-            </div>
-          </a>
-
-          <a href="./daily/bmi.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="scale"></i></div>
-            <div class="tool-card-content">
-              <h3>BMI 계산기</h3>
-              <p>체질량지수를 계산하고 비만도를 확인하세요</p>
-            </div>
-          </a>
-
-          <a href="./daily/age.html" class="tool-card">
-            <div class="tool-card-icon"><i data-lucide="cake"></i></div>
-            <div class="tool-card-content">
-              <h3>나이 계산기</h3>
-              <p>만나이, 세는나이를 정확히 계산합니다</p>
-            </div>
-          </a>
-
-        </div>
-      </section>
-
-      <!-- 광고 영역 하단 -->
+      <!-- 광고 영역 (페이지당 1개) -->
       <div class="ad-space">
       <ins class="adsbygoogle"
         style="display:block"
@@ -331,103 +353,120 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
 
-      <!-- 사이트 소개 -->
-      <div class="calc-card">
-        <h2>계산기 도구 모음이란?</h2>
-        <p>
-          일상생활과 업무에서 자주 사용하는 다양한 계산기를 모아놓은 무료 온라인 도구입니다.
-          복잡한 설치 없이 브라우저에서 바로 사용할 수 있으며, 모든 계산은 안전하게 여러분의 기기에서만 처리됩니다.
-        </p>
-        <p style="margin-top: 16px;">
-          <strong>주요 특징:</strong>
-        </p>
-        <ul style="margin-left: 20px; color: var(--text-light);">
-          <li>✅ 완전 무료, 회원가입 불필요</li>
-          <li>✅ 모바일, 태블릿, PC 모두 지원</li>
-          <li>✅ 개인정보 수집 없음, 안전한 계산</li>
-          <li>✅ 간편하고 직관적인 인터페이스</li>
+      <!-- 기타 유틸 — 작은 텍스트 링크 -->
+      <section id="extras" class="extras-section">
+        <h2>기타 유틸리티</h2>
+        <p>일상에서 가끔 필요한 보조 도구들입니다. 핵심 도구가 아니므로 가벼운 사용에 적합합니다.</p>
+        <ul class="extras-list">
+          <li><a href="./finance/percent.html">퍼센트 계산기</a></li>
+          <li><a href="./finance/vat.html">부가세 계산기</a></li>
+          <li><a href="./stock/averaging.html">물타기 계산기</a></li>
+          <li><a href="./stock/return-rate.html">수익률 계산기</a></li>
+          <li><a href="./daily/age.html">나이 계산기</a></li>
+          <li><a href="./daily/bmi.html">BMI 계산기</a></li>
+          <li><a href="./daily/character-count.html">글자수 세기</a></li>
+          <li><a href="./daily/dday.html">D-day 계산기</a></li>
+          <li><a href="./lotto/saju-pick.html">사주 행운번호</a></li>
+        </ul>
+      </section>
+
+      <!-- 갱신 이력 -->
+      <div class="changelog">
+        <h2><i data-lucide="history" class="icon" style="width:18px;height:18px;"></i> 최근 갱신 이력</h2>
+        <ul>
+          <li><span class="cl-date">2026-04-11</span><span>사이트 컨셉 전환 — 한국 노동법·세법 가이드 + 계산 도구로 재구성. 운영 원칙·검증 절차 공개.</span></li>
+          <li><span class="cl-date">2026-03-28</span><span>About·Contact 페이지 신설, 핵심 도구 FAQ·법령 근거 보강, JSON-LD 스키마 적용.</span></li>
+          <li><span class="cl-date">2026-03-07</span><span>개인정보처리방침 신설. 클라이언트 사이드 계산 원칙 공식화.</span></li>
+          <li><span class="cl-date">2026-01-15</span><span>2026년 4대보험료율 반영 (국민연금·건강보험·고용보험·장기요양). 최저임금 검토.</span></li>
+          <li><span class="cl-date">2025-12-20</span><span>퇴직금·통상임금 계산기 출시. 평균임금 vs 통상임금 자동 비교.</span></li>
         </ul>
       </div>
 
-      <div class="calc-card">
-        <h2>카테고리별 안내</h2>
-        <div style="line-height:1.8;color:var(--text);">
-          <h3 style="margin:16px 0 8px;font-size:1.05rem;color:var(--primary);">금융·투자</h3>
-          <p style="margin-bottom:16px;">
-            연봉 실수령액 계산기로 4대 보험과 소득세를 반영한 정확한 월급을 확인하세요.
-            복리 계산기, 대출이자 계산기(원리금균등·원금균등·만기일시), 부가세 계산기, 퍼센트 계산기까지 재무 의사결정에 필요한 핵심 도구를 제공합니다.
-          </p>
-          <h3 style="margin:16px 0 8px;font-size:1.05rem;color:var(--primary);">노무·급여</h3>
-          <p style="margin-bottom:16px;">
-            근로기준법과 퇴직급여보장법에 따른 주휴수당, 퇴직금, 통상임금, 연차를 정확히 계산합니다.
-            아르바이트부터 정규직까지 고용 형태에 관계없이 내 권리를 수치로 확인할 수 있습니다.
-          </p>
-          <h3 style="margin:16px 0 8px;font-size:1.05rem;color:var(--primary);">일상 유틸리티</h3>
-          <p style="margin-bottom:16px;">
-            글자수 세기, D-day 계산기, BMI 계산기, 나이 계산기 등 일상에서 자주 필요한 도구를 모았습니다.
-            자기소개서 글자수 확인부터 체질량지수 측정, 만나이·띠·별자리 조회까지 한 곳에서 해결하세요.
-          </p>
-        </div>
+      <!-- 사이트 소개 -->
+      <div class="calc-card" style="margin-top: 32px;">
+        <h2>왜 calc-tools.kr인가</h2>
+        <p>
+          한국에는 이미 수많은 계산기 사이트가 있습니다. 그러나 직접 사용해 보면 세 가지 공통된 불편이 있었습니다.
+          첫째, 적용 기준이 불투명합니다 — 어떤 세율을 썼는지, 언제 갱신된 자료인지 알 수 없습니다.
+          둘째, 설명이 부족합니다 — 결과 숫자만 보여주고 끝납니다.
+          셋째, 광고가 콘텐츠를 압도합니다.
+        </p>
+        <p style="margin-top: 16px;">
+          calc-tools.kr은 이 세 가지를 정반대로 풀어보려는 시도입니다.
+          모든 도구의 적용 기준과 출처를 공개하고, 계산식과 법령을 함께 설명하며, 광고는 페이지당 1개로 최소화합니다.
+          실생활에서 자주 마주치는 계산을 검증하고 사용하기 위해 만들어진 도구입니다.
+        </p>
+        <p style="margin-top: 16px;">
+          더 자세한 내용은 <a href="./about.html">운영 원칙과 검증 절차</a> 페이지에서 확인하실 수 있습니다.
+        </p>
       </div>
 
+      <!-- 출처 안내 -->
+      <div class="calc-card">
+        <h2>출처 데이터</h2>
+        <p style="line-height:1.8;color:var(--text);margin-bottom:12px;">
+          본 사이트에서 사용하는 모든 세율, 보험료율, 최저임금, 법정 기준은 다음 정부 공식 기관의 1차 자료를 출처로 합니다. 분기별로 자동 또는 수동으로 검토·갱신합니다.
+        </p>
+        <ul style="margin-left: 20px; color: var(--text-light); line-height: 1.9;">
+          <li><strong>국세청</strong> (nts.go.kr) — 소득세 과세표준 구간 및 세율</li>
+          <li><strong>국민건강보험공단</strong> (nhis.or.kr) — 건강보험료율, 장기요양보험료율</li>
+          <li><strong>국민연금공단</strong> (nps.or.kr) — 국민연금 보험료율</li>
+          <li><strong>고용노동부</strong> (moel.go.kr) — 최저임금, 고용보험료율, 근로기준법</li>
+          <li><strong>법제처</strong> (law.go.kr) — 근로기준법, 퇴직급여보장법, 소득세법 등 법령 원문</li>
+        </ul>
+      </div>
+
+      <!-- 이용 방법 -->
       <div class="calc-card">
         <h2>이용 방법</h2>
         <div style="display:flex;flex-direction:column;gap:16px;color:var(--text);line-height:1.8;">
           <div style="display:flex;align-items:flex-start;gap:12px;">
             <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--primary);color:white;border-radius:50%;font-weight:700;font-size:0.85rem;flex-shrink:0;">1</span>
-            <div><strong>도구 선택</strong> — 위 목록에서 필요한 계산기를 선택하거나, 검색창에 키워드를 입력하세요.</div>
+            <div><strong>도구 선택</strong> — 위 핵심 도구 또는 기타 유틸에서 필요한 계산기를 선택하거나 검색창에 키워드를 입력하세요.</div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:12px;">
             <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--primary);color:white;border-radius:50%;font-weight:700;font-size:0.85rem;flex-shrink:0;">2</span>
-            <div><strong>값 입력</strong> — 안내에 따라 금액, 날짜, 수치 등을 입력하고 "계산하기"를 누르세요.</div>
+            <div><strong>값 입력</strong> — 안내에 따라 금액, 날짜, 수치를 입력하세요. 핵심 도구는 입력 즉시 결과가 갱신됩니다.</div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:12px;">
             <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--primary);color:white;border-radius:50%;font-weight:700;font-size:0.85rem;flex-shrink:0;">3</span>
-            <div><strong>결과 확인</strong> — 계산 결과와 함께 계산 근거, 관련 법 조항, 참고 정보를 제공합니다.</div>
+            <div><strong>결과 + 해설 확인</strong> — 결과 숫자뿐 아니라 적용 공식, 관련 법령, 실전 시나리오, 자주 하는 실수까지 함께 제공합니다.</div>
           </div>
         </div>
       </div>
 
-      <div class="calc-card">
-        <h2>계산 정확성</h2>
-        <p style="line-height:1.8;color:var(--text);margin-bottom:12px;">
-          모든 계산기는 국세청, 고용노동부, 국민건강보험공단 등 정부 공식 기관의 자료를 기반으로 합니다.
-          세율, 보험료율, 최저임금 등 핵심 수치는 <strong>분기별로 자동 업데이트</strong>되어 항상 최신 기준이 반영됩니다.
-        </p>
-        <p style="line-height:1.8;color:var(--text-light);font-size:0.875rem;">
-          ※ 모든 계산 결과는 참고용이며 법적 효력을 갖지 않습니다. 중요한 의사결정 시에는 전문가와 상담하세요.
-        </p>
-      </div>
-
+      <!-- FAQ -->
       <div class="calc-card">
         <h2>자주 묻는 질문</h2>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
             <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">정말 무료인가요?</summary>
             <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
-              네, 모든 계산기를 무료로 이용할 수 있습니다. 회원가입, 앱 설치, 결제가 필요 없습니다.
-              광고가 표시될 수 있으나, 계산 기능 이용에는 어떤 제한도 없습니다.
+              네, 모든 계산기와 가이드 글을 무료로 이용할 수 있습니다. 회원가입, 앱 설치, 결제가 필요 없습니다.
+              페이지당 광고가 1개 표시될 수 있으나, 콘텐츠 이용에는 어떤 제한도 없습니다.
             </div>
           </details>
           <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
             <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">입력한 개인정보는 안전한가요?</summary>
             <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
-              모든 계산은 사용자의 브라우저(기기)에서만 처리되며, 입력한 연봉·대출 금액·생년월일 등 어떤 데이터도 외부 서버로 전송되지 않습니다.
+              모든 계산은 사용자의 브라우저에서 자바스크립트로 직접 처리되며, 입력한 연봉·대출 금액·생년월일 등 어떤 데이터도 외부 서버로 전송되지 않습니다.
               페이지를 닫으면 입력 내용은 즉시 사라집니다. 자세한 내용은 <a href="./privacy.html">개인정보처리방침</a>을 참고하세요.
-            </div>
-          </details>
-          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
-            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">모바일에서도 사용할 수 있나요?</summary>
-            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
-              네, 모든 계산기는 모바일, 태블릿, PC 등 어떤 기기에서도 편리하게 사용할 수 있도록 반응형으로 설계되어 있습니다.
-              별도 앱 설치 없이 브라우저에서 바로 이용하실 수 있습니다.
             </div>
           </details>
           <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
             <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">계산 결과를 신뢰해도 되나요?</summary>
             <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
-              계산기 도구 모음은 정부 공식 자료(국세청, 고용노동부, 국민건강보험공단 등)를 기반으로 분기별 업데이트합니다.
-              다만 개인별 상황(비과세 수당, 특수 고용 조건 등)에 따라 실제 결과와 차이가 있을 수 있으므로, 중요한 재무·법적 결정 시에는 반드시 전문가와 상담하시기 바랍니다.
+              calc-tools.kr은 국세청·고용노동부·국민건강보험공단·국민연금공단·법제처 등 정부 공식 1차 자료만을 출처로 사용하며, 분기마다 핵심 수치를 검토·갱신합니다.
+              각 도구 페이지 하단에 적용 법령, 출처 URL, 마지막 갱신일을 모두 공개합니다.
+              다만 개인별 상황(비과세 수당, 특수 고용 조건 등)에 따라 실제 결과와 차이가 있을 수 있으므로, 중요한 의사결정 시에는 <a href="./disclaimer.html">면책 조항</a>을 함께 확인하시고 전문가와 상담하시기 바랍니다.
+            </div>
+          </details>
+          <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+            <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">운영팀에 어떻게 연락하나요?</summary>
+            <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
+              모든 문의는 <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a>으로 받습니다.
+              오류 신고, 정정 요청, 새 도구 제안 등 어떤 의견이든 영업일 기준 3일 이내에 답변드립니다.
+              자세한 운영 원칙은 <a href="./about.html">소개 페이지</a>를 참고하세요.
             </div>
           </details>
         </div>
@@ -443,8 +482,9 @@
           <a href="./about.html">소개</a>
           <a href="./contact.html">문의하기</a>
           <a href="./privacy.html">개인정보처리방침</a>
+          <a href="./disclaimer.html">면책 조항</a>
         </div>
-        <p>&copy; 2026 계산기 도구 모음. All rights reserved.</p>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
         <p style="font-size: 0.75rem; margin-top: 8px;">
           본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
         </p>
@@ -454,11 +494,9 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    // Lucide Icons 초기화
-    lucide.createIcons();
-  </script>
-
+  <script>lucide.createIcons();</script>
   <script src="./assets/js/common.js"></script>
 </body>
 </html>
+</content>
+</invoke>

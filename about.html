@@ -5,15 +5,15 @@
   <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
-  <title>소개 — 계산기 도구 모음</title>
-  <meta name="description" content="계산기 도구 모음은 금융, 노무, 일상 계산을 무료로 제공하는 온라인 도구 모음입니다. 운영 목적과 원칙을 소개합니다.">
-  <meta name="keywords" content="계산기 도구 모음, 소개, 무료 온라인 계산기, 금융 계산기, 노무 계산기">
+  <title>운영 원칙과 검증 절차 — calc-tools.kr</title>
+  <meta name="description" content="calc-tools.kr은 한국 노동법·세법 계산을 정부 공식 자료(국세청·고용노동부·국민건강보험공단·법제처) 기반으로 제공합니다. 운영 원칙과 검증 절차, 갱신 정책을 공개합니다.">
+  <meta name="keywords" content="calc-tools.kr, 운영 원칙, 한국 노동법 계산기, 세법 계산기, 정부 공식 자료, 클라이언트 사이드 계산">
   <link rel="canonical" href="https://calc-tools.kr/about.html">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="소개 — 계산기 도구 모음">
-  <meta property="og:description" content="계산기 도구 모음은 금융, 노무, 일상 계산을 무료로 제공하는 온라인 도구 모음입니다.">
+  <meta property="og:title" content="운영 원칙과 검증 절차 — calc-tools.kr">
+  <meta property="og:description" content="한국 노동법·세법 계산을 정부 공식 자료 기반으로 제공하는 calc-tools.kr의 운영 원칙과 검증 절차를 공개합니다.">
   <meta property="og:url" content="https://calc-tools.kr/about.html">
   <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
 
@@ -23,33 +23,12 @@
 
   <link rel="stylesheet" href="./assets/css/style.css">
   <style>
-    .about-content {
-      line-height: 1.8;
-    }
-    .about-content h2 {
-      margin-top: 40px;
-      margin-bottom: 16px;
-      color: var(--primary);
-      font-size: 1.35rem;
-    }
-    .about-content h3 {
-      margin-top: 28px;
-      margin-bottom: 12px;
-      color: var(--text);
-      font-size: 1.1rem;
-    }
-    .about-content p {
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-    .about-content ul {
-      margin-left: 24px;
-      margin-bottom: 16px;
-    }
-    .about-content li {
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+    .about-content { line-height: 1.8; }
+    .about-content h2 { margin-top: 40px; margin-bottom: 16px; color: var(--primary); font-size: 1.35rem; }
+    .about-content h3 { margin-top: 28px; margin-bottom: 12px; color: var(--text); font-size: 1.1rem; }
+    .about-content p { margin-bottom: 16px; color: var(--text); }
+    .about-content ul { margin-left: 24px; margin-bottom: 16px; }
+    .about-content li { margin-bottom: 8px; color: var(--text); }
     .principle-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -82,6 +61,46 @@
       color: var(--text-light);
       font-size: 0.9rem;
     }
+    .verification-steps {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 0;
+      counter-reset: step-counter;
+    }
+    .verification-steps li {
+      counter-increment: step-counter;
+      padding: 12px 16px 12px 56px;
+      position: relative;
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+    }
+    .verification-steps li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    .operator-box {
+      background: var(--gray-50);
+      border-left: 4px solid var(--primary);
+      padding: 18px 22px;
+      margin: 24px 0;
+      border-radius: var(--radius-md);
+    }
+    .operator-box p { margin-bottom: 8px; }
+    .operator-box p:last-child { margin-bottom: 0; }
     .disclaimer-box {
       background: var(--warning-50, #fffbeb);
       border: 1px solid var(--warning-200, #fde68a);
@@ -89,11 +108,7 @@
       padding: 20px;
       margin-top: 24px;
     }
-    .disclaimer-box p {
-      color: var(--text);
-      margin-bottom: 0;
-      font-size: 0.9rem;
-    }
+    .disclaimer-box p { color: var(--text); margin-bottom: 0; font-size: 0.9rem; }
   </style>
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258"
@@ -106,96 +121,129 @@
     gtag('js', new Date());
     gtag('config', 'G-KLECX1HME8');
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "calc-tools.kr",
+    "url": "https://calc-tools.kr",
+    "email": "ahnhj5131@gmail.com",
+    "description": "한국 노동법·세법 계산을 정부 공식 자료 기반으로 제공하는 정적 웹사이트",
+    "foundingDate": "2025"
+  }
+  </script>
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="./index.html" class="site-logo">
+        <i data-lucide="calculator" class="icon"></i>
+        <span>calc-tools.kr</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html">홈</a></li>
+          <li><a href="./about.html">소개</a></li>
+          <li><a href="./contact.html">문의</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
   <main class="container">
     <div class="calc-card about-content">
-      <h1>계산기 도구 모음 소개</h1>
+      <h1>운영 원칙과 검증 절차</h1>
 
       <p>
-        <strong>계산기 도구 모음</strong>은 일상생활과 업무에서 자주 필요한 계산을 누구나 쉽고 정확하게 할 수 있도록 만든 무료 온라인 도구 모음입니다.
-        연봉 실수령액, 대출 이자, 퇴직금, 주휴수당 등 복잡한 계산을 전문 지식 없이도 몇 번의 입력만으로 확인할 수 있습니다.
-      </p>
-      <p>
-        2025년에 서비스를 시작하여, 현재 금융·투자, 노무·급여, 일상 유틸리티 등 5개 카테고리에 걸쳐 18개 이상의 계산기를 제공하고 있습니다.
-        모든 도구는 회원가입이나 설치 없이 웹 브라우저에서 즉시 사용할 수 있습니다.
+        <strong>calc-tools.kr</strong>은 한국의 노동법과 세법 계산을 정부 공식 자료 기준으로 정확하게 제공하는 정적 웹사이트입니다.
+        퇴직금, 주휴수당, 연차, 통상임금, 연봉 실수령액, 대출 상환, 복리 등 일상에서 자주 필요한 계산을 회원가입 없이, 광고 추적 없이, 개인정보 전송 없이 사용할 수 있습니다.
       </p>
 
-      <h2>운영 원칙</h2>
+      <h2>왜 이 사이트를 만들었나</h2>
+      <p>
+        한국에는 이미 수많은 계산기 사이트가 있습니다. 그러나 직접 사용해 보면 세 가지 공통된 불편이 있었습니다.
+        첫째, <strong>적용 기준이 불투명</strong>합니다. 어떤 세율을 썼는지, 언제 갱신된 자료인지 알 수 없습니다.
+        둘째, <strong>설명이 부족</strong>합니다. 결과 숫자만 보여주고 끝납니다. "왜 이 금액인지" 사용자가 검증할 방법이 없습니다.
+        셋째, <strong>광고가 콘텐츠를 압도</strong>합니다. 계산 결과보다 광고가 더 많은 페이지가 흔합니다.
+      </p>
+      <p>
+        calc-tools.kr은 이 세 가지를 정반대로 풀어보려는 시도입니다.
+        모든 도구의 적용 기준과 출처를 페이지에 공개하고, 계산식과 법령을 함께 설명하며, 광고 영역을 페이지당 최소한으로 유지합니다.
+        실생활에서 필요한 계산을 직접 검증하고 사용하기 위해 만들어진 도구이기도 합니다.
+      </p>
+
+      <h2>네 가지 운영 원칙</h2>
       <div class="principle-grid">
         <div class="principle-card">
-          <strong>정확성</strong>
-          <p>국세청, 고용노동부, 국민건강보험공단 등 정부 공식 자료를 기반으로 세율·보험료율·최저임금 등 핵심 수치를 분기마다 업데이트합니다. 계산 공식과 법적 근거를 각 페이지에 투명하게 공개합니다.</p>
+          <strong>① 정확성 — 정부 공식 자료만 사용</strong>
+          <p>국세청, 고용노동부, 국민건강보험공단, 국민연금공단, 법제처 등 정부 공식 기관의 1차 자료만 출처로 사용합니다. 블로그·뉴스·2차 가공 자료는 인용하지 않습니다. 세율과 보험료율은 분기마다 자동 또는 수동으로 검토합니다.</p>
         </div>
         <div class="principle-card">
-          <strong>개인정보 보호</strong>
-          <p>모든 계산은 사용자의 브라우저(기기)에서만 처리되며, 어떤 입력 데이터도 외부 서버로 전송되지 않습니다. 개인 재무 정보를 안심하고 입력할 수 있습니다.</p>
+          <strong>② 개인정보 보호 — 클라이언트 사이드 계산</strong>
+          <p>모든 계산은 사용자의 브라우저에서 자바스크립트로 직접 처리됩니다. 연봉·대출금·생년월일 등 어떤 입력값도 외부 서버로 전송되지 않습니다. 페이지를 닫으면 입력 내용은 즉시 사라집니다.</p>
         </div>
         <div class="principle-card">
-          <strong>접근성</strong>
-          <p>모바일, 태블릿, PC 등 어떤 기기에서도 편리하게 사용할 수 있는 반응형 디자인을 적용합니다. 회원가입, 앱 설치, 비용 결제 없이 누구나 자유롭게 이용 가능합니다.</p>
+          <strong>③ 투명성 — 공식과 출처 공개</strong>
+          <p>각 도구 페이지에 적용한 계산 공식, 관련 법령 조문, 출처 URL을 함께 표시합니다. 사용자가 결과를 직접 검증할 수 있도록 모든 근거를 노출합니다.</p>
         </div>
         <div class="principle-card">
-          <strong>투명성</strong>
-          <p>각 계산기 페이지에 계산 방법, 적용 세율, 관련 법 조항을 함께 안내합니다. 사용자가 결과의 근거를 직접 확인하고 이해할 수 있도록 돕습니다.</p>
+          <strong>④ 갱신 가능성 — 마지막 검토일 표시</strong>
+          <p>각 페이지 하단에 "마지막 갱신일"과 "다음 검토 예정일"을 명시합니다. 법령 개정이나 요율 변경이 발생하면 신속히 반영하고, 사용자가 정보 신선도를 직접 확인할 수 있도록 합니다.</p>
         </div>
       </div>
 
-      <h2>제공 서비스</h2>
-
-      <h3>금융·투자 계산기</h3>
+      <h2>콘텐츠 검증 절차</h2>
       <p>
-        연봉 실수령액 계산기, 복리 계산기, 대출이자 계산기, 부가세 계산기, 퍼센트 계산기를 제공합니다.
-        4대 보험과 소득세를 반영한 정확한 실수령액 계산부터, 원리금균등·원금균등·만기일시 등 다양한 대출 상환 방식의 이자 비교까지 가능합니다.
+        새 도구를 만들거나 기존 도구를 갱신할 때 다음 4단계를 거칩니다. 사용자에게 보이지 않는 작업이지만, 결과의 신뢰성은 이 절차에서 나옵니다.
       </p>
+      <ol class="verification-steps">
+        <li><strong>출처 확인</strong> — 관련 법령(법제처) + 시행령 + 고시(국세청·고용노동부·건보공단)를 1차 자료에서 직접 확인합니다.</li>
+        <li><strong>계산식 검증</strong> — 법조문과 시행령에 명시된 공식을 그대로 코드로 옮기고, 정부 공식 모의 계산기(있는 경우)와 결과를 대조합니다.</li>
+        <li><strong>실전 시나리오 적용</strong> — 실제 사용 케이스 3개 이상을 직접 입력해 보고 결과가 합리적인지 점검합니다.</li>
+        <li><strong>분기별 재검토</strong> — 모든 핵심 도구는 분기마다 적용 세율·요율을 다시 검토하고, 변경이 있으면 페이지 상단에 갱신 이력을 추가합니다.</li>
+      </ol>
 
-      <h3>노무·급여 계산기</h3>
+      <h2>출처 데이터</h2>
       <p>
-        주휴수당 계산기, 퇴직금 계산기, 통상임금 시급 계산기, 연차 계산기를 제공합니다.
-        근로기준법과 퇴직급여보장법에 따른 정확한 계산 결과를 제공하며, 아르바이트부터 정규직까지 다양한 고용 형태에 대응합니다.
-      </p>
-
-      <h3>주식 계산기</h3>
-      <p>
-        물타기(평균단가) 계산기와 수익률 계산기를 제공합니다.
-        추가 매수 시 변동되는 평균 단가를 미리 계산하고, 매수·매도 금액 기반의 정확한 수익률과 손익 금액을 확인할 수 있습니다.
-      </p>
-
-      <h3>일상 유틸리티</h3>
-      <p>
-        글자수 세기, D-day 계산기, BMI 계산기, 나이 계산기를 제공합니다.
-        자기소개서 글자수 확인부터 기념일 계산, 체질량지수 측정, 만나이·띠·별자리 조회까지 일상에서 자주 필요한 도구를 모았습니다.
-      </p>
-
-      <h3>로또·운세</h3>
-      <p>
-        사주 기반 행운번호 생성기를 제공합니다. 생년월일시를 입력하면 사주팔자 분석과 함께 오늘의 행운번호를 추천하며, 결과를 카카오톡 등으로 공유할 수 있습니다.
-      </p>
-
-      <h2>데이터 정확성</h2>
-      <p>
-        본 사이트에서 사용하는 세율, 보험료율, 최저임금 등 주요 수치는 다음 정부 공식 기관의 자료를 기반으로 합니다.
-        데이터는 분기별로 검토·업데이트되며, 법령 개정이나 요율 변경 시 신속히 반영합니다.
+        본 사이트에서 사용하는 세율, 보험료율, 최저임금, 법정 기준 등 모든 핵심 수치는 다음 정부 공식 기관의 1차 자료를 출처로 합니다.
       </p>
       <ul class="source-list">
-        <li><strong>국세청</strong> — 소득세 과세표준 구간 및 세율</li>
+        <li><strong>국세청 (nts.go.kr)</strong> — 소득세 과세표준 구간 및 세율, 근로소득 간이세액표</li>
         <li><strong>국민건강보험공단 (nhis.or.kr)</strong> — 건강보험료율, 장기요양보험료율</li>
         <li><strong>국민연금공단 (nps.or.kr)</strong> — 국민연금 보험료율</li>
-        <li><strong>고용노동부 (moel.go.kr)</strong> — 최저임금, 고용보험료율, 근로기준법 기준</li>
-        <li><strong>법제처 (law.go.kr)</strong> — 근로기준법, 퇴직급여보장법 등 법령 원문</li>
+        <li><strong>고용노동부 (moel.go.kr)</strong> — 최저임금, 고용보험료율, 근로기준법 적용 기준</li>
+        <li><strong>법제처 (law.go.kr)</strong> — 근로기준법, 퇴직급여보장법, 소득세법 등 법령 원문</li>
       </ul>
+
+      <h2>운영 정보</h2>
+      <div class="operator-box">
+        <p><strong>운영 주체:</strong> calc-tools.kr 운영팀</p>
+        <p><strong>연락처:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a></p>
+        <p><strong>응답 SLA:</strong> 오류 신고·정정 요청·콘텐츠 제안 등 모든 문의에 영업일 기준 3일 이내 답변</p>
+        <p><strong>운영 시작:</strong> 2025년</p>
+      </div>
+      <p>
+        본 사이트의 모든 콘텐츠는 외주 작가나 자동 생성 도구 없이, 1차 자료를 직접 확인한 뒤 작성됩니다.
+        오류를 발견하시거나 정정이 필요한 부분이 있다면 언제든 위 이메일로 알려 주세요.
+        영업일 3일 이내에 확인하고 답변드립니다.
+      </p>
 
       <h2>면책 조항</h2>
       <div class="disclaimer-box">
         <p>
           본 사이트에서 제공하는 모든 계산 결과는 <strong>참고 목적</strong>이며 법적 효력을 갖지 않습니다.
           실제 세금 신고, 급여 산정, 재무적 의사결정 시에는 반드시 세무사, 공인노무사, 재무설계사 등 해당 분야의 전문가와 상담하시기 바랍니다.
-          계산기 도구 모음은 계산 결과의 정확성을 위해 최선을 다하고 있으나, 법령 변경, 개인별 상황 차이, 입력 오류 등으로 인해 실제 결과와 차이가 발생할 수 있으며, 이에 대한 책임을 지지 않습니다.
+          calc-tools.kr은 계산 결과의 정확성을 위해 최선을 다하고 있으나, 법령 변경, 개인별 상황 차이, 입력 오류 등으로 인해 실제 결과와 차이가 발생할 수 있으며, 이에 대한 책임을 지지 않습니다.
+          자세한 내용은 <a href="./disclaimer.html">면책 조항 페이지</a>를 참고하시기 바랍니다.
         </p>
       </div>
 
-      <!-- 광고 영역 하단 -->
-      <div class="ad-space" style="min-height:90px; text-align:center; margin:20px 0;">
+      <p style="margin-top: 32px; color: var(--text-light); font-size: 0.875rem;">
+        최종 갱신: 2026-04-11 | 다음 검토 예정: 2026-07-11
+      </p>
+
+      <!-- 광고 영역 (페이지당 1개) -->
+      <div class="ad-space" style="min-height:90px; text-align:center; margin:24px 0;">
         <ins class="adsbygoogle"
           style="display:block"
           data-ad-client="ca-pub-9632606296515258"
@@ -207,9 +255,29 @@
     </div>
   </main>
 
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="./index.html">홈</a>
+          <a href="./about.html">소개</a>
+          <a href="./contact.html">문의하기</a>
+          <a href="./privacy.html">개인정보처리방침</a>
+          <a href="./disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+        <p style="font-size: 0.75rem; margin-top: 8px;">
+          본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
+        </p>
+      </div>
+    </div>
+  </footer>
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>lucide.createIcons();</script>
   <script src="./assets/js/common.js"></script>
 </body>
 </html>
+</content>
+</invoke>
