@@ -148,42 +148,15 @@ calc-tools의 데이터 무결성과 배포 파이프라인을 책임진다. rat
 
 ## 미션 유형별 표준 분배 패턴
 
-### 새 가이드 글 작성 (예: 세법 가이드 1편)
-1. **PM** — 주제·우선순위·법령 범위 확정
-2. **Compliance** — 법령 인용·산식 검증·Grey Zone 발굴 (본문 작성)
-3. **Brand** — 톤·voice·구조 검수 (가이드 표준 템플릿 부합)
-4. **DevOps** — sitemap 등록·새 페이지 메타 점검
-5. **QA** — 내부 링크·관련 도구 매핑 검증
-6. **PM** — 종합 보고
+| 미션 유형 | 호출 순서 (PM 시작·종료 생략) |
+|---------|------|
+| 새 가이드 글 작성 | Compliance(본문+Grey Zone) → Brand(검수) → DevOps(sitemap) → QA(링크) |
+| 산식 정확성 검증 | QA(1차) → Compliance(2차) → DevOps(rates 영향) |
+| rates.json 분기 갱신 | DevOps(1차 출처) → Compliance(법적 검증) → QA(회귀) |
+| UX/UI 변경 | Brand(토큰) → DevOps(배포) → QA(회귀) |
+| AdSense 신청 전 점검 | DevOps + Compliance + Brand + QA 모두 → PM GO/NO-GO |
 
-### 산식 정확성 검증 미션
-1. **PM** — 검증 대상·범위 정의
-2. **QA** — 산식·엣지 케이스·시나리오 검증 (1차)
-3. **Compliance** — 법적 근거·1차 출처 재검증 (2차)
-4. **DevOps** — rates.json 영향 확인
-5. **PM** — 보고
-
-### 데이터 갱신 미션 (예: rates.json 분기 갱신)
-1. **PM** — 갱신 항목·시점 정의
-2. **DevOps** — 1차 출처 수집·rates.json 변경
-3. **Compliance** — 변경값 법적 검증
-4. **QA** — 영향받는 도구 회귀 테스트
-5. **PM** — 보고
-
-### UX/UI 변경 미션
-1. **PM** — 변경 사유·범위·KPI
-2. **Brand** — 디자인 토큰·마크업 변경
-3. **DevOps** — 배포·캐시 무효화
-4. **QA** — 모든 디바이스·브라우저 회귀
-5. **PM** — 보고
-
-### AdSense 신청 전 종합 점검
-1. **PM** — 체크리스트 정의
-2. **DevOps** — sitemap·robots·canonical·Lighthouse·GSC
-3. **Compliance** — 모든 가이드의 1차 출처 점검
-4. **Brand** — 디자인 일관성·카피 톤
-5. **QA** — 전 도구 산식·회귀
-6. **PM** — 종합 GO/NO-GO 판단
+PM은 모든 미션의 시작(미션 정의·worker 분배)과 종료(종합 보고·archive)를 책임진다.
 
 ## 갱신 이력
 - 2026-04-12: 초기 작성 (5명 셋업)
