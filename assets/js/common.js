@@ -277,10 +277,11 @@ function createNavigation() {
   const isAbout   = path.endsWith('/about.html');
   const isContact = path.endsWith('/contact.html');
 
+  // 홈 항목은 빼고 (로고가 홈 링크 역할), 두 헤더(index.html 직접 + 본 함수 자동 생성) 동일 5개로 통일
   const navItems = [
-    { href: '/index.html',           label: '홈',       active: isHome },
     { href: '/index.html#core',      label: '핵심 도구', active: false },
     { href: '/guide/index.html',     label: '가이드',   active: isGuide },
+    { href: '/index.html#extras',    label: '기타 유틸', active: false },
     { href: '/about.html',           label: '소개',     active: isAbout },
     { href: '/contact.html',         label: '문의',     active: isContact },
   ];
