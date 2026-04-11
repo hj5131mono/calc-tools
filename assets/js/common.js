@@ -269,34 +269,32 @@ function initAutoComma() {
 }
 
 // 공통 네비게이션 HTML 생성 (서브 페이지용 - active 상태 자동 감지)
+// 컨셉 전환(2026-04): 한국 노동법·세법 가이드 + 도구 — 옛 카테고리(금융/투자, 로또/운세, 일상 유틸리티) 폐기
 function createNavigation() {
   const path = window.location.pathname;
-  let activeCategory = '';
-  if (path.includes('/finance/') || path.includes('/stock/')) activeCategory = '금융';
-  else if (path.includes('/payroll/')) activeCategory = '노무';
-  else if (path.includes('/lotto/')) activeCategory = '로또';
-  else if (path.includes('/daily/')) activeCategory = '유틸리티';
+  const isHome    = path === '/' || path.endsWith('/index.html');
+  const isGuide   = path.includes('/guide/');
+  const isAbout   = path.endsWith('/about.html');
+  const isContact = path.endsWith('/contact.html');
 
   const navItems = [
-    { href: '/index.html', label: '홈', key: 'home' },
-    { href: '/index.html#금융', label: '금융/투자', key: '금융' },
-    { href: '/index.html#노무', label: '노무/급여', key: '노무' },
-    { href: '/index.html#로또', label: '로또/운세', key: '로또' },
-    { href: '/index.html#유틸리티', label: '일상 유틸리티', key: '유틸리티' },
+    { href: '/index.html',           label: '홈',       active: isHome },
+    { href: '/index.html#core',      label: '핵심 도구', active: false },
+    { href: '/guide/index.html',     label: '가이드',   active: isGuide },
+    { href: '/about.html',           label: '소개',     active: isAbout },
+    { href: '/contact.html',         label: '문의',     active: isContact },
   ];
 
-  const navHTML = navItems.map(item => {
-    const isActive = item.key === activeCategory ||
-      (item.key === 'home' && (path === '/' || path.endsWith('/index.html')));
-    return `<li><a href="${item.href}"${isActive ? ' class="active"' : ''}>${item.label}</a></li>`;
-  }).join('');
+  const navHTML = navItems.map(item =>
+    `<li><a href="${item.href}"${item.active ? ' class="active"' : ''}>${item.label}</a></li>`
+  ).join('');
 
   return `
     <header class="site-header">
       <div class="container header-inner">
         <a href="/index.html" class="site-logo">
           <i data-lucide="calculator" class="icon"></i>
-          <span>계산기 도구 모음</span>
+          <span>calc-tools.kr</span>
         </a>
         <nav>
           <ul class="nav-links">
@@ -316,11 +314,13 @@ function createFooter() {
         <div class="footer-content">
           <div class="footer-links">
             <a href="/index.html">홈</a>
+            <a href="/guide/index.html">가이드</a>
             <a href="/about.html">소개</a>
             <a href="/contact.html">문의하기</a>
             <a href="/privacy.html">개인정보처리방침</a>
+            <a href="/disclaimer.html">면책 조항</a>
           </div>
-          <p>&copy; ${new Date().getFullYear()} 계산기 도구 모음. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} calc-tools.kr. All rights reserved.</p>
           <p style="font-size: 0.75rem; margin-top: 8px;">
             본 사이트의 모든 계산 결과는 참고용이며, 실제 거래나 결정 시 전문가와 상담하시기 바랍니다.
           </p>
@@ -330,18 +330,36 @@ function createFooter() {
   `;
 }
 
-// 네비게이션과 푸터 자동 삽입
+// 네비게이션과 푸터 자동 삽입 (옛 hardcoded 헤더/푸터 강제 교체)
+// 컨셉 전환(2026-04) 이전의 도구 페이지 다수가 옛 카테고리(금융/투자/로또/유틸리티) 헤더를 hardcoded로 갖고 있음 → 강제 교체로 일괄 새 컨셉 적용
 function initLayout() {
-  // body 시작 부분에 네비게이션 삽입
-  const header = document.querySelector('body');
-  if (header && !document.querySelector('.site-header')) {
-    header.insertAdjacentHTML('afterbegin', createNavigation());
+  const body = document.querySelector('body');
+  if (!body) return;
+
+  // index.html은 새 컨셉으로 이미 작성됨 — 그대로 둠
+  const isHomePage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+
+  // 헤더: 옛 hardcoded 헤더 제거 후 새 헤더 삽입 (홈 제외)
+  if (!isHomePage) {
+    const oldHeader = document.querySelector('.site-header');
+    if (oldHeader) oldHeader.remove();
+    body.insertAdjacentHTML('afterbegin', createNavigation());
+  } else if (!document.querySelector('.site-header')) {
+    body.insertAdjacentHTML('afterbegin', createNavigation());
   }
 
-  // body 끝 부분에 푸터 삽입
-  const footer = document.querySelector('body');
-  if (footer && !document.querySelector('.site-footer')) {
-    footer.insertAdjacentHTML('beforeend', createFooter());
+  // 푸터: 옛 hardcoded 푸터 제거 후 새 푸터 삽입 (홈 제외)
+  if (!isHomePage) {
+    const oldFooter = document.querySelector('.site-footer');
+    if (oldFooter) oldFooter.remove();
+    body.insertAdjacentHTML('beforeend', createFooter());
+  } else if (!document.querySelector('.site-footer')) {
+    body.insertAdjacentHTML('beforeend', createFooter());
+  }
+
+  // 강제 교체 후 lucide 아이콘 재초기화 (calculator 아이콘 등)
+  if (typeof lucide !== 'undefined' && lucide.createIcons) {
+    try { lucide.createIcons(); } catch (_) {}
   }
 }
 
