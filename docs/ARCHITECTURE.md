@@ -61,6 +61,13 @@ CSS 변수 — 반드시 하드코딩 대신 변수 사용:
 | guide/labor | `annual-leave-2026.html` | 2026 연차 발생 기준 |
 | guide/labor | `ordinary-wage-supreme-court.html` | 통상임금 대법원 판례 |
 | guide/labor | `overtime-pay-guide.html` | 야간/연장/휴일 가산수당 |
+| guide/labor | `unemployment-benefit-guide.html` | 실업급여 수급 조건과 금액 |
+| guide/labor | `severance-interim-payment.html` | 퇴직금 중간정산 사유 |
+| guide/labor | `4-insurance-part-time.html` | 4대보험 알바 적용 |
+| guide/labor | `wage-arrears-report.html` | 임금체불 신고 절차 |
+| guide/labor | `probation-wage.html` | 수습 급여 90% 감액 |
+| guide/labor | `parental-leave-pay.html` | 육아휴직 급여 |
+| guide/labor | `workers-compensation.html` | 산재보험 보험급여 |
 
 ## 페이지 구조
 
