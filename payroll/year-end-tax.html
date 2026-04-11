@@ -611,55 +611,99 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../assets/js/common.js"></script>
   <script>
+    // ── rates.json 캐시 (DOMContentLoaded에서 로드) ──────────────
+    let RATES = null;
+
+    // 폴백값 (rates.json 로드 실패 시 사용 — 2026 기준 동기화)
+    const FALLBACK = {
+      workIncomeDeduction: [
+        { from: 0,         to: 5000000,   base: 0,        rate: 0.70 },
+        { from: 5000000,   to: 15000000,  base: 3500000,  rate: 0.40 },
+        { from: 15000000,  to: 45000000,  base: 7500000,  rate: 0.15 },
+        { from: 45000000,  to: 100000000, base: 12000000, rate: 0.05 },
+        { from: 100000000, to: null,      base: 14750000, rate: 0.02 }
+      ],
+      workIncomeDeductionCap: 20000000,
+      brackets: [
+        { from: 0,          to: 14000000,  rate: 0.06, deduction: 0        },
+        { from: 14000000,   to: 50000000,  rate: 0.15, deduction: 1260000  },
+        { from: 50000000,   to: 88000000,  rate: 0.24, deduction: 5760000  },
+        { from: 88000000,   to: 150000000, rate: 0.35, deduction: 15440000 },
+        { from: 150000000,  to: 300000000, rate: 0.38, deduction: 19940000 },
+        { from: 300000000,  to: 500000000, rate: 0.40, deduction: 25940000 },
+        { from: 500000000,  to: 1000000000,rate: 0.42, deduction: 35940000 },
+        { from: 1000000000, to: null,      rate: 0.45, deduction: 65940000 }
+      ],
+      workCreditCap: [
+        { incomeUpTo: 33000000, cap: 740000 },
+        { incomeUpTo: 70000000, cap: 660000 },
+        { incomeUpTo: null,     cap: 500000 }
+      ],
+      childCredit: [
+        { children: 0, credit: 0      },
+        { children: 1, credit: 150000 },
+        { children: 2, credit: 350000 }
+      ],
+      childCreditExtra: 300000,
+      personalDeduction: 1500000
+    };
+
+    function tax() { return (RATES && RATES.incomeTax) ? RATES.incomeTax : FALLBACK; }
+
     // ── 근로소득공제 (rates.json workIncomeDeduction) ──────────────
     function calcWorkIncomeDeduction(gross) {
-      // 2025 근로소득공제 구간
-      // 0~500: 70%
-      // 500~1500: 350 + 초과 40%
-      // 1500~4500: 750 + 초과 15%
-      // 4500~10000: 1200 + 초과 5%
-      // 10000~: 1475 + 초과 2%, 한도 2000
+      const t = tax();
+      const arr = t.workIncomeDeduction || FALLBACK.workIncomeDeduction;
       let ded = 0;
-      if (gross <= 5000000) ded = gross * 0.70;
-      else if (gross <= 15000000) ded = 3500000 + (gross - 5000000) * 0.40;
-      else if (gross <= 45000000) ded = 7500000 + (gross - 15000000) * 0.15;
-      else if (gross <= 100000000) ded = 12000000 + (gross - 45000000) * 0.05;
-      else ded = 14750000 + (gross - 100000000) * 0.02;
-      return Math.min(ded, 20000000);
+      for (const b of arr) {
+        if (b.to == null || gross <= b.to) {
+          ded = b.base + (gross - b.from) * b.rate;
+          break;
+        }
+      }
+      return Math.min(ded, FALLBACK.workIncomeDeductionCap);
     }
 
-    // ── 종합소득세 산출 (소득세법 제55조) ──────────────────────────
+    // ── 종합소득세 산출 (소득세법 제55조, rates.json brackets) ───────
     function calcIncomeTax(base) {
       if (base <= 0) return 0;
-      const brackets = [
-        { limit: 14000000,  rate: 0.06, deduct: 0 },
-        { limit: 50000000,  rate: 0.15, deduct: 1260000 },
-        { limit: 88000000,  rate: 0.24, deduct: 5760000 },
-        { limit: 150000000, rate: 0.35, deduct: 15440000 },
-        { limit: 300000000, rate: 0.38, deduct: 19940000 },
-        { limit: 500000000, rate: 0.40, deduct: 25940000 },
-        { limit: 1000000000,rate: 0.42, deduct: 35940000 },
-        { limit: Infinity,  rate: 0.45, deduct: 65940000 },
-      ];
-      for (const b of brackets) {
-        if (base <= b.limit) return base * b.rate - b.deduct;
+      const t = tax();
+      const arr = t.brackets || FALLBACK.brackets;
+      for (const b of arr) {
+        if (b.to == null || base <= b.to) {
+          return base * b.rate - b.deduction;
+        }
       }
       return 0;
     }
 
     // ── 근로소득 세액공제 한도 (rates.json workCreditCap) ───────────
     function workCreditCap(gross) {
-      if (gross <= 33000000) return 740000;
-      if (gross <= 70000000) return 660000;
+      const t = tax();
+      const arr = t.workCreditCap || FALLBACK.workCreditCap;
+      for (const c of arr) {
+        if (c.incomeUpTo == null || gross <= c.incomeUpTo) return c.cap;
+      }
       return 500000;
     }
 
-    // ── 자녀 세액공제 ─────────────────────────────────────────────
+    // ── 자녀 세액공제 (rates.json childCredit + childCreditExtra) ──
     function childCredit(n) {
       if (n <= 0) return 0;
-      if (n === 1) return 150000;
-      if (n === 2) return 350000;
-      return 350000 + (n - 2) * 300000;
+      const t = tax();
+      const arr = t.childCredit || FALLBACK.childCredit;
+      const extra = t.childCreditExtra ?? FALLBACK.childCreditExtra;
+      // 배열에 있는 정확한 자녀 수면 그 값 사용
+      const exact = arr.find(c => c.children === n);
+      if (exact) return exact.credit;
+      // 배열에 없는 큰 값(3명 이상): 마지막 정의 + 초과분 × extra
+      const last = arr[arr.length - 1];
+      return last.credit + (n - last.children) * extra;
+    }
+
+    // ── 인적공제 단가 (rates.json personalDeduction) ───────────────
+    function personalDeductionUnit() {
+      return tax().personalDeduction || FALLBACK.personalDeduction;
     }
 
     // ── 신용카드 등 공제 ──────────────────────────────────────────
@@ -705,8 +749,8 @@
       const workDed = calcWorkIncomeDeduction(gross);
       const workIncome = gross - workDed;
 
-      // ── ② 인적공제 ──────────────────────────────────────────
-      const personalDed = (1 + dep) * 1500000;
+      // ── ② 인적공제 (본인 1 + 부양가족 dep) × 1인당 공제액 ─────
+      const personalDed = (1 + dep) * personalDeductionUnit();
 
       // ── ③ 신용카드 등 공제 ─────────────────────────────────
       const cardDed = calcCardDeduction(gross, credit, check);
@@ -795,8 +839,8 @@
 
     document.addEventListener('DOMContentLoaded', async function() {
       lucide.createIcons();
-      const rates = await loadRates();
-      applyRatesYear(rates);
+      RATES = await loadRates();
+      applyRatesYear(RATES);
     });
 
     document.getElementById('yetForm').addEventListener('submit', function(e) {

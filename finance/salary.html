@@ -377,13 +377,13 @@
 
           <div class="form-group">
             <label for="dependents">부양가족 수
-              <span style="font-weight:400; font-size:0.8rem; color:var(--text-light);">(본인 포함)</span>
+              <span style="font-weight:400; font-size:0.8rem; color:var(--text-light);">(본인 제외, 본인은 자동 포함)</span>
             </label>
-            <input type="number" id="dependents" min="1" max="20" value="1">
+            <input type="number" id="dependents" min="0" max="20" value="0">
           </div>
 
           <div class="form-group">
-            <label for="children">20세 이하 자녀 수</label>
+            <label for="children">8세 이상 20세 이하 자녀 수</label>
             <input type="number" id="children" min="0" max="10" value="0">
           </div>
 
@@ -694,7 +694,7 @@
           </table>
         </div>
 
-        <h3 style="margin:0 0 12px; color:var(--text); font-size:1rem;">연봉별 실수령액 참고표 (2026년, 부양가족 1명 기준)</h3>
+        <h3 style="margin:0 0 12px; color:var(--text); font-size:1rem;">연봉별 실수령액 참고표 (2026년, 본인만·부양가족 0명·자녀 0명 기준)</h3>
         <div style="overflow-x:auto;margin-bottom:10px;">
           <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
             <thead>
@@ -998,7 +998,7 @@
       // 과세표준 계산
       const wid      = workIncomeDeduction(annualTaxable);
       const wiAmount = annualTaxable - wid;                        // 근로소득금액
-      const personal = dependents * 1500000;                       // 기본공제
+      const personal = (1 + dependents) * 1500000;                 // 기본공제 (본인 1 + 부양가족)
       const taxBase  = Math.max(0, wiAmount - personal - annualInsurance);
 
       // 산출세액

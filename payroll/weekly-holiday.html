@@ -572,7 +572,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../assets/js/common.js"></script>
   <script>
-    let MIN_WAGE = 10030; // rates.json에서 로드됨
+    let MIN_WAGE = 10320; // rates.json에서 로드됨 (폴백: 2026 기준)
 
     document.addEventListener('DOMContentLoaded', async function() {
       lucide.createIcons();
@@ -600,6 +600,14 @@
       hideResult('resultBox');
 
       if (!hourly || !hours) return;
+      if (hourly < 0 || hours < 0) {
+        alert('시급과 주 근로시간은 0 이상이어야 합니다.');
+        return;
+      }
+      if (hours > 168) {
+        alert('주 근로시간은 168시간(24×7)을 초과할 수 없습니다.');
+        return;
+      }
 
       // 주 15시간 미만 — 주휴수당 없음
       if (hours < 15) {

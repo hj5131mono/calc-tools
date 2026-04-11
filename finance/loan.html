@@ -763,9 +763,16 @@
 
       if (monthlyRate === 0) {
         const mp = Math.round(principal / months);
+        let cumPaid = 0;
         for (let i = 1; i <= months; i++) {
-          const balance = Math.round(Math.max(0, principal - mp * i));
-          schedule.push({ month: i, payment: mp, principal: mp, interest: 0, balance });
+          let pay = mp;
+          if (i === months) {
+            // 마지막 회차: 누적 반올림 오차 보정 (원금이 정확히 떨어지도록)
+            pay = principal - cumPaid;
+          }
+          cumPaid += pay;
+          const balance = Math.max(0, principal - cumPaid);
+          schedule.push({ month: i, payment: pay, principal: pay, interest: 0, balance });
         }
         return { firstPayment: mp, fixedPayment: mp, totalInterest: 0,
                  totalRepayment: principal, schedule };
@@ -778,13 +785,19 @@
 
       for (let i = 1; i <= n; i++) {
         const interest      = balance * r;
-        const principalPaid = raw - interest;
-        balance            -= principalPaid;
-        if (balance < 1) balance = 0;
+        let principalPaid   = raw - interest;
+        let payment         = raw;
+        // 마지막 회차: 누적 반올림 오차 보정 (남은 원금 + 이자를 정확히 맞춤)
+        if (i === n) {
+          principalPaid = balance;
+          payment       = balance + interest;
+        }
+        balance      -= principalPaid;
+        if (balance < 0.5) balance = 0;
         totalInterest += interest;
         schedule.push({
           month:     i,
-          payment:   Math.round(raw),
+          payment:   Math.round(payment),
           principal: Math.round(principalPaid),
           interest:  Math.round(interest),
           balance:   Math.round(Math.max(0, balance)),
@@ -809,14 +822,20 @@
 
       for (let i = 1; i <= months; i++) {
         const interest = balance * monthlyRate;
-        const payment  = monthlyPrincipal + interest;
-        balance       -= monthlyPrincipal;
-        if (balance < 1) balance = 0;
+        let pPaid      = monthlyPrincipal;
+        let payment    = monthlyPrincipal + interest;
+        // 마지막 회차: 잔여 원금 전액 + 그달 이자
+        if (i === months) {
+          pPaid   = balance;
+          payment = balance + interest;
+        }
+        balance      -= pPaid;
+        if (balance < 0.5) balance = 0;
         totalInterest += interest;
         schedule.push({
           month:     i,
           payment:   Math.round(payment),
-          principal: Math.round(monthlyPrincipal),
+          principal: Math.round(pPaid),
           interest:  Math.round(interest),
           balance:   Math.round(Math.max(0, balance)),
         });

@@ -549,6 +549,15 @@
       }
     }
 
+    // ── 만 N개월 계산 (정역월 기준, 근로기준법 60조 "1개월 개근 시 1일") ──
+    // 입사 2/1 → 3/1은 만 1개월. 3/15는 만 1개월(2/15 < 3/15 = 만 1개월). 2/28은 만 0개월.
+    function fullMonthsBetween(start, end) {
+      if (end < start) return 0;
+      let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+      if (end.getDate() < start.getDate()) months--;
+      return Math.max(0, months);
+    }
+
     // ── 연차 발생 일수 (근속연수 기준) ────────────────────────────
     function leaveDaysByYears(y) {
       if (y < 1) return 0;
@@ -558,11 +567,11 @@
     // ── 입사일 기준 계산 ──────────────────────────────────────────
     function calcHireBasis(hireDate, refDate) {
       const totalDays = Math.floor((refDate - hireDate) / 86400000);
-      const years  = Math.floor(totalDays / 365.25);
-      const months = Math.floor((totalDays % 365) / 30);
+      const fullMonths = fullMonthsBetween(hireDate, refDate);
+      const years  = Math.floor(fullMonths / 12);
+      const months = fullMonths % 12;
 
       if (years < 1) {
-        const fullMonths = Math.floor(totalDays / 30);
         return { days: Math.min(fullMonths, 11), firstYear: true, years, months };
       }
       return { days: leaveDaysByYears(years), firstYear: false, years, months };
@@ -574,14 +583,14 @@
       const refYear   = refDate.getFullYear();
       const hireYear  = hireDate.getFullYear();
 
-      // 입사 당해연도: 입사일~12/31 동안 1개월 개근 시 1일 (최대 11)
+      // 입사 당해연도: 입사일~12/31 동안 만 1개월 개근 시 1일 (최대 11)
       const dec31hire = new Date(hireYear, 11, 31);
-      const daysInHireYear = Math.floor((dec31hire - hireDate) / 86400000) + 1;
-      const hireYearLeave  = Math.min(Math.floor(daysInHireYear / 30), 11);
+      const hireYearMonths = fullMonthsBetween(hireDate, dec31hire);
+      const hireYearLeave  = Math.min(hireYearMonths, 11);
 
       if (hireYear === refYear) {
         // 아직 첫 회계연도
-        const elapsed = Math.floor(Math.floor((refDate - hireDate) / 86400000) / 30);
+        const elapsed = fullMonthsBetween(hireDate, refDate);
         return {
           days: Math.min(elapsed, 11),
           hireYearLeave,
@@ -592,15 +601,15 @@
 
       // 기준일 연도 1월 1일 기준 근속연수
       const jan1 = new Date(refYear, 0, 1);
-      const tenureDays   = Math.floor((jan1 - hireDate) / 86400000);
-      const fullYearsJan1 = Math.floor(tenureDays / 365.25);
+      const tenureMonths  = fullMonthsBetween(hireDate, jan1);
+      const fullYearsJan1 = Math.floor(tenureMonths / 12);
 
       if (fullYearsJan1 < 1) {
         // 1월 1일 기준 1년 미만 → 입사년도 비례 연차만
         return {
           days: hireYearLeave,
           hireYearLeave,
-          fiscalNote: `${refYear}년 1월 1일 기준 근속 ${Math.floor(tenureDays/30)}개월 (1년 미만, 입사년도 비례 연차)`,
+          fiscalNote: `${refYear}년 1월 1일 기준 근속 ${tenureMonths}개월 (1년 미만, 입사년도 비례 연차)`,
           fullYears: fullYearsJan1
         };
       }

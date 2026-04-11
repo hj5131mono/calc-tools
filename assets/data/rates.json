@@ -7,10 +7,10 @@
   },
 
   "minimumWage": {
-    "year": 2025,
-    "hourly": 10030,
-    "monthly": 2096270,
-    "effectiveFrom": "2025-01-01",
+    "year": 2026,
+    "hourly": 10320,
+    "monthly": 2156880,
+    "effectiveFrom": "2026-01-01",
     "source": "https://www.moel.go.kr/info/lawinfo/announ/list.do"
   },
 
@@ -40,8 +40,9 @@
   },
 
   "incomeTax": {
-    "year": 2025,
+    "year": 2026,
     "localTaxRate": 0.1,
+    "personalDeduction": 1500000,
     "source": "소득세법 제55조, nts.go.kr 간이세액표",
     "brackets": [
       { "from": 0,          "to": 14000000,  "rate": 0.06,  "deduction": 0        },

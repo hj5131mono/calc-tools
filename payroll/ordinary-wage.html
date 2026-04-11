@@ -655,7 +655,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../assets/js/common.js"></script>
   <script>
-    let MIN_WAGE = 10030; // rates.json에서 로드
+    let MIN_WAGE = 10320; // rates.json에서 로드 (폴백: 2026 기준)
 
     // ── 초기 수당 항목 ────────────────────────────────────────────
     const PRESET_ALLOWANCES = [
@@ -693,8 +693,19 @@
 
     // ── 계산 ─────────────────────────────────────────────────────
     function calc() {
-      const weeklyHours = parseFloat(document.getElementById('weeklyHours').value) || 40;
-      const dailyHours  = parseFloat(document.getElementById('dailyHours').value)  || 8;
+      const weeklyHoursRaw = parseFloat(document.getElementById('weeklyHours').value);
+      const dailyHoursRaw  = parseFloat(document.getElementById('dailyHours').value);
+      // 명시적 0/음수/과대값은 거부, 빈 입력은 기본값(40/8) 사용
+      if (Number.isFinite(weeklyHoursRaw) && (weeklyHoursRaw <= 0 || weeklyHoursRaw > 168)) {
+        alert('주 근로시간은 1~168시간 사이로 입력해주세요.');
+        return;
+      }
+      if (Number.isFinite(dailyHoursRaw) && (dailyHoursRaw <= 0 || dailyHoursRaw > 24)) {
+        alert('일 근로시간은 1~24시간 사이로 입력해주세요.');
+        return;
+      }
+      const weeklyHours = Number.isFinite(weeklyHoursRaw) && weeklyHoursRaw > 0 ? weeklyHoursRaw : 40;
+      const dailyHours  = Number.isFinite(dailyHoursRaw) && dailyHoursRaw > 0 ? dailyHoursRaw : 8;
       const basePay     = parseNumber(document.getElementById('basePay').value);
 
       if (!basePay) return;
