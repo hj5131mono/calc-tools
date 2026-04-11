@@ -53,12 +53,32 @@ CSS 변수 — 반드시 하드코딩 대신 변수 사용:
 | payroll | `severance.html` | 퇴직금 계산기 |
 | payroll | `ordinary-wage.html` | 통상임금 시급 계산기 |
 | payroll | `annual-leave.html` | 연차 계산기 |
+| payroll | `year-end-tax.html` | 연말정산 환급 계산기 |
+| 루트 | `disclaimer.html` | 면책 조항 |
+| guide | `guide/index.html` | 가이드 허브 (노동법/세법/금융) |
+| guide/labor | `severance-vs-pension.html` | 퇴직금 vs DB/DC |
+| guide/labor | `weekly-holiday-mistakes.html` | 주휴수당 실수 5 |
+| guide/labor | `annual-leave-2026.html` | 2026 연차 발생 기준 |
+| guide/labor | `ordinary-wage-supreme-court.html` | 통상임금 대법원 판례 |
+| guide/labor | `overtime-pay-guide.html` | 야간/연장/휴일 가산수당 |
 
 ## 페이지 구조
 
 각 HTML 파일은 독립적으로 동작. 공통 레이어는 상대경로 참조:
 - 루트 페이지: `assets/css/style.css`, `assets/js/common.js`
-- 하위 폴더: `../assets/css/style.css`, `../assets/js/common.js`
+- 1단계 하위 폴더 (`finance/`, `payroll/` 등): `../assets/css/style.css`, `../assets/js/common.js`
+- 2단계 하위 폴더 (`guide/labor/` 등): `../../assets/css/style.css`, `../../assets/js/common.js`
+
+## 가이드 페이지 표준 (Phase C)
+
+`/guide/<category>/<slug>.html` 형식. 도구 페이지와 다른 콘텐츠 중심 템플릿:
+
+- 컨테이너 `max-width: 780px` (가독성 우선)
+- 섹션 순서: article-hero (제목+법령 태그+갱신일+읽기 시간) → TL;DR 3줄 → article-body → related-tool 카드 → 출처 → 운영자 박스
+- JSON-LD: `Article` (author = `Organization` "calc-tools.kr 운영팀")
+- 본문 분량: 800~1500 단어
+- 출처: 법제처(law.go.kr) 직링크 우선, 정부 부처/대법원 보조
+- 광고 슬롯: 본문 끝 1개
 
 ## 날짜 입력 패턴
 
