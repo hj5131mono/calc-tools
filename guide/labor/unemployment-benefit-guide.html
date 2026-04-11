@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>실업급여 수급 조건과 금액 계산 — calc-tools.kr 가이드</title>
+  <meta name="description" content="2026년 실업급여 수급 자격, 이직 사유 인정 기준, 1일 구직급여액 산정과 지급 기간을 고용보험법과 고용노동부 자료로 정리합니다.">
+  <meta name="keywords" content="실업급여, 구직급여, 고용보험, 1일 상한액, 수급기간, 이직사유, 자발적 퇴사">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="실업급여 수급 조건과 금액 계산 (2026)">
+  <meta property="og:description" content="고용보험법 기반 수급 자격과 1일 구직급여액·지급 기간을 사례로 정리합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/labor/unemployment-benefit-guide.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/labor/unemployment-benefit-guide.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "실업급여 수급 조건과 금액 계산 (2026년 기준)",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/labor/unemployment-benefit-guide.html"
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>실업급여 수급 조건과 금액 계산 (2026년 기준)</h1>
+        <div class="article-meta">
+          <span class="law-tag">고용보험법</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 11분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>이직 전 18개월 동안 고용보험 가입기간이 180일 이상이어야 한다. 자발적 퇴사는 원칙적으로 제외되지만 예외 사유가 인정되면 받을 수 있다.</li>
+          <li>1일 구직급여액 = 평균임금의 60%. 2026년 기준 상한 68,100원, 하한 66,048원이다(2026-01-01 이후 이직자).</li>
+          <li>지급 기간은 가입기간과 연령에 따라 120~270일 사이에서 결정된다. 50세 이상이거나 장애인이면 가장 길다.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>실업급여는 누가 받을 수 있나</h2>
+        <p>
+          많은 사람이 "직장을 그만두면 자동으로 받는 돈"으로 알고 있지만, 실업급여(정식 명칭은 <strong>구직급여</strong>)는 일정한 자격 요건을 충족해야 받을 수 있다.
+          근거 법령은 <strong>고용보험법 제40조</strong>이며, 다음 네 가지 조건을 모두 만족해야 한다.
+        </p>
+        <ol>
+          <li>이직일 이전 18개월 동안 고용보험 피보험단위기간이 <strong>통산 180일 이상</strong>일 것</li>
+          <li>근로의 의사와 능력이 있고, 적극적인 재취업 활동에도 불구하고 취업하지 못한 상태일 것</li>
+          <li>이직 사유가 <strong>비자발적 사유</strong>이거나, 자발적 퇴사라도 정당한 사유가 인정될 것</li>
+          <li>수급자격 인정 신청을 한 후 <strong>실업 인정</strong>을 받을 것 (1~4주 단위로 고용센터 방문 또는 온라인 신고)</li>
+        </ol>
+        <p>
+          여기서 가장 자주 오해하는 것이 1번 조건이다.
+          "1년 이상 일했으면 받는다"가 아니라, 실제로 보수가 지급된 날(피보험단위기간) 기준 180일이다.
+          주 5일 근무자라면 약 7~8개월, 주 6일 근무자라면 약 6개월 근속 시 충족된다.
+          무급휴직·무급주말 등은 포함되지 않으니 본인 가입 이력은 <strong>고용보험 사이트(ei.go.kr)</strong>에서 확인하는 것이 정확하다.
+        </p>
+
+        <h2>이직 사유 — 자발적 퇴사도 받을 수 있는 경우</h2>
+        <p>
+          원칙은 비자발적 이직(권고사직, 정리해고, 계약만료, 폐업 등)만 수급 대상이다.
+          그러나 자발적으로 사직했더라도 다음과 같은 <strong>정당한 사유</strong>가 인정되면 수급 자격이 부여된다.
+          근거는 고용보험법 시행규칙 제101조 별표 2이다.
+        </p>
+        <h3>자발적 퇴사여도 인정되는 대표 사유</h3>
+        <p>
+          공통 전제: 아래 사유 대부분은 <strong>"이직 전 1년 이내"</strong>에 발생한 것이어야 한다. 단순히 "예전에 한 번 있었다"가 아니라 최근 1년 이내 사유여야 한다는 점이 중요하다.
+        </p>
+        <ul>
+          <li><strong>이직 전 1년 이내</strong> 임금이 2개월 이상 정해진 날짜에 지급되지 않거나 최저임금 미달</li>
+          <li><strong>이직 전 1년 이내</strong> 회사의 휴업으로 평균임금의 70% 미만 지급이 2개월 이상 지속</li>
+          <li>사업장 이전·전근으로 통근 시간이 왕복 3시간 이상</li>
+          <li>본인 또는 가족의 질병·부상으로 30일 이상 근무가 불가능하고 휴직이 거부된 경우</li>
+          <li>임신·출산·8세 이하 자녀 양육으로 휴직이 거부된 경우</li>
+          <li>직장 내 괴롭힘·성희롱이 사실로 확인된 경우</li>
+          <li>회사가 종교·성별·신체장애 등을 이유로 차별 대우를 한 경우</li>
+        </ul>
+        <p>
+          이런 사유로 수급을 신청할 때는 반드시 <strong>객관적 증빙</strong>이 필요하다.
+          체불임금은 노동부 진정 결과서, 통근 시간은 회사 발령 공문 + 거주지 주소, 괴롭힘은 회사 조사 결과 또는 노동위원회 판정문이 핵심 자료다.
+          단순히 "다니기 힘들었다"는 진술만으로는 인정되지 않는다.
+        </p>
+
+        <h2>1일 구직급여액은 어떻게 산정되나</h2>
+        <p>
+          1일 구직급여액은 <strong>이직 전 3개월간 평균임금의 60%</strong>다(고용보험법 제46조).
+          단 다음 두 가지 한계가 있다.
+        </p>
+        <table>
+          <thead>
+            <tr><th>구분</th><th>2026년 기준</th><th>비고</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1일 상한액</td><td>68,100원</td><td>고소득자도 이 금액을 초과할 수 없음</td></tr>
+            <tr><td>1일 하한액</td><td>66,048원</td><td>최저임금 80% × 1일 소정근로 8시간 기준</td></tr>
+            <tr><td>적용 시점</td><td>2026-01-01 이후 이직자</td><td>이직일 기준으로 적용 연도 결정</td></tr>
+          </tbody>
+        </table>
+        <p>
+          상한과 하한 차이가 약 2,000원밖에 되지 않는 이유는 2026년 최저임금(시급 10,320원) 인상으로 하한이 크게 오르면서 상한이 따라 올라갔기 때문이다.
+          실질적으로 대부분의 근로자는 하한~상한 사이의 좁은 구간에 위치하게 된다.
+          저임금 근로자에게는 유리한 구조이지만, 고임금 근로자 입장에서는 평균임금의 60%보다 훨씬 적은 금액을 받게 될 수 있다.
+        </p>
+
+        <h2>지급 기간은 얼마나 되나</h2>
+        <p>
+          소정급여일수는 가입기간과 이직일 당시 연령에 따라 결정된다(고용보험법 제50조 별표 1).
+        </p>
+        <table>
+          <thead>
+            <tr><th>가입기간</th><th>50세 미만·비장애인</th><th>50세 이상·장애인</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1년 미만</td><td>120일</td><td>120일</td></tr>
+            <tr><td>1년 이상 3년 미만</td><td>150일</td><td>180일</td></tr>
+            <tr><td>3년 이상 5년 미만</td><td>180일</td><td>210일</td></tr>
+            <tr><td>5년 이상 10년 미만</td><td>210일</td><td>240일</td></tr>
+            <tr><td>10년 이상</td><td>240일</td><td>270일</td></tr>
+          </tbody>
+        </table>
+        <p>
+          예를 들어 45세이고 가입기간 7년인 사람은 210일(약 7개월) 동안 받을 수 있다.
+          1일 67,000원을 받는다고 가정하면 총 수령액은 약 <strong>1,407만 원</strong>이다.
+          중간에 재취업하면 그 시점에 지급이 중단되지만, 일정 조건을 만족하면 <strong>조기재취업수당</strong>(잔여 일수의 50%)을 별도로 받을 수 있다.
+        </p>
+
+        <h2>실전 시나리오</h2>
+
+        <h3>사례 A. 5년 근속 후 권고사직 (38세)</h3>
+        <p>
+          월 평균임금 350만 원으로 5년 근속한 38세 직장인이 권고사직을 당했다.
+          1일 평균임금은 약 116,667원, 60%는 약 70,000원이지만 상한 68,100원이 적용된다.
+          소정급여일수는 180일이므로 총 수령액은 약 <strong>1,225만 원</strong>이다.
+          매월 약 200만 원씩 6개월간 지급된다고 보면 된다.
+          이 정도 금액이면 다음 직장을 차분히 찾을 시간을 벌 수 있다.
+        </p>
+
+        <h3>사례 B. 임금 체불로 자발적 퇴사 (29세)</h3>
+        <p>
+          월급이 2개월간 미지급되어 자발적으로 사직한 29세 근로자.
+          이직 전 노동부에 진정을 넣어 체불 사실 확인서를 받은 후 사직서를 제출했다.
+          가입기간은 2년 6개월. 평균임금이 낮아 1일 구직급여는 하한액 66,048원이 적용된다.
+          소정급여일수는 150일이므로 총 약 <strong>991만 원</strong>을 받는다.
+          체불 사유는 인정되지만 사전에 객관적 증빙(진정 접수증)을 확보해야 거절되지 않는다.
+        </p>
+
+        <h3>사례 C. 계약직 만료 (52세)</h3>
+        <p>
+          1년 단위 계약직으로 4년간 일한 52세 근로자가 계약 만료로 이직했다.
+          계약 만료는 비자발적 이직으로 인정된다.
+          가입기간 4년 + 50세 이상이므로 소정급여일수는 210일.
+          평균임금이 최저임금에 가까워 하한액이 적용되며 총 약 <strong>1,387만 원</strong>을 받는다.
+          50세 이상은 같은 가입기간이라도 30일 더 받는다는 점을 활용해, 가능하면 만 50세를 넘긴 후 이직하는 것이 유리한 경우도 있다.
+        </p>
+
+        <h2>자주 하는 실수 5가지</h2>
+        <ol>
+          <li><strong>퇴직 직후 바로 신청하지 않음</strong> — 이직일 다음 날부터 12개월 이내에 수급을 마치지 못하면 잔여 일수는 소멸한다. 늦게 신청할수록 손해다.</li>
+          <li><strong>구직활동 증빙 부족</strong> — 매 실업인정 회차마다 일정 횟수의 구직활동(입사지원, 취업특강, 직업훈련 등)을 증빙해야 한다. 누락하면 그 회차분이 지급되지 않는다.</li>
+          <li><strong>아르바이트 신고 누락</strong> — 수급 기간 중 단기 알바를 했는데 신고하지 않으면 부정수급으로 간주되어 추가징수(받은 금액의 최대 5배)를 당할 수 있다.</li>
+          <li><strong>이직 사유 코드 오류</strong> — 회사가 이직확인서에 사유 코드를 잘못 기재하면 자발적 퇴사로 잡혀 수급이 거절될 수 있다. 신청 전 본인이 직접 확인해야 한다.</li>
+          <li><strong>평균임금 계산 오류</strong> — 회사가 통상임금만 적게 신고해서 평균임금이 낮아지는 사례가 있다. 본인 급여명세서로 직접 검증하고, 차이가 나면 고용센터에 이의신청할 수 있다.</li>
+        </ol>
+
+        <p>
+          본인이 받을 수 있는 1일 구직급여액과 총 수령액을 미리 추정해보고 싶다면 우리 사이트의 연봉 계산기로 평균임금을 먼저 확인하는 것을 추천한다.
+          실제 신청은 반드시 거주지 관할 고용센터 또는 고용보험 홈페이지(ei.go.kr)를 통해 진행해야 한다.
+        </p>
+
+        <a href="../../finance/salary.html" class="related-tool">
+          <i data-lucide="wallet" class="icon"></i>
+          <div>
+            <strong>연봉 실수령액 계산기</strong>
+            <span>월 평균 급여를 기반으로 1일 평균임금과 실업급여 추정 가능</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://www.law.go.kr/법령/고용보험법" target="_blank" rel="noopener">고용보험법 (법제처 law.go.kr)</a></li>
+          <li><a href="https://www.law.go.kr/법령/고용보험법시행규칙" target="_blank" rel="noopener">고용보험법 시행규칙 별표 2 (정당한 이직 사유)</a></li>
+          <li><a href="https://www.ei.go.kr" target="_blank" rel="noopener">고용보험 홈페이지 — 실업급여 안내 및 모의계산</a></li>
+          <li><a href="https://www.moel.go.kr/policy/policydata/list.do" target="_blank" rel="noopener">고용노동부 실업급여 정책 자료</a></li>
+        </ul>
+      </div>
+
+      <div class="ad-space" style="margin-top:24px;">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 법령 원문과 정부 공식 자료에 근거하여 작성되었으며, 개별 사례의 법률 자문을 대체하지 않습니다. 2026년 1월 1일 이후 이직자 기준이며, 금액과 기간은 매년 변경될 수 있습니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>
