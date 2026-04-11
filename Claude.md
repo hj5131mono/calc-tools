@@ -16,12 +16,28 @@
 
 | 작업 | 참조 파일 |
 |------|-----------|
+| **에이전트 팀 협업·호출** ⭐ | `@docs/team/README.md` (5명 + MD board) |
+| **5원칙 (모든 에이전트 헌법)** | `@docs/team/PRINCIPLES.md` (특히 Grey Zone) |
+| 에이전트 명단·역학관계 | `@docs/team/ROSTER.md` |
+| 현재 진행 중 미션 | `@docs/team/board/current.md` |
+| 백로그·미래 미션 | `@docs/team/board/backlog.md` |
 | 아키텍처 / 공유 레이어 / 페이지 목록 | `@docs/ARCHITECTURE.md` |
 | 새 도구 페이지 추가 | `@docs/ARCHITECTURE.md` > 체크리스트 |
 | UX 라이팅 / UI 패턴 | `@UX_GUIDE.md` |
 | 세율·요율 자동 업데이트 | `@docs/RATES_SYSTEM.md` |
 | 세율·요율 수동 업데이트 절차 | `@docs/RATES_MANUAL.md` |
 | 이전 세션 인계 / 작업 이력 | `@docs/handover/` |
+
+## 에이전트 팀 (2026-04-12 셋업)
+
+본 프로젝트에는 5명의 전문 에이전트(`.claude/agents/`)가 정의되어 있다:
+- **`pm`** (Opus) — 총괄 orchestrator, 미션 분석·worker 분배
+- **`qa`** (Sonnet) — 산식·엣지·회귀 진단 + 자동화 검사 설계
+- **`compliance`** (Opus) — 노동·세·상법 해석 + Grey Zone 발굴
+- **`brand`** (Sonnet) — UI/UX/콘텐츠 일관성 + 디자인 시스템
+- **`devops`** (Sonnet) — rates.json·sitemap·GHA·hosting·Lighthouse 전담
+
+호출: `@pm <미션>` 또는 `use the pm agent to ...`. PM이 board/current.md에 미션 정의 후 main Claude가 worker 순차 호출. **Sub-agent끼리 직접 통신 불가 — board.md가 유일한 협업 매개**.
 
 ## 프로젝트 개요
 

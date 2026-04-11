@@ -1,5 +1,8 @@
 # Claude Code 설정 (로컬 전용, 공개하지 않음)
-.claude/
+.claude/*
+# 단, 에이전트 정의는 팀 자산이므로 gitcheckin
+!.claude/agents/
+!.claude/agents/**
 
 # OS 자동 생성 파일
 .DS_Store
