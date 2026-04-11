@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>퇴직금 vs 퇴직연금(DB/DC), 어느 쪽이 유리할까 — calc-tools.kr 가이드</title>
+  <meta name="description" content="일시금 퇴직금과 DB·DC형 퇴직연금의 구조와 장단점을 사례로 비교합니다. 운용 책임, 수익률 변동, 세제 혜택, 중간정산 가능 여부를 한눈에 정리합니다.">
+  <meta name="keywords" content="퇴직금, 퇴직연금, DB형, DC형, IRP, 퇴직급여보장법, 퇴직금 차이">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="퇴직금 vs 퇴직연금(DB/DC), 어느 쪽이 유리할까">
+  <meta property="og:description" content="일시금 퇴직금과 DB·DC형 퇴직연금의 구조·세제·운용 책임을 사례로 비교합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/labor/severance-vs-pension.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/labor/severance-vs-pension.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "퇴직금 vs 퇴직연금(DB/DC), 어느 쪽이 유리할까",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/labor/severance-vs-pension.html"
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>퇴직금 vs 퇴직연금(DB/DC), 어느 쪽이 유리할까</h1>
+        <div class="article-meta">
+          <span class="law-tag">근로자퇴직급여보장법</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 10분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>퇴직금(일시금)과 DB형 퇴직연금은 받는 금액이 같다. 차이는 사외 적립 여부와 부도 위험이다.</li>
+          <li>DC형은 매년 연봉 1/12을 본인 IRP에 적립하고 직접 운용한다. 임금상승률과 수익률 중 어느 쪽이 더 높은지가 유불리를 가른다.</li>
+          <li>임금피크·정년연장 회사라면 DC형 전환이 유리한 경우가 많다. 임금이 줄어들면 DB형 퇴직금도 같이 줄기 때문이다.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>퇴직금과 퇴직연금은 같은 제도가 아니다</h2>
+        <p>
+          많은 직장인이 "퇴직금 = 퇴직연금"이라고 생각하지만 실제로는 셋 다 다른 제도다.
+          <strong>근로자퇴직급여보장법 제2조</strong>는 "퇴직급여제도"를 퇴직금제도와 퇴직연금제도(DB·DC·IRP)로 구분한다.
+          공통점은 "1년 이상 근무한 근로자에게 평균임금 30일분 이상을 퇴직 시 지급한다"는 최저 보장이다.
+          차이점은 적립 방식, 운용 주체, 부도 시 안전성, 세제 혜택이다.
+        </p>
+
+        <h3>1. 퇴직금제도 (사내 적립·일시금 지급)</h3>
+        <p>
+          가장 전통적인 방식이다. 회사가 별도 사외 적립 없이 장부상 퇴직금 충당부채로 잡아두었다가 근로자가 퇴직할 때 일시금으로 지급한다.
+          금액은 <strong>퇴직 직전 3개월 평균임금 × 30일 × (근속일수 ÷ 365)</strong>로 계산한다.
+          단점은 명확하다. 회사가 부도나면 퇴직금을 받을 수 없거나 임금채권보장기금에서 일부만 받을 수 있다.
+          이런 위험 때문에 정부는 2012년부터 퇴직연금제도 도입을 점차 의무화하고 있다.
+        </p>
+
+        <h3>2. DB형 퇴직연금 (확정급여형)</h3>
+        <p>
+          금액 산정 방식은 퇴직금제도와 동일하다. 즉 평균임금 × 30일 × 근속연수다.
+          다른 점은 회사가 매년 일정 금액을 외부 금융기관에 적립한다는 것이다.
+          운용 책임은 회사에 있고, 운용 수익이 좋으면 회사가 적립 부담을 줄이고, 손실이 나면 회사가 보충해야 한다.
+          근로자 입장에서는 받는 금액이 보장되므로 임금이 꾸준히 오르는 회사에 다닐수록 유리하다.
+        </p>
+
+        <h3>3. DC형 퇴직연금 (확정기여형)</h3>
+        <p>
+          매년 회사가 <strong>해당 연도 임금총액의 1/12 이상</strong>을 근로자 명의의 개인 계좌(IRP)에 적립한다.
+          적립금의 운용 책임은 근로자 본인에게 있다.
+          예금·채권·주식형 펀드·ETF 등을 직접 선택해 운용하며, 운용 결과(수익 또는 손실)에 따라 최종 수령액이 달라진다.
+          임금이 매년 오르지 않거나 임금피크제로 후반부에 임금이 깎이는 회사라면 DB형보다 유리할 가능성이 크다.
+          반대로 임금이 매년 큰 폭으로 오르는 회사라면 DB형이 유리하다.
+        </p>
+
+        <h2>구조 비교 한눈에</h2>
+        <table>
+          <thead>
+            <tr><th>구분</th><th>퇴직금제도</th><th>DB형 연금</th><th>DC형 연금</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>지급액 산정</td><td colspan="2">평균임금 × 30일 × 근속연수</td><td>매년 임금총액 1/12 적립금 + 운용수익</td></tr>
+            <tr><td>적립 주체</td><td>회사 사내</td><td>회사 사외</td><td>회사 사외(개인 계좌)</td></tr>
+            <tr><td>운용 책임</td><td>해당 없음</td><td>회사</td><td>근로자 본인</td></tr>
+            <tr><td>부도 시 안전</td><td>위험</td><td>안전</td><td>안전</td></tr>
+            <tr><td>중도 인출</td><td>법정 사유만</td><td>원칙 불가</td><td>법정 사유만</td></tr>
+            <tr><td>이직 시</td><td>지급 후 종료</td><td>이전 절차 필요</td><td>IRP로 그대로 이전</td></tr>
+            <tr><td>유리한 조건</td><td>—</td><td>임금상승률 ≥ 운용수익률</td><td>임금상승률 < 운용수익률</td></tr>
+          </tbody>
+        </table>
+
+        <h2>실제 사례로 비교</h2>
+
+        <h3>사례 A. 임금 매년 5% 상승, 10년 근속</h3>
+        <p>
+          입사 시 연봉 4,000만 원에서 시작해 매년 5%씩 올라 10년 후 약 6,500만 원을 받는다고 가정하자.
+          DB형의 경우 마지막 평균임금 기준 약 <strong>5,415만 원</strong>의 퇴직금을 받게 된다.
+          DC형은 매년 그 해 연봉의 1/12을 적립하므로 누적 적립금이 약 5,000만 원 + 운용수익이다.
+          연 4% 정도의 안정적 수익률을 가정하면 약 6,100만 원 수준에 도달한다.
+          이 경우 DC형이 약간 유리하지만 차이가 크지 않다.
+          연 6% 이상의 수익률을 꾸준히 낼 수 있다면 DC형 우위가 분명해진다.
+        </p>
+
+        <h3>사례 B. 임금피크 적용, 마지막 5년 임금 30% 감액</h3>
+        <p>
+          15년 근속자가 정년을 앞두고 임금피크에 들어가 마지막 5년 동안 연봉이 30% 줄어든다고 가정하자.
+          DB형은 <strong>마지막 3개월 평균임금</strong>을 기준으로 산정하므로 퇴직금이 큰 폭으로 줄어든다.
+          반면 DC형은 임금이 높았던 시기에 적립한 금액이 그대로 유지되므로 손해가 거의 없다.
+          이런 회사에 다닌다면 가능한 한 임금피크 진입 전에 DC형으로 전환하는 것이 유리하다.
+          단, 회사가 DC형을 도입하지 않은 상태라면 노사 협의가 필요하므로 미리 노조나 인사부서에 확인해야 한다.
+        </p>
+
+        <h3>사례 C. 5인 미만 사업장, 잦은 이직</h3>
+        <p>
+          5인 미만 사업장은 퇴직연금 의무 도입 대상이 아니어서 여전히 퇴직금제도(사내 적립)인 경우가 많다.
+          이직이 잦은 직장인은 회사가 퇴직금을 지급할 여력이 있는지 매번 확인해야 한다.
+          만약 폐업·부도가 발생하면 임금채권보장기금에서 최대 3개월분의 임금과 3년분의 퇴직금까지만 보장받을 수 있다(임금채권보장법 제7조).
+          이런 환경이라면 가능하면 DC형 도입을 요구하거나, 그게 어렵다면 매년 퇴직금 충당 여부를 회계 자료로 확인해 두는 것이 안전하다.
+        </p>
+
+        <h2>세제 혜택은 거의 동일하다</h2>
+        <p>
+          퇴직금·DB·DC 모두 일시금으로 받으면 <strong>퇴직소득세</strong>가 부과된다.
+          근속연수공제·환산급여공제 등이 적용되어 일반 근로소득세보다 실효세율이 낮다.
+          예를 들어 10년 근속 후 5,000만 원 퇴직금을 받는다면 퇴직소득세는 약 100만 원 안팎이다.
+          DC·IRP를 연금으로 수령하면 세금이 추가로 30~40% 절감되는 <strong>연금소득세 분리과세</strong> 혜택을 받을 수 있다.
+          연금 수령 기간이 10년 이상이면 절세 폭이 더 커진다.
+        </p>
+
+        <h2>결론: 회사 환경이 유불리를 결정한다</h2>
+        <p>
+          DB와 DC 중 무엇이 절대적으로 유리하다고 단정할 수 없다.
+          회사의 임금 상승률, 정년·임금피크 정책, 근로자 본인의 운용 능력에 따라 달라진다.
+          확실한 것은 사외 적립이 안 되는 사내 퇴직금제도보다는 DB든 DC든 퇴직연금이 안전하다는 점이다.
+          본인의 상황을 점검할 때 다음 세 가지 질문에 답해보면 된다.
+        </p>
+        <ol>
+          <li>회사 임금이 매년 꾸준히 오르고 있는가? → 그렇다면 DB가 유리할 가능성</li>
+          <li>임금피크 또는 직급 정체가 예상되는가? → 그렇다면 DC가 유리할 가능성</li>
+          <li>본인이 직접 자산을 운용할 의향과 시간이 있는가? → 그렇다면 DC + IRP 활용</li>
+        </ol>
+        <p>
+          정확한 퇴직금 추정치를 먼저 확인하고 싶다면 아래 계산기를 활용하면 된다.
+          평균임금과 통상임금 중 더 큰 값으로 자동 적용되므로 회사가 임의로 낮게 산정하는 경우를 검증할 수 있다.
+        </p>
+
+        <a href="../../payroll/severance.html" class="related-tool">
+          <i data-lucide="hand-coins" class="icon"></i>
+          <div>
+            <strong>퇴직금 계산기</strong>
+            <span>입사일·퇴직일·최근 3개월 급여로 평균임금 vs 통상임금 자동 비교</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://www.law.go.kr/법령/근로자퇴직급여보장법" target="_blank" rel="noopener">근로자퇴직급여보장법 (법제처 law.go.kr)</a></li>
+          <li><a href="https://www.moel.go.kr/policy/policydata/list.do" target="_blank" rel="noopener">고용노동부 퇴직급여 제도 안내</a></li>
+          <li><a href="https://www.fss.or.kr/fss/main/contents.do?menuNo=200760" target="_blank" rel="noopener">금융감독원 퇴직연금 종합안내</a></li>
+        </ul>
+      </div>
+
+      <div class="ad-space" style="margin-top:24px;">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 법령 원문과 정부 공식 자료에 근거하여 작성되었으며, 개별 사례의 법률 자문을 대체하지 않습니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>

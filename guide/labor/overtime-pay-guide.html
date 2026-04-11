@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>야간·연장·휴일 근무 수당 한 번에 이해하기 — calc-tools.kr 가이드</title>
+  <meta name="description" content="연장근로 50%, 야간근로 50%, 휴일근로 50~100% 가산 임금의 계산법과 중복 가산 사례, 5인 미만 사업장 예외까지 근로기준법 56조 기준으로 정리합니다.">
+  <meta name="keywords" content="연장근로, 야간근로, 휴일근로, 가산임금, 근로기준법 56조, 5인 미만 예외, 중복 가산">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="야간·연장·휴일 근무 수당 한 번에 이해하기">
+  <meta property="og:description" content="연장·야간·휴일 가산임금의 계산식과 중복 가산 사례, 5인 미만 예외까지 정리합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/labor/overtime-pay-guide.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/labor/overtime-pay-guide.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+    .formula-box { background: var(--gray-50); border-left: 4px solid var(--primary); padding: 14px 18px; margin: 14px 0; font-family: var(--font-mono, monospace); font-size: 0.95rem; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "야간·연장·휴일 근무 수당 한 번에 이해하기",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/labor/overtime-pay-guide.html"
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>야간·연장·휴일 근무 수당 한 번에 이해하기</h1>
+        <div class="article-meta">
+          <span class="law-tag">근로기준법 56조</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 9분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>법정근로시간(주 40시간)을 넘는 연장근로와 야간(22시~익일 6시), 휴일근로에는 통상임금의 50%를 가산해야 한다.</li>
+          <li>겹치면 가산은 합산된다. 휴일에 야간 연장근로를 하면 50 + 50 + 50 = 150% 가산이 된다.</li>
+          <li>5인 미만 사업장은 가산임금 규정이 적용되지 않는다. 즉 같은 시간을 일해도 가산수당을 받을 수 없다.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>가산임금의 법적 근거</h2>
+        <p>
+          <strong>근로기준법 제56조</strong>는 사용자가 다음과 같은 근로에 대해 통상임금의 50% 이상을 가산하여 지급해야 한다고 규정한다.
+        </p>
+        <ul>
+          <li><strong>연장근로</strong>: 1주 40시간을 초과한 근로</li>
+          <li><strong>야간근로</strong>: 오후 10시부터 다음 날 오전 6시 사이의 근로</li>
+          <li><strong>휴일근로</strong>: 8시간 이내 50%, 8시간 초과분은 100% 가산</li>
+        </ul>
+        <p>
+          가산의 기준이 되는 임금은 "통상임금"이다. 평균임금이 아니다.
+          따라서 본인의 시간당 통상임금이 정확히 얼마인지부터 알아야 가산임금 계산이 가능하다.
+        </p>
+
+        <h2>1. 연장근로 가산 (50%)</h2>
+        <p>
+          법정근로시간은 1주 40시간, 1일 8시간이다(근로기준법 50조). 이를 초과하는 근로가 연장근로다.
+          단순히 "정시 퇴근 후에 일했다"가 아니라 "법정 한도를 넘었다"가 핵심이다.
+          예를 들어 평소 9시 출근 5시 퇴근(7시간 근무)인 회사에서 1시간 야근해 8시간을 일했다면 그것은 연장근로가 아니다.
+          왜냐하면 1일 법정근로시간 8시간을 초과하지 않았기 때문이다.
+        </p>
+        <div class="formula-box">
+          연장 가산임금 = 시간당 통상임금 × 1.5 × 연장근로 시간
+        </div>
+
+        <h3>주 단위 한도 — 12시간</h3>
+        <p>
+          연장근로는 무제한 가능한 것이 아니다. 노사 합의가 있어야 하고,
+          1주 12시간이 한도다(근로기준법 53조).
+          즉 1주 최대 근로시간은 40 + 12 = 52시간이다.
+          이를 넘으면 사업주는 형사 처벌(2년 이하 징역 또는 2천만 원 이하 벌금) 대상이 된다.
+        </p>
+
+        <h2>2. 야간근로 가산 (50%)</h2>
+        <p>
+          오후 10시(22:00)부터 다음 날 오전 6시(06:00) 사이의 근로다.
+          야간근로 자체는 위법이 아니지만, 근로자의 건강에 부담을 주기 때문에 통상임금의 50%를 추가 지급해야 한다.
+          18세 미만 연소근로자와 임신부·산후 1년 미만 여성은 본인의 동의가 있어야만 야간근로가 가능하다(근로기준법 70조).
+        </p>
+        <div class="formula-box">
+          야간 가산임금 = 시간당 통상임금 × 0.5 × 야간 시간
+        </div>
+        <p>
+          여기서 주의할 점은 야간 가산 50%는 <strong>"기본임금에 추가하여"</strong> 지급되는 것이라는 점이다.
+          즉 야간에 일했다면 기본임금 100% + 야간 가산 50% = 총 150%를 받는다.
+          단, 그 시간이 연장근로 시간이 아니라면 야간 가산만 추가된다.
+        </p>
+
+        <h2>3. 휴일근로 가산 (50% / 100%)</h2>
+        <p>
+          여기서 휴일은 "법정 유급휴일"을 말한다. 주휴일(근로기준법 55조), 법정 공휴일(근로기준법 55조 2항, 2022년부터 5인 이상 사업장), 노동절(5월 1일) 등이다.
+          휴일에 일한 시간이 8시간 이내라면 50% 가산, 8시간을 초과하면 100% 가산이다(근로기준법 56조 2항).
+        </p>
+        <table>
+          <thead><tr><th>상황</th><th>가산율</th><th>총 지급률</th></tr></thead>
+          <tbody>
+            <tr><td>휴일 8시간 이내</td><td>+50%</td><td>150%</td></tr>
+            <tr><td>휴일 8시간 초과분</td><td>+100%</td><td>200%</td></tr>
+          </tbody>
+        </table>
+        <p>
+          토요일은 회사마다 다르다. 주 40시간제 회사라면 토요일은 보통 무급휴무일이지 휴일이 아니다.
+          이 경우 토요일 근무는 휴일근로가 아니라 연장근로(50% 가산)로 처리된다.
+          토요일이 휴일인지 무급휴무일인지는 취업규칙·단체협약을 확인해야 한다.
+        </p>
+
+        <h2>4. 가산이 겹치는 경우 — 중복 합산</h2>
+        <p>
+          연장·야간·휴일이 동시에 발생하면 각 가산이 합산된다.
+          예를 들어 평일에 1일 14시간을 일하는 경우(8시간 + 6시간 연장),
+          그중 2시간이 22시~익일 6시 사이에 걸쳐 있다면 그 2시간은 연장 50% + 야간 50% = 100% 가산이다.
+          시간당 통상임금이 1만 원이라면 그 2시간의 임금은 1만 원 × 2 × 2 = 4만 원이 된다.
+          기본임금 2만 + 가산임금 2만 = 4만 원.
+        </p>
+
+        <h3>중복 사례별 계산표</h3>
+        <table>
+          <thead><tr><th>상황</th><th>기본</th><th>연장</th><th>야간</th><th>휴일</th><th>총 지급률</th></tr></thead>
+          <tbody>
+            <tr><td>평일 정상 근로</td><td>100%</td><td>—</td><td>—</td><td>—</td><td>100%</td></tr>
+            <tr><td>평일 연장</td><td>100%</td><td>+50%</td><td>—</td><td>—</td><td>150%</td></tr>
+            <tr><td>평일 야간</td><td>100%</td><td>—</td><td>+50%</td><td>—</td><td>150%</td></tr>
+            <tr><td>평일 야간 연장</td><td>100%</td><td>+50%</td><td>+50%</td><td>—</td><td>200%</td></tr>
+            <tr><td>휴일 8h 이내</td><td>100%</td><td>—</td><td>—</td><td>+50%</td><td>150%</td></tr>
+            <tr><td>휴일 8h 초과</td><td>100%</td><td>—</td><td>—</td><td>+100%</td><td>200%</td></tr>
+            <tr><td>휴일 야간 연장</td><td>100%</td><td>+50%</td><td>+50%</td><td>+50%</td><td>250%</td></tr>
+          </tbody>
+        </table>
+
+        <h2>5. 5인 미만 사업장 예외</h2>
+        <p>
+          상시 5인 미만 사업장(근로자 수 5명 미만)은 근로기준법 일부 조항이 적용되지 않는다.
+          그중 하나가 연장·야간·휴일 가산임금이다(근로기준법 11조 별표1).
+          즉 5인 미만 사업장에서는 연장·야간·휴일을 일해도 통상임금의 100%만 받을 수 있고, 가산수당은 청구할 수 없다.
+          단 다음 권리는 5인 미만에도 적용된다.
+        </p>
+        <ul>
+          <li>최저임금</li>
+          <li>주휴수당 (근로기준법 55조)</li>
+          <li>퇴직금 (퇴직급여보장법)</li>
+          <li>4대보험</li>
+          <li>휴게시간 (4시간당 30분 이상)</li>
+        </ul>
+
+        <h2>6. 자주 발생하는 문제</h2>
+        <h3>"포괄임금제"라면서 가산수당을 안 줘요</h3>
+        <p>
+          포괄임금제는 일정 시간의 연장·야간 근로를 포함해 월급을 정하는 임금 약정이다.
+          그러나 무제한 면죄부가 아니다. 실제 일한 시간이 약정된 시간을 초과하면 차액을 추가 지급해야 한다(2010년 대법원 2007도11181 등).
+          또한 사무직이 아닌 생산직 등에는 포괄임금제가 원칙적으로 인정되지 않는다.
+        </p>
+
+        <h3>"법정 공휴일은 휴일근로 아니다"라며 평일처럼 처리해요</h3>
+        <p>
+          2022년 1월부터 5인 이상 사업장은 법정 공휴일(설·추석·삼일절 등)이 유급휴일로 적용된다.
+          따라서 공휴일에 일한 경우 휴일근로 가산수당이 발생한다.
+          5인 미만 사업장은 여전히 적용 대상이 아니다.
+        </p>
+
+        <a href="../../payroll/ordinary-wage.html" class="related-tool">
+          <i data-lucide="clock" class="icon"></i>
+          <div>
+            <strong>통상임금 계산기</strong>
+            <span>시간당 통상임금 산정 후 연장·야간 가산임금 함께 확인</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://www.law.go.kr/법령/근로기준법/제56조" target="_blank" rel="noopener">근로기준법 제56조 (법제처 law.go.kr)</a></li>
+          <li><a href="https://www.law.go.kr/법령/근로기준법/제53조" target="_blank" rel="noopener">근로기준법 제53조 (연장근로 한도)</a></li>
+          <li><a href="https://www.law.go.kr/법령/근로기준법/제11조" target="_blank" rel="noopener">근로기준법 제11조 (5인 미만 적용 범위)</a></li>
+          <li><a href="https://www.moel.go.kr/info/lawinfo/instruction/list.do" target="_blank" rel="noopener">고용노동부 행정해석 자료</a></li>
+        </ul>
+      </div>
+
+      <div class="ad-space" style="margin-top:24px;">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9632606296515258" data-ad-slot="1446574188" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 법령 원문과 정부 공식 자료에 근거하여 작성되었으며, 개별 사례의 법률 자문을 대체하지 않습니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>
