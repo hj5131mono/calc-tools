@@ -3,8 +3,5 @@
 User-agent: *
 Allow: /
 
-# 개인정보처리방침은 인덱싱 제외
-Disallow: /privacy.html
-
 # Sitemap 위치
 Sitemap: https://calc-tools.kr/sitemap.xml

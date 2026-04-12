@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>DSR·LTV 뜻과 계산 — 대출 한도에 미치는 영향 — calc-tools.kr 가이드</title>
+  <meta name="description" content="DSR(총부채원리금상환비율)과 LTV(담보인정비율)의 뜻, 계산법, 2026년 스트레스 DSR 3단계 시행 내용, 지역·주택 유형별 LTV 규제를 사례로 정리합니다.">
+  <meta name="keywords" content="DSR, LTV, DTI, 대출 한도, 스트레스 DSR, 주택담보대출, 금융위원회">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="DSR·LTV 뜻과 계산 — 대출 한도에 미치는 영향">
+  <meta property="og:description" content="DSR·LTV의 뜻과 계산법, 2026년 규제 변화를 사례로 정리합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/finance/dsr-ltv-guide.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/finance/dsr-ltv-guide.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "DSR·LTV 뜻과 계산 — 대출 한도에 미치는 영향",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/finance/dsr-ltv-guide.html"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "DSR 40%란 무엇을 의미하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DSR 40%는 연간 총소득의 40%까지만 모든 대출의 원리금 상환에 사용할 수 있다는 의미입니다. 연소득 6,000만 원이면 연간 대출 원리금 상환액이 2,400만 원(월 200만 원)을 넘을 수 없습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "스트레스 DSR이란 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "스트레스 DSR은 현재 금리가 아닌 미래 금리 상승 가능성을 반영해 DSR을 산정하는 방식입니다. 현재 대출 금리에 일정 가산금리(스트레스 금리)를 더해 DSR을 계산하므로, 같은 소득이라도 대출 한도가 줄어듭니다. 2026년부터 3단계가 시행되어 수도권·규제지역은 스트레스 금리 하한이 3%입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "LTV 70%이면 10억 원 아파트에 얼마까지 대출받을 수 있나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "LTV 70%이면 주택 가치의 70%인 7억 원까지 대출받을 수 있습니다. 단, DSR 규제도 동시에 적용되므로, 소득 대비 상환 능력에 따라 실제 한도는 더 낮아질 수 있습니다."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>DSR·LTV 뜻과 계산 — 대출 한도에 미치는 영향</h1>
+        <div class="article-meta">
+          <span class="law-tag">금융위원회</span>
+          <span class="law-tag">은행업감독규정</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 10분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>DSR = 연간 모든 대출 원리금 상환액 / 연소득 × 100. 은행권 40%, 비은행 50% 규제.</li>
+          <li>LTV = 대출금 / 주택 담보가치 × 100. 지역·주택가격에 따라 40~70%.</li>
+          <li>2026년 스트레스 DSR 3단계 시행으로 대출 한도가 추가 축소되었다.</li>
+          <li>DSR과 LTV는 동시에 적용되며, 두 규제 중 더 낮은 한도가 최종 한도가 된다.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>DSR이란 — 총부채원리금상환비율</h2>
+        <p>
+          <strong>DSR (Debt Service Ratio)</strong>은 차주의 연간 소득 대비 모든 금융 대출의 연간 원리금 상환액 비율이다.
+          주택담보대출뿐 아니라 신용대출, 자동차 할부, 학자금 대출 등 <strong>모든 대출</strong>의 원리금을 합산한다.
+        </p>
+        <p>
+          <strong>DSR(%) = (모든 대출의 연간 원리금 상환 합계 / 연소득) × 100</strong>
+        </p>
+        <p>
+          현재 은행권은 DSR 40%, 비은행(보험사, 저축은행 등)은 DSR 50%를 적용한다.
+          예를 들어 연소득 6,000만 원인 차주가 은행에서 대출받으려면, 모든 대출의 연간 원리금 합계가 2,400만 원(월 200만 원)을 넘을 수 없다.
+        </p>
+
+        <h2>LTV란 — 담보인정비율</h2>
+        <p>
+          <strong>LTV (Loan to Value)</strong>는 주택의 담보가치 대비 대출금의 비율이다.
+        </p>
+        <p>
+          <strong>LTV(%) = 대출금 / 주택 담보가치 × 100</strong>
+        </p>
+        <p>
+          주택 담보가치는 KB시세, 한국감정원 시세, 감정가 중 은행이 인정하는 금액이다.
+          LTV가 70%이면 10억 원 아파트에 최대 7억 원까지 대출받을 수 있다.
+        </p>
+
+        <h2>2026년 지역별 LTV 규제</h2>
+        <table>
+          <thead>
+            <tr><th>지역</th><th>LTV</th><th>비고</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>투기과열지구 (서울 일부 등)</td><td>40% (무주택 50%)</td><td>9억 초과분은 20%</td></tr>
+            <tr><td>조정대상지역</td><td>50% (무주택 60%)</td><td></td></tr>
+            <tr><td>비규제지역</td><td>70%</td><td></td></tr>
+            <tr><td>생애최초 주택구입</td><td>80%</td><td>6억 원 이하 주택, 소득 요건</td></tr>
+          </tbody>
+        </table>
+        <p>
+          규제 지역 지정은 수시로 변경되므로, 실제 대출 시점에 해당 지역의 규제 상태를 <a href="https://www.korea.kr/news/policyNewsView.do?newsId=148950959" target="_blank" rel="noopener">정책브리핑</a>이나 은행 창구에서 반드시 확인해야 한다.
+        </p>
+
+        <h2>DTI와 DSR의 차이</h2>
+        <table>
+          <thead>
+            <tr><th>구분</th><th>DTI</th><th>DSR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>분자</td><td>주담대 원리금 + 기타대출 <strong>이자만</strong></td><td>모든 대출 <strong>원리금</strong></td></tr>
+            <tr><td>적용 범위</td><td>주택담보대출 중심</td><td>모든 금융 대출</td></tr>
+            <tr><td>현재 위상</td><td>DSR에 흡수 (보완적)</td><td><strong>주된 규제 지표</strong></td></tr>
+          </tbody>
+        </table>
+        <p>
+          DTI는 기타 대출의 원금 상환을 반영하지 않아 규제가 느슨했다. DSR은 모든 대출의 원리금을 합산하므로 더 엄격하다.
+          2023년부터 DSR이 주된 규제 지표가 되었다.
+        </p>
+
+        <h2>스트레스 DSR — 2026년 3단계 시행</h2>
+        <p>
+          스트레스 DSR은 현재 대출 금리가 아닌 <strong>금리 상승 가능성을 반영한 가상 금리</strong>로 DSR을 산정하는 제도다.
+          현재 금리에 '스트레스 금리'를 가산해 DSR을 계산하므로, 같은 소득이라도 대출 한도가 줄어든다.
+        </p>
+        <ul>
+          <li><strong>1단계 (2024.2~):</strong> 은행 주담대에 스트레스 금리 적용</li>
+          <li><strong>2단계 (2024.9~):</strong> 은행 신용대출, 2금융권 주담대로 확대</li>
+          <li><strong>3단계 (2026.1~):</strong> 전 금융권 전 대출로 확대. 수도권·규제지역 스트레스 금리 하한 3%</li>
+        </ul>
+        <p>
+          3단계 시행으로 수도권 주택담보대출의 실질 한도가 5~10% 추가 축소되었다.
+          예를 들어 연소득 7,000만 원인 차주가 연 4% 금리로 30년 원리금균등 주담대를 받으면, 스트레스 금리 3%가 가산되어 DSR 산정 시 금리를 7%로 보고 한도를 계산한다.
+        </p>
+
+        <h2>사례: 연소득 7,000만 원, 10억 원 아파트 구매</h2>
+        <h3>LTV 한도 (비규제지역 70%)</h3>
+        <p>10억 × 70% = <strong>7억 원</strong></p>
+
+        <h3>DSR 한도 (은행 40%, 금리 4%, 30년 원리금균등)</h3>
+        <p>
+          연소득 7,000만 × 40% = 연간 상환 한도 2,800만 원 = 월 233만 원.<br>
+          스트레스 금리 미적용 시 월 233만 원으로 30년 원리금균등 대출하면 약 <strong>4.88억 원</strong>.<br>
+          스트레스 금리 3% 적용 시(실효 7%) 월 233만 원으로 계산하면 약 <strong>3.5억 원</strong>.
+        </p>
+        <p>
+          LTV 한도 7억 원 vs DSR 한도 3.5~4.88억 원 → <strong>DSR이 더 낮으므로 DSR 한도가 최종 한도</strong>.
+          기존 신용대출 등이 있으면 DSR 한도는 더 줄어든다.
+        </p>
+
+        <h2>합법적으로 대출 한도를 높이는 방법</h2>
+        <ol>
+          <li><strong>기존 대출 상환:</strong> DSR은 모든 대출의 원리금을 합산하므로, 신용대출·카드론을 먼저 상환하면 주담대 한도가 늘어난다.</li>
+          <li><strong>상환 기간 연장:</strong> 30년 → 40년으로 연장하면 월 원리금이 줄어 DSR이 낮아진다. 단, 총이자는 증가한다.</li>
+          <li><strong>공동 명의 대출:</strong> 배우자와 공동 명의로 대출하면 양쪽 소득을 합산해 DSR을 산정한다.</li>
+          <li><strong>보금자리론 등 정책 대출 활용:</strong> <a href="https://www.hf.go.kr/ko/sub01/sub01_01_01.do" target="_blank" rel="noopener">한국주택금융공사 보금자리론</a>은 DSR 규제 완화 특례가 있을 수 있으므로 확인할 가치가 있다.</li>
+          <li><strong>생애최초 주택 특례:</strong> LTV 80%, 취득세 감면 등 추가 혜택이 있다.</li>
+        </ol>
+
+        <h2>자주 묻는 질문 (FAQ)</h2>
+
+        <h3>Q. DSR 40%란 무엇을 의미하나요?</h3>
+        <p>연간 총소득의 40%까지만 모든 대출의 원리금 상환에 사용할 수 있다는 의미다. 연소득 6,000만 원이면 연간 원리금 상환 한도가 2,400만 원이다.</p>
+
+        <h3>Q. 스트레스 DSR이란 무엇인가요?</h3>
+        <p>미래 금리 상승을 반영해 DSR을 산정하는 방식이다. 현재 금리에 스트레스 금리를 더해 계산하므로 대출 한도가 줄어든다. 2026년 3단계 시행으로 수도권은 스트레스 금리 하한 3%가 적용된다.</p>
+
+        <h3>Q. LTV 70%이면 10억 원 아파트에 얼마까지 대출받을 수 있나요?</h3>
+        <p>LTV만 보면 7억 원이지만, DSR 규제가 동시에 적용되므로 소득에 따라 실제 한도는 더 낮아질 수 있다.</p>
+
+        <h2>관련 가이드</h2>
+        <ul>
+          <li><a href="./loan-repayment-methods.html">대출 상환 방식 비교 — 원리금균등·원금균등·만기일시</a></li>
+          <li><a href="./simple-vs-compound-interest.html">단리 vs 복리 — 같은 이율, 30년 뒤 차이</a></li>
+        </ul>
+
+        <a href="../../finance/loan.html" class="related-tool">
+          <div>
+            <strong>대출이자 계산기</strong>
+            <span>대출금·금리·기간 입력 → 상환 방식별 월 상환액·총이자 비교</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://www.fsc.go.kr/no010101/84824" target="_blank" rel="noopener">금융위원회 가계대출 관리 방안 보도자료</a></li>
+          <li><a href="https://www.korea.kr/news/policyNewsView.do?newsId=148950959" target="_blank" rel="noopener">정책브리핑 — 주택담보대출 한도 축소 안내</a></li>
+          <li><a href="https://www.hf.go.kr/ko/sub01/sub01_01_01.do" target="_blank" rel="noopener">한국주택금융공사 보금자리론 안내 (hf.go.kr)</a></li>
+        </ul>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 정부 공식 자료에 근거하여 작성되었으며, 개별 대출 심사 결과를 보장하지 않습니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>

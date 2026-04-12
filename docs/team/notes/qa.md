@@ -65,3 +65,40 @@ git ls-files | xargs grep -l "4.5%.*국민연금\|7.09%\|3.545%"
 
 ## 갱신 이력
 - 2026-04-12: 초기 골격 + 본 세션 회귀 케이스 4건 + 시나리오 표
+
+## 회귀 케이스 #5 (2026-04-12)
+- **증상**: sitemap.xml에 신규 가이드 8편(세법5+금융3) URL 미등록
+- **위치**: sitemap.xml (기존 35개, 누락 8개)
+- **원인**: Compliance가 가이드 파일 생성 후 DevOps/QA에 sitemap 추가 인계 남겼으나 반영 전 QA 호출
+- **수정**: QA가 직접 43개로 확장 (lastmod=2026-04-12, changefreq=monthly, priority=0.7)
+- **자동화 검사**: `grep -c '<loc>' sitemap.xml` → 기준치 이상인지 확인. 가이드 추가 시 checklist 항목으로 추가.
+- **다음 점검 시 우선 확인**: 예 — 가이드 추가 후 sitemap 등록이 자동화 안 되어 있어 재발 가능
+
+## 회귀 케이스 #6 (2026-04-12)
+- **증상**: check-stale.sh의 1차 출처 검출 패턴이 fsc.go.kr(금융위), korea.kr(정책브리핑)을 미인식 — dsr-ltv-guide.html 오탐
+- **위치**: scripts/check-stale.sh (1차 출처 검사는 현재 미구현 — QA 수동 검증)
+- **원인**: 1차 출처 도메인 목록에 fsc.go.kr, korea.kr, moef.go.kr 미포함
+- **수정**: 수동 확인으로 실제 출처 3개 확인(korea.kr+hf.go.kr+fsc.go.kr) — 통과
+- **자동화 검사**: 향후 check-stale.sh에 1차 출처 검사 항목 추가 시 `fsc.go.kr|korea.kr|moef.go.kr` 패턴 포함 필요
+- **다음 점검 시 우선 확인**: 예
+
+## 신규 스크립트 (2026-04-12)
+- **scripts/word-count.sh**: 핵심 도구 8개 + 가이드 20편 단어 수 자동 측정
+  - 기준: 핵심 도구 1,800+ / 가이드 800+
+  - 실행: `bash scripts/word-count.sh`
+  - 2026-04-12 결과: 28개 전부 통과 (최저 weekly-holiday 1,843)
+
+## 산식 검증 기준치 (2026-04-12 확정)
+| 도구 | 핵심 산식 | 검증 완료 |
+|---|---|---|
+| severance | effectiveDaily × 30 × (serviceDays/365), max(평균, 통상) | OK |
+| weekly-holiday | (hours/40) × 8 × hourly | OK |
+| annual-leave | min(15 + floor((y-1)/2), 25) | OK |
+| ordinary-wage | monthlyOrdinary / (주간시간+주휴)×365/7/12 | OK |
+| salary | rates.json 참조, floor10/floor1 적용 | OK |
+| loan | PMT = P×r×(1+r)^n/((1+r)^n-1) | OK |
+| compound | P(1+r)^n + PMT×((1+r)^n-1)/r | OK |
+| year-end-tax | 총급여→공제→과표→세율→세액공제, rates.json 참조 | OK |
+
+## 갱신 이력
+- 2026-04-12 세션2: AdSense 4차 QA 워크 완료 (#5, #6 케이스, word-count.sh, 산식 기준치 추가)

@@ -89,5 +89,29 @@
 - 옛 컨셉 잔재 회귀 방지 check (QA가 설계, DevOps가 적용)
 - Lighthouse CI (PR마다 점수 측정)
 
+## GHA 워크플로우 현황 (2026-04-12 확인)
+
+| 워크플로우 | 파일 | 트리거 | 상태 |
+|-----------|------|-------|------|
+| 세율/요율 자동 업데이트 | update-rates.yml | schedule(1/1, 7/1, 4/1, 10/1) + workflow_dispatch | 구조 정상 |
+| Stale Concept Check | stale-check.yml | push/PR to main | 구조 정상 |
+
+## 인프라·SEO 작업 이력
+
+### 2026-04-12: AdSense 4차 사전 정비 (옵션 B)
+- 수동 광고 블록 전면 제거: `<div class="ad-space">...</div>` 51개 / 34개 파일에서 제거
+  - 핵심 도구 8개: 각 2블록 → 0
+  - 보조 도구 9개: 각 2블록 → 0
+  - 노동 가이드 12개: 각 1블록 → 0
+  - 루트·신뢰 페이지 5개(index/about/contact/disclaimer + guide/index): 1블록 → 0
+  - Auto Ads JS(`adsbygoogle.js`) 로딩은 각 파일 head에 유지
+- CSS `.ad-space` 스타일 주석처리 (`assets/css/style.css` line 613-626)
+- robots.txt `Disallow: /privacy.html` 제거 (sitemap.xml과 모순 해소)
+- sitemap.xml 35개 URL 파일 존재 검증: 35/35 OK (missing 0)
+- canonical 25개 페이지 절대경로 검증: 25/25 OK
+- JSON-LD 21개 페이지 파싱 검증: 21/21 OK
+- rates.json 2026 핵심 수치 12항목 교차 검증: 전부 일치
+
 ## 갱신 이력
 - 2026-04-12: 초기 골격 + 2026 수치 표 + 분기 체크리스트
+- 2026-04-12: AdSense 4차 사전 정비 작업 이력 추가 (광고 제거·robots·sitemap·canonical·JSON-LD·rates 검증)

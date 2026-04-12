@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>단리 vs 복리 — 같은 이율, 30년 뒤 차이는 얼마인가 — calc-tools.kr 가이드</title>
+  <meta name="description" content="단리와 복리의 차이를 공식, 사례, 30년 시뮬레이션으로 설명합니다. 적금·예금·투자에서 복리 효과를 극대화하는 방법과 이자소득세 15.4%의 영향까지 정리합니다.">
+  <meta name="keywords" content="단리, 복리, 복리 효과, 이자, 적금, 예금, 72의 법칙, 이자소득세">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="단리 vs 복리 — 같은 이율, 30년 뒤 차이는 얼마인가">
+  <meta property="og:description" content="단리와 복리의 차이를 공식과 30년 시뮬레이션으로 설명합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/finance/simple-vs-compound-interest.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/finance/simple-vs-compound-interest.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "단리 vs 복리 — 같은 이율, 30년 뒤 차이는 얼마인가",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/finance/simple-vs-compound-interest.html"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "72의 법칙이란 무엇인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "72를 연이율(%)로 나누면 원금이 2배가 되는 대략적인 기간(년)을 구할 수 있습니다. 예를 들어 연 4% 복리라면 72 / 4 = 약 18년이면 원금이 2배가 됩니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "적금은 단리인가요 복리인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "한국의 정기적금은 대부분 단리로 운영됩니다. 복리 적금 상품도 있으나 소수입니다. 정기예금의 경우 단리와 복리 상품이 모두 있으며, 복리 예금은 1년 이상 장기 예치 시 효과가 커집니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "이자소득세는 단리와 복리에 다르게 적용되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "이자소득세율(15.4%)은 단리·복리 모두 동일하게 적용됩니다. 다만 복리의 경우 이자에 이자가 붙으므로 과세 대상 이자 총액이 더 크고, 따라서 세금도 더 많습니다. 세후 수익률로 비교하는 것이 정확합니다."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>단리 vs 복리 — 같은 이율, 30년 뒤 차이는 얼마인가</h1>
+        <div class="article-meta">
+          <span class="law-tag">금융 기초</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 8분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>단리: 원금에만 이자가 붙는다. 복리: 원금 + 이전 이자에 이자가 붙는다.</li>
+          <li>1,000만 원을 연 5%로 30년 → 단리 2,500만 원, 복리 4,322만 원. 차이 1,822만 원.</li>
+          <li>72의 법칙: 72를 연이율로 나누면 원금이 2배 되는 대략적인 연수가 나온다.</li>
+          <li>이자소득세(15.4%) 적용 후에도 복리가 단리보다 항상 유리하다.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>단리와 복리의 공식</h2>
+        <p>
+          <strong>단리</strong>는 매 기간 원금에만 이자를 계산한다.
+          공식: <code>만기금액 = 원금 × (1 + 이율 × 기간)</code>
+        </p>
+        <p>
+          <strong>복리</strong>는 이전 기간의 이자를 원금에 더한 후 다시 이자를 계산한다.
+          공식: <code>만기금액 = 원금 × (1 + 이율)^기간</code>
+        </p>
+        <p>
+          지수(^)의 힘이 복리의 본질이다. 1년이나 2년에서는 차이가 미미하지만, 기간이 길어질수록 격차가 기하급수적으로 벌어진다.
+        </p>
+
+        <h2>30년 시뮬레이션 — 원금 1,000만 원, 연 5%</h2>
+        <table>
+          <thead>
+            <tr><th>경과 연수</th><th>단리 (만기금액)</th><th>복리 (만기금액)</th><th>차이</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1년</td><td>1,050만 원</td><td>1,050만 원</td><td>0</td></tr>
+            <tr><td>5년</td><td>1,250만 원</td><td>1,276만 원</td><td>26만 원</td></tr>
+            <tr><td>10년</td><td>1,500만 원</td><td>1,629만 원</td><td>129만 원</td></tr>
+            <tr><td>20년</td><td>2,000만 원</td><td>2,653만 원</td><td>653만 원</td></tr>
+            <tr><td>30년</td><td>2,500만 원</td><td>4,322만 원</td><td><strong>1,822만 원</strong></td></tr>
+          </tbody>
+        </table>
+        <p>
+          30년 후 복리는 원금의 4.3배, 단리는 2.5배다. 이자만으로 비교하면 단리 이자 1,500만 원 vs 복리 이자 3,322만 원으로 2배 이상 차이가 난다.
+        </p>
+
+        <h2>72의 법칙 — 원금이 2배 되는 기간</h2>
+        <p>
+          복리에서 원금이 2배가 되는 기간을 간단히 계산하는 경험 법칙이 있다.
+          <strong>72 / 연이율(%) = 원금 2배 소요 연수</strong>
+        </p>
+        <table>
+          <thead>
+            <tr><th>연이율</th><th>72의 법칙</th><th>실제 기간</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2%</td><td>36년</td><td>35년</td></tr>
+            <tr><td>3%</td><td>24년</td><td>23.4년</td></tr>
+            <tr><td>4%</td><td>18년</td><td>17.7년</td></tr>
+            <tr><td>5%</td><td>14.4년</td><td>14.2년</td></tr>
+            <tr><td>7%</td><td>10.3년</td><td>10.2년</td></tr>
+          </tbody>
+        </table>
+        <p>
+          72의 법칙은 어림값이지만 매우 정확하다. 투자 계획을 세울 때 목표 금액까지의 기간을 빠르게 가늠하는 데 유용하다.
+        </p>
+
+        <h2>한국 금융 상품에서의 적용</h2>
+        <h3>정기예금</h3>
+        <p>
+          정기예금은 단리 상품과 복리 상품이 모두 있다.
+          1년 이하의 단기 예금은 단리와 복리 차이가 거의 없다.
+          2~3년 이상의 장기 예금이라면 복리 상품이 유리하다.
+          금융감독원의 <a href="https://finlife.fss.or.kr/finlife/main/main.do?menuNo=700000" target="_blank" rel="noopener">금융상품 한눈에</a>에서 은행별 예금 금리와 이자 방식을 비교할 수 있다.
+        </p>
+
+        <h3>정기적금</h3>
+        <p>
+          한국의 정기적금은 대부분 <strong>단리</strong>로 운영된다. 매월 납입하는 적금의 경우, 첫 달 납입금은 12개월치 이자를 받지만 마지막 달 납입금은 1개월치 이자만 받는다.
+          이 때문에 적금의 실질 수익률은 표시 금리의 약 절반 수준이다. 연 4% 적금이라면 실제 연환산 수익률은 약 2.2% 정도다.
+        </p>
+
+        <h3>권리 안내: ISA·IRP·연금저축으로 비과세 복리 효과 극대화</h3>
+        <p>
+          이자소득에는 15.4%(소득세 14% + 지방소득세 1.4%)의 세금이 부과된다.
+          그러나 다음 세제혜택 상품을 활용하면 이자소득세 없이 복리 효과를 극대화할 수 있다.
+        </p>
+        <ul>
+          <li><strong>ISA (개인종합자산관리계좌):</strong> 순이익 200만 원(서민형 400만 원)까지 비과세. 초과분은 9.9% 분리과세.</li>
+          <li><strong>IRP (개인형 퇴직연금):</strong> 연 900만 원 한도 세액공제(13.2%~16.5%) + 운용 수익 과세이연.</li>
+          <li><strong>연금저축:</strong> 연 600만 원 한도 세액공제 + 연금 수령 시 3.3~5.5% 저율 과세.</li>
+        </ul>
+        <p>
+          이 세 가지 계좌를 활용하면 과세 이연(세금을 나중에 내는 것)으로 복리 효과가 극대화된다.
+          세금을 매년 내면 이자의 15.4%가 빠져나가 재투자 원금이 줄어들지만, 과세 이연이면 이자 전액이 재투자되어 복리 효과가 온전히 유지된다.
+        </p>
+
+        <h2>이자소득세 적용 후 비교</h2>
+        <p>
+          이자소득세 15.4%를 적용하면 세후 연이율은 약 4.23%(= 5% × 0.846)이 된다.
+          1,000만 원을 세후 4.23%로 30년 복리 운용하면 만기 금액은 약 3,435만 원이다.
+          비과세(ISA 등)로 운용하면 4,322만 원이므로, 세금 차이만으로 <strong>887만 원</strong>이 달라진다.
+        </p>
+
+        <h2>자주 묻는 질문 (FAQ)</h2>
+
+        <h3>Q. 72의 법칙이란 무엇인가요?</h3>
+        <p>72를 연이율(%)로 나누면 원금이 2배가 되는 대략적인 기간(년)이 나온다. 연 4% 복리라면 72 / 4 = 약 18년이다.</p>
+
+        <h3>Q. 적금은 단리인가요 복리인가요?</h3>
+        <p>한국의 정기적금은 대부분 단리다. 복리 적금 상품도 있으나 소수다.</p>
+
+        <h3>Q. 이자소득세는 단리와 복리에 다르게 적용되나요?</h3>
+        <p>세율(15.4%)은 동일하다. 복리는 이자에 이자가 붙으므로 과세 대상 이자 총액이 더 크고, 세금도 더 많다. 세후 수익률로 비교하는 것이 정확하다.</p>
+
+        <h2>관련 가이드</h2>
+        <ul>
+          <li><a href="./loan-repayment-methods.html">대출 상환 방식 비교 — 원리금균등·원금균등·만기일시</a></li>
+          <li><a href="./dsr-ltv-guide.html">DSR·LTV 뜻과 계산 — 대출 한도에 미치는 영향</a></li>
+        </ul>
+
+        <a href="../../finance/compound.html" class="related-tool">
+          <div>
+            <strong>복리 계산기</strong>
+            <span>원금·이율·기간 입력 → 세전·세후 만기금액 실시간 계산</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://finlife.fss.or.kr/finlife/main/main.do?menuNo=700000" target="_blank" rel="noopener">금융감독원 금융상품 한눈에 — 예·적금 금리 비교 (finlife.fss.or.kr)</a></li>
+          <li><a href="https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643" target="_blank" rel="noopener">한국은행 기준금리 추이 (bok.or.kr)</a></li>
+          <li><a href="https://www.kdic.or.kr/sp/dpstrprot/ProtSyst/selectScrn.do" target="_blank" rel="noopener">예금보험공사 예금자보호제도 안내 (kdic.or.kr)</a></li>
+        </ul>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 공식 금융 자료에 근거하여 작성되었으며, 특정 금융상품의 투자 권유가 아닙니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>

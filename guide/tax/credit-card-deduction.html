@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="naver-site-verification" content="d95c4f7f81f57747f5d0f22ddfbcde67bc85b285" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <title>신용카드 소득공제 한도와 공제 순서 최적화 — calc-tools.kr 가이드</title>
+  <meta name="description" content="신용카드·체크카드·현금영수증 소득공제의 공제율, 25% 한도 적용 순서, 추가공제 한도를 정리합니다. 카드 사용 순서만 바꿔도 공제액이 달라지는 이유를 사례로 설명합니다.">
+  <meta name="keywords" content="신용카드 소득공제, 체크카드 공제, 현금영수증, 25% 한도, 소득공제 순서, 조세특례제한법, 연말정산">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="신용카드 소득공제 한도와 공제 순서 최적화">
+  <meta property="og:description" content="신용카드·체크카드 소득공제의 공제율과 최적 사용 순서를 사례로 설명합니다.">
+  <meta property="og:url" content="https://calc-tools.kr/guide/tax/credit-card-deduction.html">
+  <meta property="og:image" content="https://calc-tools.kr/assets/og-image.svg">
+  <link rel="canonical" href="https://calc-tools.kr/guide/tax/credit-card-deduction.html">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .article-hero { padding: 28px 0 16px; border-bottom: 1px solid var(--gray-200); margin-bottom: 24px; }
+    .article-hero h1 { font-size: var(--type-title-lg); color: var(--text); line-height: 1.35; margin-bottom: 12px; }
+    .article-meta { display: flex; gap: 14px; font-size: 0.8rem; color: var(--text-light); flex-wrap: wrap; }
+    .article-meta .law-tag { padding: 2px 8px; background: var(--primary-50); color: var(--primary); border-radius: 4px; font-weight: 600; }
+    .tldr { background: var(--primary-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; }
+    .tldr h2 { font-size: 0.95rem; color: var(--primary); margin-bottom: 10px; }
+    .tldr ul { margin-left: 18px; line-height: 1.7; color: var(--text); font-size: 0.92rem; }
+    .article-body h2 { font-size: var(--type-title-md); color: var(--text); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+    .article-body h3 { font-size: 1.05rem; color: var(--primary); margin: 22px 0 10px; }
+    .article-body p { line-height: 1.85; color: var(--text); margin-bottom: 14px; }
+    .article-body ul, .article-body ol { margin: 0 0 16px 24px; line-height: 1.85; color: var(--text); }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0; }
+    .article-body th, .article-body td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    .article-body th { background: var(--gray-50); }
+    .related-tool { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--gray-50); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin: 20px 0; text-decoration: none; color: var(--text); }
+    .related-tool strong { display: block; font-size: 1rem; color: var(--text); }
+    .related-tool span { display: block; font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9632606296515258" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLECX1HME8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KLECX1HME8');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "신용카드 소득공제 한도와 공제 순서 최적화",
+    "author": { "@type": "Organization", "name": "calc-tools.kr 운영팀", "email": "ahnhj5131@gmail.com" },
+    "publisher": { "@type": "Organization", "name": "calc-tools.kr" },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "mainEntityOfPage": "https://calc-tools.kr/guide/tax/credit-card-deduction.html"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "신용카드와 체크카드 소득공제율이 다른가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "신용카드 공제율은 15%, 체크카드·현금영수증은 30%입니다. 같은 금액을 쓰더라도 체크카드·현금영수증으로 결제하면 공제액이 2배입니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "총급여 25% 한도는 어떻게 적용되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "모든 카드·현금영수증 사용액을 합산한 금액이 총급여의 25%를 초과해야 소득공제가 시작됩니다. 25% 이하 사용분은 공제 대상이 아닙니다. 이 한도를 채울 때는 공제율이 낮은 신용카드(15%)부터 차감됩니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "카드 소득공제 최대 한도는 얼마인가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "기본 한도는 총급여 7,000만 원 이하일 때 300만 원, 7,000만~1.2억 원은 250만 원, 1.2억 초과는 200만 원입니다. 여기에 전통시장(+100만), 대중교통(+100만), 문화비(+300만) 추가 한도가 별도로 적용됩니다."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container" style="max-width:780px;">
+      <div class="article-hero">
+        <h1>신용카드 소득공제 한도와 공제 순서 최적화</h1>
+        <div class="article-meta">
+          <span class="law-tag">조세특례제한법 126조의2</span>
+          <span>마지막 갱신: 2026-04-12</span>
+          <span>약 10분 읽기</span>
+        </div>
+      </div>
+
+      <div class="tldr">
+        <h2>TL;DR</h2>
+        <ul>
+          <li>총급여 25%까지는 어떤 카드로 써도 공제 대상이 아니다. 이 구간은 신용카드(15%)로 채우는 게 유리하다.</li>
+          <li>25% 초과분부터 진짜 공제가 시작된다. 이 구간은 체크카드·현금영수증(30%)으로 쓰면 공제율이 2배다.</li>
+          <li>기본 한도 300만 원 + 전통시장 100��� + 대중교통 100만 + 문화비 300만 = 최대 800만 원 공제 가능.</li>
+        </ul>
+      </div>
+
+      <div class="article-body">
+        <h2>신용카드 소득공제의 기본 구조</h2>
+        <p>
+          조세특례제한법 제126조의2에 따라, 근로소득이 있는 거주자(일용직 제외)가 신용카드·체크카드·현금영수증으로 사용한 금액이 총급여의 25%를 초과하면 초과분에 대해 소득공제를 받는다.
+          핵심 포인트는 두 가지다. 첫째, 25% 이하 사용���은 공제되지 않는다. 둘째, 카드 종류마다 공제율이 다르다.
+        </p>
+
+        <h2>카드 종류별 공제율 비교</h2>
+        <table>
+          <thead>
+            <tr><th>결제 수단</th><th>공제율</th><th>비고</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>신용카드</td><td>15%</td><td>가장 낮음</td></tr>
+            <tr><td>체크카드</td><td>30%</td><td></td></tr>
+            <tr><td>현금영수증</td><td>30%</td><td></td></tr>
+            <tr><td>전통시장</td><td>40%</td><td>결제 수단 무관</td></tr>
+            <tr><td>대중교통</td><td>40%</td><td>결제 수단 무관</td></tr>
+            <tr><td>문화비 (도서·공연·체육시설)</td><td>30%</td><td>총급여 7,000만 원 이하만</td></tr>
+          </tbody>
+        </table>
+
+        <h2>25% 한도 적용 순서 — 이것이 핵심이다</h2>
+        <p>
+          국세청은 총급여 25% 한도를 채울 때 <strong>공제율이 낮은 결제 수단부터 차감</strong>한다.
+          즉, 신용카드(15%) 사용액이 먼저 25% 한도에 투입되고, 남은 금액부터 체크카드(30%)·전통시장(40%) 등 공제율이 높은 항목이 적용된다.
+        </p>
+        <p>
+          이 순서는 납세자에게 유리한 해석이다. 공제율이 낮은 신용카드를 먼저 비공제 구간에서 소진하고, 공제율이 높은 체크카드·현금영수증을 실제 공제 구간에 배치하기 때문이다.
+        </p>
+
+        <h3>사례: 총급여 5,000만 원 직장인</h3>
+        <p>
+          25% 한도 = 1,250만 원. 연간 카드 사용 합계가 3,000만 원이라고 하자.
+        </p>
+        <ul>
+          <li>신용카드 사용액: 1,500만 원</li>
+          <li>체크카드 사용액: 1,000만 원</li>
+          <li>전통시장: 300만 원</li>
+          <li>대중교통: 200만 원</li>
+        </ul>
+        <p>
+          <strong>1단계:</strong> 25% 한도(1,250만 원)를 신용카드에서 먼저 차감. 신용카드 잔여 = 1,500 - 1,250 = 250만 원.<br>
+          <strong>2단계:</strong> 공제 대상 계산.
+        </p>
+        <ul>
+          <li>신용카드 잔여 250만 × 15% = 37.5만 원</li>
+          <li>체크카드 1,000만 × 30% = 300만 원</li>
+          <li>전통시장 300만 × 40% = 120만 원</li>
+          <li>대중교통 200만 × 40% = 80만 원</li>
+        </ul>
+        <p>
+          <strong>3단계:</strong> 한도 적용. 기본 한도 300만 원(신용+체크) + 전통시장 추가 100만 원 + 대중교통 추가 100만 원 = 총 500만 원 한도.
+          실제 공제 합계(37.5 + 300 + 120 + 80 = 537.5만)가 한도(500만)를 초과하므로 <strong>최종 소득공제액은 500만 원</strong>이다.
+        </p>
+
+        <h2>절세 팁: 연초부터 카드 사용 전략 세우기</h2>
+        <p>
+          공제 순서가 '신용카드 → 체크카드' 순으로 자동 적용되므로, 사용자가 직접 순서를 조작할 필요는 없다.
+          그러나 다음 전략은 공제 극대화에 도움이 된다.
+        </p>
+        <ol>
+          <li><strong>25% 한도까지는 신용카드 사용:</strong> 어차피 비공제 구간이므로 포인트·마일리지 적립이 유리한 신용카드를 쓴다.</li>
+          <li><strong>25% 초과분은 체크카드·현금영수증으로 전환:</strong> 공제율 30%를 최대한 활용한다.</li>
+          <li><strong>전통시장·대중교통은 별도 한도:</strong> 이 두 항목은 기본 300만 원 한도와 별도이므로, 전통시장 장보기와 대중교통 이용을 의식적으로 하면 추가 100만 원씩 더 받을 수 있다.</li>
+          <li><strong>문화비 추가 한도 활용:</strong> 도서구입, 공연 관람, 2025년 7월 이후 헬스장 이용 등은 별도 300만 원 한도. 총급여 7,000만 원 이하일 때만 적용된다.</li>
+        </ol>
+
+        <h2>공제 제외 대상 — 이것은 공제가 안 된다</h2>
+        <ul>
+          <li>보험료, 교육비, 기부금 (다른 공제 항목에서 이미 공제)</li>
+          <li>세금(국세, 지방세), 공과금, 아파트관리비</li>
+          <li>자동차 구매비 (중고차는 10% 공제 가능)</li>
+          <li>해외 사용분</li>
+          <li>현금서비스, 카드론 (대출이므로 사용이 아님)</li>
+        </ul>
+
+        <h2>맞벌이 부부의 카드 공제 전략</h2>
+        <p>
+          맞벌이 부부는 각자의 명의 카드 사용액만 본인 공제에 반영된다. 배우자의 카드 사용액을 합산할 수 없다.
+          다만, <strong>기본공제대상자인 직계존속·자녀의 카드 사용액은 부양가족 등록자의 공제에 합산</strong>할 수 있다.
+        </p>
+        <p>
+          부부 중 한쪽이 총급여 25% 한도를 이미 넘겼고 다른 쪽은 한도에 못 미칠 때, 한도 미달 쪽이 가족카드로 더 사용하면 그 쪽의 25%를 넘기는 데 도움이 될 수 있다.
+          하지만 가족카드는 명의자 기준이므로 실제 결제자가 누구인지와 카드 명의를 정확히 구분해야 한다.
+        </p>
+
+        <h2>자주 묻는 질문 (FAQ)</h2>
+
+        <h3>Q. 신용카드와 체크카드 소득공제율이 다른가요?</h3>
+        <p>
+          신용카드 공제율�� 15%, 체크카드·현금영수증은 30%다. 같은 금액을 쓰더라도 체크카드·현금영수증으로 결제하면 공제액이 2배다.
+        </p>
+
+        <h3>Q. 총급여 25% 한도는 어떻게 적용되나요?</h3>
+        <p>
+          모든 카드·현금영수증 사용액을 합산한 금액이 총급여의 25%를 초과해야 소득공제가 시작된다. 25% 이하 사용분은 공제 대상이 아니다. 이 한도를 채울 때는 공제율이 낮은 신용카드(15%)부터 차감된다.
+        </p>
+
+        <h3>Q. 카드 소득공제 최대 한도는 얼마인가요?</h3>
+        <p>
+          기본 한도는 총급여 7,000만 원 이하일 때 300만 원, 7,000만~1.2억 원은 250만 원, 1.2억 초과는 200만 원이다. 여기에 전통시장(+100만), 대중교통(+100만), 문화비(+300만) 추가 한도가 별도로 적용된다.
+        </p>
+
+        <h2>관련 가이드</h2>
+        <ul>
+          <li><a href="./year-end-tax-changes-2026.html">2026년 연말정산 변경점 총정리</a></li>
+          <li><a href="./medical-expense-deduction.html">의료비 세액공제 — 가족 합산과 한도 초과 전략</a></li>
+          <li><a href="./dependent-deduction.html">부양가족 인적공제 — 등록 조건과 맞벌이 최적 배분</a></li>
+          <li><a href="./rent-deduction.html">월세 세액공제 — 조건·한도·신청 방법</a></li>
+        </ul>
+
+        <a href="../../payroll/year-end-tax.html" class="related-tool">
+          <div>
+            <strong>연말정산 계산기</strong>
+            <span>카드 사용액·공제 항목 입력 → 예상 환급액 실시간 계산</span>
+          </div>
+        </a>
+
+        <h2>출처</h2>
+        <ul>
+          <li><a href="https://www.law.go.kr/LSW/lsLawLinkInfo.do?lsJoLnkSeq=1001060529&chrClsCd=010202&lsId=001584&print=print" target="_blank" rel="noopener">조세특례제한법 제126조의2 — 신용카드 등 사용금액에 대한 소득공제 (법제처)</a></li>
+          <li><a href="https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938" target="_blank" rel="noopener">2025년 귀속 연말정산 종합 안내 (국세청)</a></li>
+          <li><a href="https://hometax.go.kr" target="_blank" rel="noopener">국세청 홈택스 — 연말정산 간소화 서비스</a></li>
+        </ul>
+      </div>
+
+      <div class="calc-card" style="background:var(--gray-50);margin-top:24px;">
+        <p style="padding:12px 16px;background:var(--white);border-left:3px solid var(--primary);border-radius:var(--radius-sm);font-size:0.875rem;color:var(--text);line-height:1.7;">
+          <strong>마지막 갱신:</strong> 2026-04-12 &nbsp;|&nbsp; <strong>다음 검토 예정:</strong> 2026-07-12<br>
+          <strong>오류 신고·정정 요청:</strong> <a href="mailto:ahnhj5131@gmail.com">ahnhj5131@gmail.com</a> (영업일 3일 이내 답변)<br>
+          <span style="color:var(--text-light);font-size:0.8rem;">본 글은 법령 원문과 정부 공식 자료에 근거하여 작성되었으며, 개별 사례의 법률 자문을 대체하지 않습니다.</span>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="../../index.html">홈</a>
+          <a href="../index.html">가이드 허브</a>
+          <a href="../../about.html">소개</a>
+          <a href="../../contact.html">문의하기</a>
+          <a href="../../privacy.html">개인정보처리방침</a>
+          <a href="../../disclaimer.html">면책 조항</a>
+        </div>
+        <p>&copy; 2026 calc-tools.kr. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../../assets/js/common.js"></script>
+</body>
+</html>

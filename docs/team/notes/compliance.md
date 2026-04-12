@@ -75,5 +75,30 @@
 - [국세청 홈택스](https://www.hometax.go.kr)
 - [보건복지부](https://www.mohw.go.kr)
 
+### 세법 영역 (2026-04-12 세션2 추가)
+1. **신용카드 25% 한도 적용 순서** — 공제율 낮은 신용카드(15%)부터 비공제 구간에서 소진 → 체크카드(30%) 공제 극대화. 근거: 국세청 연말정산 종합안내, 조세특례제한법 제126조의2
+2. **의료비 세액공제 나이·소득 제한 없음** — 소득 있는 배우자·20세 이상 자녀도 공제 가능. 근거: 소득세법 제59조의4 제2항 괄호 "나이 및 소득의 제한을 받지 아니한다"
+3. **월세 세액공제 경정청구 5년 소급** — 국세기본법에 따라 최대 5년치 소급 환급. 월세 60만×12×17%×5년 = 최대 610만 원.
+4. **표준세액공제 vs 특별세액공제 자동 비교** — 의료비+기부금+보험료 합계 공제액이 13만 원 미만이면 표준(13만 원) 선택이 유리. 근거: 소득세법 제59조의4 제6항
+
+### 금융 영역 (2026-04-12 세션2 추가)
+1. **ISA·IRP·연금저축 비과세 복리** — 과세이연으로 이자소득세 15.4% 절감. 30년 기준 세후 수익 차이 887만 원(원금 1,000만/연 5%).
+2. **기존 대출 상환으로 DSR 한도 확보** — 신용대출·카드론 정리 → 주담대 한도 수백만~수천만 원 증가. 2026 스트레스DSR 3단계로 더 중요해짐.
+3. **주담대 이자 소득공제** — 15년 이상 원리금/원금균등은 공제 대상이나, 만기일시는 대상 아님. 근거: 소득세법 제52조
+
+## 1차 출처 직링크 — 세법 추가 (2026-04-12)
+- [국세청 2025년 귀속 연말정산 종합안내](https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2304&cntntsId=238938)
+- [조세특례제한법 제126조의2 신용카드 소득공제](https://www.law.go.kr/LSW/lsLawLinkInfo.do?lsJoLnkSeq=1001060529&chrClsCd=010202&lsId=001584&print=print)
+- [소득세법 제59조의4 특별세액공제](https://www.law.go.kr/LSW/lsLawLinkInfo.do?lsJoLnkSeq=1000819707&chrClsCd=010202)
+- [국세청 의료비 공제 상담](https://call.nts.go.kr/call/qna/selectQnaInfo.do?mi=1318&ctgId=CTG11909)
+- [국세청 월세 세액공제 상담](https://call.nts.go.kr/call/qna/selectQnaInfo.do?mi=1318&ctgId=CTG11906)
+- [금융감독원 금융상품 한눈에](https://finlife.fss.or.kr/finlife/main/main.do?menuNo=700000)
+- [한국은행 기준금리 추이](https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643)
+- [예금보험공사 예금자보호제도](https://www.kdic.or.kr/sp/dpstrprot/ProtSyst/selectScrn.do)
+- [한국주택금융공사 보금자리론](https://www.hf.go.kr/ko/sub01/sub01_01_01.do)
+- [금융위원회 가계대출 관리 보도자료](https://www.fsc.go.kr/no010101/84824)
+- [대법원 2024.12.19 통상임금 전합 판결](https://casenote.kr/%EB%8C%80%EB%B2%95%EC%9B%90/2023%EB%8B%A4302838)
+
 ## 갱신 이력
 - 2026-04-12: 초기 골격 + 본 세션 1차 출처 + Grey Zone 후보 다수
+- 2026-04-12 세션2: 세법 5편 + 금융 3편 가이드 작성, Grey Zone 7건 추가(세법4+금융3), 1차 출처 직링크 11건 추가, 도구 4개 출처 보강

@@ -610,20 +610,7 @@ select.input-error {
   font-variant-numeric: tabular-nums;
 }
 
-/* 광고 영역 */
-.ad-space {
-  min-height: 90px;
-  text-align: center;
-  margin: var(--spacing-md) 0;
-  background-color: var(--gray-100);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-  font-size: 0.75rem;
-}
+/* .ad-space 스타일 제거 — 2026-04-12 수동 광고 전면 제거, Auto Ads만 유지 */
 
 /* 푸터 */
 .site-footer {

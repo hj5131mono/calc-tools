@@ -166,6 +166,59 @@
     <priority>0.8</priority>
   </url>
 
+
+  <!-- 세법 가이드 5편 (2026-04-12 추가) -->
+  <url>
+    <loc>https://calc-tools.kr/guide/tax/year-end-tax-changes-2026.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/tax/credit-card-deduction.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/tax/medical-expense-deduction.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/tax/dependent-deduction.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/tax/rent-deduction.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 금융 가이드 3편 (2026-04-12 추가) -->
+  <url>
+    <loc>https://calc-tools.kr/guide/finance/simple-vs-compound-interest.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/finance/loan-repayment-methods.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://calc-tools.kr/guide/finance/dsr-ltv-guide.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- 보조 도구 (Tier 2) -->
   <url>
     <loc>https://calc-tools.kr/finance/percent.html</loc>
