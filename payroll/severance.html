@@ -166,6 +166,11 @@
               <select id="retireDay" class="date-select"><option value="">일</option></select>
             </div>
           </div>
+          <div class="form-group">
+            <label for="weeklyHours">4주 평균 1주 소정근로시간 (시간)</label>
+            <input type="number" id="weeklyHours" value="40" min="0" max="40" step="0.5" inputmode="decimal" required>
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">퇴직금은 계속근로기간 1년 이상이고, 4주 평균 1주 소정근로시간이 15시간 이상인 근로자에게 발생합니다.</small>
+          </div>
 
           <p class="section-divider">💰 월 급여 정보</p>
           <div class="form-group">
@@ -178,14 +183,14 @@
             <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">매달 고정으로 받는 식대·교통비·직책수당 등 합계</small>
           </div>
           <div class="form-group">
-            <label for="irregularBonus">성과급·인센티브 — 최근 3개월 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
+            <label for="irregularBonus">최근 3개월 지급된 평균임금 포함 수당 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
             <input type="text" id="irregularBonus" class="auto-comma" placeholder="예: 1,500,000" data-amount-hint="원" inputmode="numeric">
-            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">성과급, 특근수당 등 비정기 수당의 최근 3개월 합계</small>
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">연장·야간·휴일수당, 직전 3개월에 실제 지급된 임금성 수당을 입력하세요. 일회성 포상금, 실비변상, 복리후생성 금품은 제외될 수 있습니다.</small>
           </div>
           <div class="form-group">
             <label for="annualBonus">연간 상여금 합계 (원) <span style="font-weight:400;color:var(--text-light);">(선택)</span></label>
             <input type="text" id="annualBonus" class="auto-comma" placeholder="예: 6,000,000" data-amount-hint="원" inputmode="numeric">
-            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">명절상여·정기상여 등 연간 합계 (3/12 자동 산입)</small>
+            <small style="color:var(--text-light);font-size:var(--type-caption);margin-top:4px;display:block;">정기상여금·명절상여금 등 1년 단위로 정기 지급되는 금액을 입력하세요. 계산기는 3/12를 평균임금에 산입합니다.</small>
           </div>
 
           <div class="btn-group">
@@ -269,7 +274,7 @@
         </div>
         <p style="line-height:1.8;color:var(--text);margin-bottom:16px;">
           <strong>평균임금</strong>은 퇴직일 이전 3개월간 지급된 임금 총액을 그 기간의 총 일수(보통 89~92일)로 나눈 금액입니다.
-          여기에는 기본급뿐 아니라 정기 상여금(3/12 산입), 고정수당, 성과급 등이 포함됩니다.
+          여기에는 기본급, 고정수당, 직전 3개월에 실제 지급된 임금성 수당, 정기 상여금의 3/12 상당액 등이 포함될 수 있습니다. 일회성 포상금이나 실비변상 금품은 제외될 수 있습니다.
         </p>
 
         <h3 style="margin:24px 0 12px;font-size:var(--type-title-md);">평균임금 vs 통상임금</h3>
@@ -290,7 +295,7 @@
               </tr>
               <tr>
                 <td style="padding:10px;border:1px solid var(--border);font-weight:600;">포함 항목</td>
-                <td style="padding:10px;border:1px solid var(--border);">기본급 + 고정수당 + 성과급 + 상여금(3/12)</td>
+                <td style="padding:10px;border:1px solid var(--border);">기본급 + 고정수당 + 임금성 수당 + 정기상여금(3/12)</td>
                 <td style="padding:10px;border:1px solid var(--border);">기본급 + 고정수당만</td>
               </tr>
               <tr>
@@ -336,7 +341,7 @@
           <li><strong>1년 미만 근무</strong>: 퇴직금 없음 (365일 이상부터 발생)</li>
           <li><strong>4주 평균 주 15시간 미만</strong>: 단시간 근로자로 퇴직금 미발생</li>
           <li><strong>평균임금 < 통상임금</strong>이면 통상임금으로 산정 (법적 보호)</li>
-          <li>퇴직 전 3개월에 육아휴직·산재 기간 포함 시 해당 기간 제외 후 재산정</li>
+          <li>퇴직 전 3개월에 출산전후휴가, 육아휴직, 업무상 재해 요양기간, 사용자 귀책 휴업 등이 있으면 해당 기간과 임금은 평균임금 산정에서 제외될 수 있음</li>
           <li><strong>세금</strong>: 퇴직소득세 별도 (퇴직소득공제 적용, 일반 근로소득세와 다름)</li>
           <li><strong>지급 기한</strong>: 퇴직일로부터 14일 이내 지급이 원칙 (퇴직급여보장법 제9조)</li>
         </ul>
@@ -365,9 +370,8 @@
             <summary style="padding:14px 18px;cursor:pointer;font-weight:600;background:var(--gray-50);">퇴직금에 세금이 붙나요?</summary>
             <div style="padding:14px 18px;line-height:1.7;color:var(--text-light);">
               퇴직금에는 <strong>퇴직소득세</strong>가 부과됩니다. 일반 근로소득세와는 별도로 계산되며,
-              근속연수공제·환산급여공제 등 다양한 공제가 적용되어 실효세율이 낮은 편입니다.
-              예를 들어 10년 근무 후 3천만 원 퇴직금을 받는 경우 퇴직소득세는 수십만 원 수준입니다.
-              정확한 세액은 국세청 퇴직소득 세액계산 프로그램으로 확인할 수 있습니다.
+              근속연수공제·환산급여공제 등이 적용되어 일반 근로소득과 다른 방식으로 계산됩니다.
+              실제 세액은 근속연수, 과거 중간정산 여부, 지급 시점에 따라 달라지므로 국세청 퇴직소득 세액계산 프로그램으로 확인하세요.
             </div>
           </details>
           <details style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
@@ -638,6 +642,19 @@
       const hireDate   = new Date(+hY, +hM - 1, +hD);
       const retireDate = new Date(+rY, +rM - 1, +rD);
       const serviceDays = Math.floor((retireDate - hireDate) / 86400000);
+      const weeklyHours = parseFloat(document.getElementById('weeklyHours')?.value || '40');
+
+      if (serviceDays <= 0) {
+        document.getElementById('ineligibleBox').classList.add('show');
+        document.getElementById('ineligibleReason').textContent = '퇴직일은 입사일보다 늦어야 합니다. 퇴직일은 마지막 근무일의 다음 날로 입력하세요.';
+        return;
+      }
+
+      if (weeklyHours < 15) {
+        document.getElementById('ineligibleBox').classList.add('show');
+        document.getElementById('ineligibleReason').textContent = '퇴직금 미발생: 4주 평균 1주 소정근로시간이 15시간 미만이면 퇴직급여보장법상 퇴직금 지급 대상이 아닙니다.';
+        return;
+      }
 
       if (serviceDays < 365) {
         document.getElementById('ineligibleBox').classList.add('show');

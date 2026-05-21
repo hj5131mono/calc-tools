@@ -281,7 +281,6 @@ function createNavigation() {
   const navItems = [
     { href: '/index.html#core',      label: '핵심 도구', active: false },
     { href: '/guide/index.html',     label: '가이드',   active: isGuide },
-    { href: '/index.html#extras',    label: '기타 유틸', active: false },
     { href: '/about.html',           label: '소개',     active: isAbout },
     { href: '/contact.html',         label: '문의',     active: isContact },
   ];
